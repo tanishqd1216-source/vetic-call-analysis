@@ -1,4 +1,11 @@
 venv/
 .env
+.env.*
 __pycache__/
 *.pyc
+
+# Binaries, logs, OS junk — keep out of the repo
+*.exe
+*.log
+*.lnk
+
