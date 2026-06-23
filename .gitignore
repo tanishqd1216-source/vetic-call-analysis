@@ -4,8 +4,6 @@ venv/
 __pycache__/
 *.pyc
 
-# Binaries, logs, OS junk — keep out of the repo
-*.exe
-*.log
-*.lnk
+# make_call.py and its compiled bytecode hold a hardcoded Twilio token — keep out
+twilio-test/make_call.py
 
