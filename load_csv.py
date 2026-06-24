@@ -1,8 +1,17 @@
+import os
 import pandas as pd
 from sqlalchemy import create_engine
 
-# Database connection URL
-DATABASE_URL = "postgresql://postgres:postgres123@localhost:5432/nps_database"
+# Load DATABASE_URL from .env (never hardcode credentials)
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
+DATABASE_URL = os.environ.get("DATABASE_URL")
+if not DATABASE_URL:
+    raise RuntimeError("DATABASE_URL is not set. Add it to your .env file.")
 engine = create_engine(DATABASE_URL)
 
 csv_file = "Call Analysis Model - Analysis.csv"

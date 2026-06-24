@@ -4,6 +4,9 @@ venv/
 __pycache__/
 *.pyc
 
+# Runtime data file that captured a live API key + DB URL — keep out
+conversation_history.json
+
 # make_call.py and its compiled bytecode hold a hardcoded Twilio token — keep out
 twilio-test/make_call.py
 
