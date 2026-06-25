@@ -54,8 +54,8 @@ while True:
 
         try:
             with client.messages.stream(
-                model="claude-opus-4-6",
-                max_tokens=128000,
+                model="claude-sonnet-4-5-20250929",
+                max_tokens=8192,
                 messages=conversation_history
             ) as stream:
 
