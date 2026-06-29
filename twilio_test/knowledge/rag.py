@@ -26,6 +26,7 @@ Python) to pick top-k before formatting -- still no network call.
 """
 
 import os
+import re
 import json
 
 # Knowledge files live in the same directory as this module, resolved
@@ -81,7 +82,90 @@ def build_examples_block(scenario: str, stage: int) -> str:
     return "\n".join(lines)
 
 
+# ── Fast-path intent matching ────────────────────────────────────────────────
+# On a confident match we skip BOTH Claude and TTS and play a pre-rendered clip.
+# A wrong canned reply ignores what the caller actually said, which is worse than
+# a slightly slower-but-correct LLM reply — so matching is deliberately strict and
+# errs toward "no match" (fall through to the LLM).
+
+CONTROL_TAGS = ("[NEXT_STAGE]", "[END_CALL]")
+
+
+def _normalize(s: str) -> str:
+    """Lowercase, drop punctuation, collapse whitespace."""
+    return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9\s]", " ", str(s).lower())).strip()
+
+
+def _tokens(s: str) -> set:
+    return set(_normalize(s).split())
+
+
+def split_control_tag(text: str):
+    """Return (clean_text_without_tag, tag_or_None). Used so the tag is never
+    spoken aloud but is still available to drive the stage state machine."""
+    tag = None
+    for t in CONTROL_TAGS:
+        if t in text:
+            tag = t
+            text = text.replace(t, "")
+    return text.strip(), tag
+
+
+def all_instances():
+    """Yield (scenario, stage_name, instance) for every loaded knowledge instance.
+    The server uses this to pre-render each canned response to audio once."""
+    for (scenario, stage_name), instances in KNOWLEDGE.items():
+        for inst in instances:
+            yield scenario, stage_name, inst
+
+
+def match_intent(user_speech: str, scenario: str, stage: int,
+                 fallback_scenario: str = None, min_score: float = 0.72):
+    """Return the best-matching instance for a confident hit, else None.
+
+    Scoring is Jaccard token overlap (|A∩B| / |A∪B|) between the caller's speech
+    and each trigger phrase. Jaccard punishes length mismatch in BOTH directions,
+    so a short generic trigger ("go ahead") won't match a long, specific utterance
+    ("go ahead and tell me why my dog is bleeding"). The primary scenario is tried
+    first; the campaign fallback is only consulted if the primary yields nothing —
+    this is what lets stage-1 turns match even before a scenario keyword appears.
+    """
+    stage_name = STAGE_NAMES.get(stage, "")
+    speech_tokens = _tokens(user_speech)
+    if not speech_tokens:
+        return None
+
+    scenarios = [scenario]
+    if fallback_scenario and fallback_scenario != scenario:
+        scenarios.append(fallback_scenario)
+
+    for sc in scenarios:
+        local_best, local_score = None, 0.0
+        for inst in KNOWLEDGE.get((sc, stage_name), []):
+            for trig in inst.get("triggers", []):
+                t_tokens = _tokens(trig)
+                if not t_tokens:
+                    continue
+                union = len(speech_tokens | t_tokens)
+                score = len(speech_tokens & t_tokens) / union if union else 0.0
+                if score > local_score:
+                    local_best, local_score = inst, score
+        if local_best and local_score >= min_score:
+            return local_best
+    return None
+
+
 if __name__ == "__main__":
     # Quick manual check: python knowledge/rag.py
     print(f"Loaded knowledge keys: {list(KNOWLEDGE.keys())}")
     print(build_examples_block("grooming", 1))
+    print("\n--- match_intent smoke test (scenario=general, fallback=grooming) ---")
+    for utterance in [
+        "Yes, who is this?",          # -> groom-intro-01
+        "go ahead",                   # -> groom-intro-04
+        "go ahead and tell me why my dog is bleeding from the neck",  # -> no match
+        "what's the weather like",    # -> no match
+        "call me later",              # -> groom-intro-03 ([END_CALL])
+    ]:
+        hit = match_intent(utterance, "general", 1, fallback_scenario="grooming")
+        print(f"  {utterance!r:65} -> {hit['id'] if hit else None}")
