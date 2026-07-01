@@ -4,6 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from twilio.jwt.access_token import AccessToken
 from twilio.jwt.access_token.grants import VoiceGrant
 from twilio.twiml.voice_response import VoiceResponse, Gather, Play
+from twilio.rest import Client
 from anthropic import AsyncAnthropic
 from dotenv import load_dotenv
 import psycopg2
@@ -42,6 +43,9 @@ from knowledge.rag import (
 #                     as it arrives — so TTS overlaps generation instead of running after
 #                     it. Claude + Sarvam both have timeouts and degrade gracefully.
 #                     All sentence clips are nested in one barge-in <Gather>.
+#   * CONTEXT        (#9b): only a bounded window of the transcript is sent to Claude
+#                     each turn (HISTORY_MAX_MESSAGES) and the stable system prefix is
+#                     prompt-cached, so latency/cost stay flat on long or looping calls.
 # ─────────────────────────────────────────────────────────────────────────────
 
 load_dotenv()
@@ -60,6 +64,14 @@ FALLBACK_TROUBLE = None
 LLM_TIMEOUT = float(os.environ.get("LLM_TIMEOUT", "12"))
 SARVAM_TIMEOUT = float(os.environ.get("SARVAM_TIMEOUT", "8"))
 
+# Conversation history sent to Claude each turn is capped to the last N messages so
+# the prompt (and thus latency + cost) stays flat on long or looping calls. The full
+# transcript is kept in memory; only the view sent to the model is trimmed. Durable
+# context (customer record + stage rules) lives in the system prompt, so dropping old
+# turns is safe. PROMPT_CACHING caches that stable system prefix across turns.
+HISTORY_MAX_MESSAGES = int(os.environ.get("HISTORY_MAX_MESSAGES", "16"))
+PROMPT_CACHING = os.environ.get("PROMPT_CACHING", "1").strip().lower() in ("1", "true", "yes", "on")
+
 # instance_id -> pre-rendered wav filename (filled at startup by _prerender_intents).
 PRERENDERED_INTENTS: dict[str, str] = {}
 
@@ -72,6 +84,13 @@ CAMPAIGN_SCENARIO = os.environ.get("CAMPAIGN_SCENARIO", "grooming")
 # real customer's record, so it is OFF by default and only injected when DEMO_MODE is
 # enabled (set env DEMO_MODE=1). Real calls use only the genuine database context.
 DEMO_MODE = os.environ.get("DEMO_MODE", "").strip().lower() in ("1", "true", "yes", "on")
+# Which DB record the browser test page (/voice) loads. Defaults to a real unhappy-GROOMING
+# ticket so the browser test exercises the grooming win-back flow. Override via env to test
+# another customer (matches a Ticket ID, phone number, or row index in the ticket DB).
+TEST_CALL_IDENTIFIER = os.environ.get("TEST_CALL_IDENTIFIER", "352027")
+# Record browser test calls (the /voice path) so they can be reviewed afterwards.
+# The outbound make_call path already records via record=True; this covers browser calls.
+RECORD_BROWSER_CALLS = os.environ.get("RECORD_BROWSER_CALLS", "1").strip().lower() in ("1", "true", "yes", "on")
 DEMO_SCENARIO_CONTEXT = (
     "\n\nCRITICAL SCENARIO CONTEXT:\n"
     "The user is Rajat. He is extremely angry about his last grooming session. "
@@ -296,17 +315,43 @@ def _clean_for_tts(text: str) -> str:
     return text.replace("[NEXT_STAGE]", "").replace("[END_CALL]", "").strip()
 
 
+def _messages_for_api(history: list, max_messages: int = None) -> list:
+    """Return the trailing window of the transcript to send to Claude, bounded to
+    `max_messages` so the prompt can't grow without limit on long calls. The window
+    is shifted to begin on a 'user' turn (the Anthropic API requires the first message
+    to be the user's). The stored `history` itself is never mutated."""
+    if max_messages is None:
+        max_messages = HISTORY_MAX_MESSAGES
+    if max_messages <= 0 or len(history) <= max_messages:
+        return history
+    window = history[-max_messages:]
+    while window and window[0]["role"] != "user":
+        window = window[1:]
+    return window
+
+
 async def _stream_and_synthesize(model: str, system_prompt: str, history: list,
                                  pace: float, metrics: dict):
     """Stream Claude; as each complete sentence arrives, fire its TTS concurrently so
-    synthesis OVERLAPS generation instead of starting after it. Returns
+    synthesis OVERLAPS generation instead of starting after it. Sends only a bounded
+    history window and (optionally) caches the stable system prefix. Returns
     (full_text, [wav filenames, in spoken order])."""
     tts_tasks = []
     buf, full = "", ""
+
+    api_messages = _messages_for_api(history)
+    metrics["history_sent"] = len(api_messages)
+    metrics["history_total"] = len(history)
+    # Cache the stable system prefix so repeated turns within a stage reuse it.
+    system_param = (
+        [{"type": "text", "text": system_prompt, "cache_control": {"type": "ephemeral"}}]
+        if PROMPT_CACHING else system_prompt
+    )
+
     llm_start = time.time()
     try:
         async with aclient.messages.stream(
-            model=model, max_tokens=300, system=system_prompt, messages=history,
+            model=model, max_tokens=300, system=system_param, messages=api_messages,
         ) as stream:
             async for delta in stream.text_stream:
                 buf += delta
@@ -319,6 +364,14 @@ async def _stream_and_synthesize(model: str, system_prompt: str, history: list,
                     clean = _clean_for_tts(sentence)
                     if clean:
                         tts_tasks.append(asyncio.create_task(synthesize(clean, pace)))
+            # Capture cache/usage stats — wrapped so a failure here never breaks the turn.
+            try:
+                u = (await stream.get_final_message()).usage
+                metrics["cache_read"] = getattr(u, "cache_read_input_tokens", 0) or 0
+                metrics["cache_created"] = getattr(u, "cache_creation_input_tokens", 0) or 0
+                metrics["input_tokens"] = getattr(u, "input_tokens", 0) or 0
+            except Exception:
+                pass
     except Exception:
         for t in tts_tasks:
             t.cancel()
@@ -375,6 +428,7 @@ COMPLEX_MODEL = "claude-haiku-4-5-20251001"
 
 BASE_RULES = """
 You are Aarya, a warm, empathetic, and welcoming AI customer support agent for Vetic Pet Care.
+PURPOSE: This is an OUTBOUND service-recovery (win-back) call. You are calling a customer who gave UNHAPPY FEEDBACK on a recent service — for now, an unhappy GROOMING experience. The customer's record is already provided to you below (owner name, pet name, service, appointment date, clinic, city). Your job is to confirm what you already know, understand exactly what went wrong with the grooming, and make it right. You already have their details — you are here to CONFIRM and RESOLVE, never to collect information.
 Maintain this warm and empathetic tone throughout the entire conversation.
 The customer is likely unhappy or distressed. DO NOT sound joyful, cheerful, or overly enthusiastic. Maintain a calm, serious, and supportive tone throughout the entire conversation.
 Your responses will be spoken aloud to a customer on a phone call using an Indian voice.
@@ -383,7 +437,7 @@ Keep answers brief and conversational.
 CRITICAL RULES:
 - Speak ONLY in English. Do not use Hindi words or script.
 - Do not use filler sounds like "Umm", "Uhh", "Ah", or "Aaa". They cause the voice engine to stutter.
-- Never exceed 3 sentences per response.
+- Never exceed 2 short sentences per response. Keep it tight — long replies are slow to speak (each sentence adds TTS time) and easy to mishear.
 - ABSOLUTELY NO markdown, asterisks, brackets, quotes, or emojis. Output plain text ONLY. (e.g. no *sigh* or [pause])
 - IMPORTANT COMPLAINT HANDLING: The customer is likely calling because they are unhappy with the service they received. You must listen patiently, apologize sincerely on behalf of Vetic, and focus on de-escalating the situation. Assure them their feedback is taken seriously and offer a concrete resolution or escalation to management. Maintain your warm and empathetic tone while handling complaints.
 - EMPATHY RULE: DO NOT ever use the word "appreciate" (e.g., "I appreciate your feedback", "I appreciate you telling me"). Instead, express genuine empathy using phrases like "I understand completely", "I'm so sorry you experienced that", or "That sounds really difficult".
@@ -420,6 +474,58 @@ conversations: dict[str, dict] = {}
 
 # ── Speech recognition (what the agent HEARS) ────────────────────
 BASE_HINTS = "Vetic, Aarya, grooming, vaccination, checkup, appointment, refund, clinic, doctor, pet, dog, cat"
+
+# Telephony-tuned ASR + endpointing. All env-overridable so you can A/B test on
+# live calls without a code change.
+#   SPEECH_MODEL   : 'phone_call' (+ enhanced) is Google's telephony model, far more
+#                    accurate on 8 kHz call audio than the default. Alternative:
+#                    'experimental_conversations' (no enhanced).
+#   SPEECH_TIMEOUT : seconds of trailing silence before Twilio treats the caller as
+#                    done. Lower = snappier replies but risks cutting off slow or
+#                    emotional talkers; higher = safer but laggier. 'auto' lets Twilio
+#                    decide (usually the laggiest). 2s is a balanced start for a
+#                    de-escalation line where callers pause to think.
+#   START_TIMEOUT  : seconds to wait for the caller to START speaking before re-prompt.
+# NOTE: 'phone_call' (and the deprecated 'enhanced' flag) do NOT support en-IN, so
+# Indian-accented English was mis-transcribed into Hinglish garbage. The
+# 'experimental_conversations' model DOES support en-IN; build_gather() drops the
+# invalid 'enhanced' flag automatically for non-phone_call models.
+SPEECH_MODEL = os.environ.get("SPEECH_MODEL", "experimental_conversations")
+# 2s clipped distressed callers who pause mid-thought; 3s is safer for en-IN.
+SPEECH_TIMEOUT = os.environ.get("SPEECH_TIMEOUT", "3")
+# Numeric form of SPEECH_TIMEOUT for the perceived-latency log; None when set to 'auto'.
+try:
+    SPEECH_TIMEOUT_S = float(SPEECH_TIMEOUT)
+except ValueError:
+    SPEECH_TIMEOUT_S = None
+START_TIMEOUT = int(os.environ.get("START_TIMEOUT", "15"))
+
+# Barge-in: when ON (default) the agent's audio is nested INSIDE the <Gather>, so the
+# recognizer listens WHILE the agent speaks and the caller can interrupt. The downside
+# is that background noise or speaker echo can falsely trigger it, cutting the agent off
+# and feeding noise to STT ("the agent can't hear me"). Set BARGE_IN=0 to play the audio
+# BEFORE the gather instead — the recognizer then only listens AFTER the agent finishes,
+# which is immune to noise/echo cutting in. Use it to A/B test whether barge-in is the
+# cause of a "can't hear me" problem.
+BARGE_IN = os.environ.get("BARGE_IN", "1").strip().lower() in ("1", "true", "yes", "on")
+
+# With actionOnEmptyResult on, every no-speech turn POSTs to /process_speech (so it gets
+# logged), but a truly silent/dead line would then loop "I didn't catch that" forever.
+# After this many CONSECUTIVE empty (no-speech) turns, end the call gracefully.
+MAX_EMPTY_TURNS = int(os.environ.get("MAX_EMPTY_TURNS", "3"))
+
+# State-machine safety net. A real call once looped ONE stage for ~8 minutes because the
+# model never emitted [NEXT_STAGE]. Force-advance a stage after this many turns without
+# progress, and hard-cap the whole call so it can never run forever.
+MAX_STAGE_TURNS = int(os.environ.get("MAX_STAGE_TURNS", "6"))
+MAX_CALL_TURNS = int(os.environ.get("MAX_CALL_TURNS", "25"))
+
+# Drop transcripts below this confidence — they're usually the agent's own echo or background
+# noise ("the agent hearing things on its own"), not the caller. 0 disables the gate.
+# NOTE: Twilio's experimental_conversations often returns 0.0 for garbage AND for very short
+# valid words, so a real one-word reply may occasionally get re-prompted; the Tier-2 Sarvam
+# STT swap gives reliable confidence to lean on.
+CONFIDENCE_MIN = float(os.environ.get("CONFIDENCE_MIN", "0.3"))
 
 
 def hints_from_context(user_context: str) -> str:
@@ -461,19 +567,48 @@ def _base_url(request: Request) -> str:
 
 
 def build_gather(extra_hints: str = "") -> Gather:
-    """Single source of truth for every speech <Gather>. bargeIn=True lets the caller
-    interrupt the nested audio; enhanced=True uses Google's telephony-tuned model."""
+    """Single source of truth for every speech <Gather>.
+    - speechModel='phone_call' + enhanced: Google's telephony-tuned model (much more
+      accurate on 8 kHz call audio than the default).
+    - profanityFilter off: angry callers' real words reach the model so it reads
+      sentiment correctly and de-escalates, instead of seeing masked '****'.
+    - bargeIn: caller can interrupt the nested audio.
+    - hints: caller's real owner/pet/clinic names primed to reduce mis-hears."""
     hints = BASE_HINTS + (", " + extra_hints if extra_hints else "")
-    return Gather(
+    kwargs = dict(
         input="speech",
         action="/process_speech",
-        timeout=15,
-        speechTimeout="auto",
+        timeout=START_TIMEOUT,
+        speechTimeout=SPEECH_TIMEOUT,
+        speechModel=SPEECH_MODEL,
+        profanityFilter=False,
         bargeIn=True,
-        enhanced=True,
+        # Report even no-speech turns to /process_speech, so silence / no-capture is
+        # LOGGED (heard=no) instead of silently falling through to hangup. This is what
+        # makes a "the agent can't hear me" failure visible in latency_logs.csv.
+        actionOnEmptyResult=True,
         language="en-IN",
         hints=hints,
     )
+    # `enhanced` is only valid for the phone_call / numbers_and_commands models;
+    # leave it off for the experimental models so the combo stays valid.
+    if SPEECH_MODEL in ("phone_call", "numbers_and_commands"):
+        kwargs["enhanced"] = True
+    return Gather(**kwargs)
+
+
+def _attach_audio(response: VoiceResponse, gather: Gather, base_url: str,
+                  play_file: str = None, say_text: str = None):
+    """Attach the agent's audio, honoring BARGE_IN.
+    BARGE_IN on  -> nested INSIDE the gather (caller can interrupt the agent).
+    BARGE_IN off -> played on `response` BEFORE the gather, so the recognizer only
+                    listens after the agent finishes (immune to noise/echo cut-ins).
+    The caller appends `gather` to `response` afterwards in both cases."""
+    target = gather if BARGE_IN else response
+    if play_file:
+        target.play(f"{base_url}/audio/{play_file}")
+    elif say_text:
+        target.say(say_text, voice="Polly.Aditi")
 
 
 def _append_listen_with_fallbacks(response: VoiceResponse, request: Request,
@@ -485,10 +620,7 @@ def _append_listen_with_fallbacks(response: VoiceResponse, request: Request,
     response.append(gather)
 
     gather2 = build_gather(extra_hints)
-    if FALLBACK_STILL_THERE:
-        gather2.play(f"{base_url}/audio/{FALLBACK_STILL_THERE}")
-    else:
-        gather2.say(STILL_THERE_TEXT, voice="Polly.Aditi")
+    _attach_audio(response, gather2, base_url, play_file=FALLBACK_STILL_THERE, say_text=STILL_THERE_TEXT)
     response.append(gather2)
 
     if FALLBACK_GOODBYE:
@@ -524,12 +656,10 @@ async def gather_response(request: Request, say_text: str = None, play_file: str
         response.hangup()
         return response
 
-    # Main turn: audio nested INSIDE the Gather + bargeIn so the caller can interrupt.
+    # Main turn: speak, then listen. With BARGE_IN the audio is nested in the Gather so
+    # the caller can interrupt; without it the audio plays before the Gather.
     gather = build_gather(extra_hints)
-    if play_file:
-        gather.play(f"{base_url}/audio/{play_file}")
-    elif say_text:
-        gather.say(say_text, voice="Polly.Aditi")
+    _attach_audio(response, gather, base_url, play_file=play_file, say_text=say_text)
 
     _append_listen_with_fallbacks(response, request, gather, extra_hints)
     return response
@@ -558,10 +688,7 @@ async def _build_greeting_twiml(request: Request, call_sid: str) -> Response:
 
     greeting_file = await synthesize(greeting) if SARVAM_API_KEY else None
     gather = build_gather(extra_hints)
-    if greeting_file:
-        gather.play(f"{base_url}/audio/{greeting_file}")
-    else:
-        gather.say(greeting, voice="Polly.Aditi")
+    _attach_audio(response, gather, base_url, play_file=greeting_file, say_text=greeting)
 
     _append_listen_with_fallbacks(response, request, gather, extra_hints)
     return Response(content=str(response), media_type="application/xml")
@@ -591,7 +718,7 @@ async def incoming_call(request: Request):
     call_sid = form_data.get("CallSid", "")
     # Match the customer by the number we are calling ('To'); fall back to the test number.
     to_number = form_data.get("To") or form_data.get("Called") or ""
-    _init_conversation(call_sid, to_number or "8273004988")
+    _init_conversation(call_sid, to_number or TEST_CALL_IDENTIFIER)
     return await _build_greeting_twiml(request, call_sid)
 
 
@@ -608,8 +735,13 @@ def _twiml_play_clips(request: Request, clips: list, end_call: bool = False,
         return Response(content=str(response), media_type="application/xml")
 
     gather = build_gather(extra_hints)
+    # Honor BARGE_IN: nest clips INSIDE the gather (interruptible) when on; play them
+    # BEFORE the gather (recognizer listens only after the agent finishes — no echo
+    # captured) when off. Previously clips were always nested, so BARGE_IN=0 had no
+    # effect on the main streamed turns.
+    target = gather if BARGE_IN else response
     for fn in clips:
-        gather.play(f"{base_url}/audio/{fn}")
+        target.play(f"{base_url}/audio/{fn}")
     _append_listen_with_fallbacks(response, request, gather, extra_hints)
     return Response(content=str(response), media_type="application/xml")
 
@@ -643,6 +775,8 @@ async def _run_stage(request: Request, user_speech: str, call_sid: str, state: d
     """Single LLM turn: stream Claude, synthesize each sentence as it arrives, parse
     control tags to advance the state machine, and return a barge-in TwiML reply.
     On timeout/error the call degrades gracefully instead of dropping."""
+    state["turn_count"] = state.get("turn_count", 0) + 1
+    state["stage_turns"] = state.get("stage_turns", 0) + 1
     model = COMPLEX_MODEL if is_complex(user_speech, history) else ROUTINE_MODEL
     system_prompt = get_system_prompt(state["scenario"], stage, state.get("user_context", ""))
     pace = get_pace(stage, is_distressed(user_speech))
@@ -660,12 +794,28 @@ async def _run_stage(request: Request, user_speech: str, call_sid: str, state: d
     end_call = "[END_CALL]" in full_text
     if not end_call and "[NEXT_STAGE]" in full_text:
         state["stage"] = min(stage + 1, 4)
+        state["stage_turns"] = 0
         print(f"[{call_sid}] Advanced to stage {state['stage']}")
+    elif not end_call and state["stage_turns"] >= MAX_STAGE_TURNS:
+        # SAFETY NET: the stage looped without emitting [NEXT_STAGE]. Don't get stuck.
+        if stage < 4:
+            state["stage"] = stage + 1
+            state["stage_turns"] = 0
+            print(f"[{call_sid}] SAFETY NET: force-advanced stage {stage}->{state['stage']} "
+                  f"after {MAX_STAGE_TURNS} turns with no progress")
+        else:
+            end_call = True
+            print(f"[{call_sid}] SAFETY NET: ending call — {MAX_STAGE_TURNS} turns stuck in final stage")
+    if not end_call and state["turn_count"] >= MAX_CALL_TURNS:
+        end_call = True
+        print(f"[{call_sid}] SAFETY NET: hard cap of {MAX_CALL_TURNS} turns reached — ending call")
 
     clean_text = _clean_for_tts(full_text)
+    m = state["metrics"]
     print(f"[{call_sid}] AI Response (stage {stage}): {clean_text}")
-    print(f"[{call_sid}] [LATENCY] LLM {state['metrics']['llm_latency']:.2f}s | "
-          f"TTS-tail {state['metrics']['tts_latency']:.2f}s | clips={len(clips)}")
+    print(f"[{call_sid}] [LATENCY] LLM {m['llm_latency']:.2f}s | TTS-tail {m['tts_latency']:.2f}s | "
+          f"clips={len(clips)} | hist {m.get('history_sent', '?')}/{m.get('history_total', '?')} sent | "
+          f"cache read={m.get('cache_read', 0)} created={m.get('cache_created', 0)}")
     history.append({"role": "assistant", "content": [{"type": "text", "text": clean_text}]})
 
     if not clips:                              # TTS produced nothing — don't play silence
@@ -694,6 +844,7 @@ async def _try_fast_path(request: Request, user_speech: str, call_sid: str, stat
     end_call = tag == "[END_CALL]"
     if tag == "[NEXT_STAGE]":
         state["stage"] = min(stage + 1, 4)
+        state["stage_turns"] = 0
         print(f"[{call_sid}] Advanced to stage {state['stage']}")
 
     return Response(
@@ -704,17 +855,70 @@ async def _try_fast_path(request: Request, user_speech: str, call_sid: str, stat
     )
 
 
-def _log_latency(call_sid: str, stage: int, llm: float, tts: float, total: float):
+def _latency_line(call_sid: str, total_time: float, llm: float = 0.0, tts: float = 0.0,
+                  label: str = "turn") -> str:
+    """Per-turn perceived-latency breakdown. Separates the parts of the delay a caller
+    feels: the endpointing wait (Twilio waits SPEECH_TIMEOUT of silence BEFORE the
+    request reaches us — invisible to the server but real to the caller), the server
+    work (LLM + the TTS not overlapped by streaming), and the rough total. Audio also
+    only plays after the whole TwiML returns, so server-time ≈ added dead air."""
+    if SPEECH_TIMEOUT_S is not None:
+        endpoint = f"{SPEECH_TIMEOUT_S:.0f}s"
+        perceived = f"{SPEECH_TIMEOUT_S + total_time:.2f}s"
+    else:
+        endpoint = str(SPEECH_TIMEOUT)
+        perceived = "?"
+    return (f"[{call_sid}] [LATENCY] {label}: endpoint~{endpoint} (pre-server, Twilio waits "
+            f"for silence) | server {total_time:.2f}s (LLM {llm:.2f}s + TTS-tail {tts:.2f}s) "
+            f"| ~caller-perceived {perceived} + network")
+
+
+LATENCY_CSV = "latency_logs.csv"
+# Each row separates the TWO actions a turn needs, so the log tells you WHICH one failed:
+#   HEARING (did the agent capture your speech?):
+#     Heard        = yes / no   (no = empty/garbled SpeechResult: noise, barge-in, silence)
+#     Confidence   = Twilio's 0.0-1.0 transcription score  (low = shaky capture)
+#     Transcript   = what was actually recognized  (blank/garbled = a hearing failure)
+#   RESPONDING (how long to generate + speak the reply):
+#     LLM_sec      = Claude generation
+#     TTS_tail_sec = TTS time NOT overlapped by streaming
+#     Server_sec   = our total processing (request in -> TwiML out); ~= added dead air
+#   TURN-TAKING / TOTAL:
+#     Endpoint_sec  = silence Twilio waits (SPEECH_TIMEOUT) BEFORE the request reaches us
+#     Perceived_sec = Endpoint + Server (closest computable to what the caller feels; the
+#                     residual on top is network/tunnel, which a server cannot measure).
+# READING IT: many Heard=no / low Confidence -> a HEARING problem (try BARGE_IN=0, mic);
+# Heard=yes but big LLM/TTS/Server -> a RESPONDING problem; both fine but caller still
+# lags -> it's the Endpoint wait or the network.
+LATENCY_HEADER = ["Timestamp", "Call_SID", "Stage", "Path",
+                  "Heard", "Confidence", "Transcript",
+                  "Endpoint_sec", "LLM_sec", "TTS_tail_sec", "Server_sec", "Perceived_sec"]
+
+
+def _log_latency(call_sid: str, stage: int, llm: float, tts: float, total: float,
+                 path: str = "llm", heard: str = "yes", confidence: str = "",
+                 transcript: str = ""):
     try:
-        csv_path = "latency_logs.csv"
-        file_exists = os.path.exists(csv_path)
-        with open(csv_path, "a", newline="") as f:
+        endpoint = SPEECH_TIMEOUT_S            # None when SPEECH_TIMEOUT='auto'
+        perceived = (endpoint + total) if endpoint is not None else None
+        # If a CSV with a different (older) header exists, archive it so columns don't
+        # misalign with the current schema.
+        if os.path.exists(LATENCY_CSV):
+            with open(LATENCY_CSV, "r", newline="") as f:
+                if f.readline().strip() != ",".join(LATENCY_HEADER):
+                    os.replace(LATENCY_CSV, "latency_logs.old.csv")
+        file_exists = os.path.exists(LATENCY_CSV)
+        with open(LATENCY_CSV, "a", newline="") as f:
             writer = csv.writer(f)
             if not file_exists:
-                writer.writerow(["Timestamp", "Call_SID", "Stage", "LLM_Latency_sec",
-                                 "TTS_Latency_sec", "Total_Latency_sec"])
-            writer.writerow([time.strftime("%Y-%m-%d %H:%M:%S"), call_sid, stage,
-                             f"{llm:.2f}", f"{tts:.2f}", f"{total:.2f}"])
+                writer.writerow(LATENCY_HEADER)
+            writer.writerow([
+                time.strftime("%Y-%m-%d %H:%M:%S"), call_sid, stage, path,
+                heard, confidence or "", (transcript or "").strip()[:200],
+                f"{endpoint:.2f}" if endpoint is not None else "auto",
+                f"{llm:.2f}", f"{tts:.2f}", f"{total:.2f}",
+                f"{perceived:.2f}" if perceived is not None else "",
+            ])
     except Exception as e:
         print(f"Failed to write metrics to CSV: {e}")
 
@@ -725,6 +929,12 @@ async def process_speech(request: Request):
     form_data = await request.form()
     user_speech = form_data.get("SpeechResult", "")
     call_sid = form_data.get("CallSid", "")
+    confidence = form_data.get("Confidence", "")
+    # Raw STT diagnostics — fires on EVERY turn (even empty) so empty / garbled / low-
+    # confidence transcripts can be correlated with barge-in firing. repr() exposes
+    # whitespace and garbage; Confidence is Twilio's 0.0-1.0 transcription score (blank
+    # when nothing was recognized).
+    print(f"[{call_sid}] STT SpeechResult={user_speech!r} | Confidence={confidence or 'n/a'}")
 
     state = conversations.setdefault(
         call_sid,
@@ -735,12 +945,48 @@ async def process_speech(request: Request):
     history = state["history"]
 
     if not user_speech:
-        print(f"[{call_sid}] Received empty SpeechResult from Twilio. Prompting to repeat.")
+        total_time = time.time() - req_start
+        state["empty_count"] = state.get("empty_count", 0) + 1
+        print(f"[{call_sid}] Empty SpeechResult from Twilio (Confidence={confidence or 'n/a'}) — "
+              f"no speech captured ({state['empty_count']} in a row). Likely mic/audio path or silence.")
+        # Log the HEARING FAILURE so it's visible in the sheet (this turn used to be
+        # dropped from the CSV — masking exactly the "agent can't hear me" problem).
+        _log_latency(call_sid, state.get("stage", 1), 0.0, 0.0, total_time,
+                     path="reprompt", heard="no", confidence=confidence, transcript=user_speech)
+        # Guard: actionOnEmptyResult makes a dead/silent line loop forever otherwise.
+        if state["empty_count"] >= MAX_EMPTY_TURNS:
+            print(f"[{call_sid}] {state['empty_count']} empty turns in a row — ending call gracefully.")
+            return Response(content=str(await gather_response(
+                request, say_text="I'm having trouble hearing you. I'll call you back later. Goodbye.",
+                end_call=True)), media_type="application/xml")
         return Response(content=str(await gather_response(
             request, say_text="I didn't catch that. Could you please repeat?",
             extra_hints=state.get("extra_hints", ""))), media_type="application/xml")
 
-    print(f"[{call_sid}] Transcribed: {user_speech}")
+    # LOW-CONFIDENCE GUARD: Twilio returns garbage (often the agent's own echo or noise) with
+    # low/zero confidence. Don't act on it — treat like a no-catch and re-prompt, and count it
+    # toward the same hang-up guard so a persistently bad line ends gracefully.
+    try:
+        conf_val = float(confidence) if confidence not in ("", None) else 0.0
+    except (TypeError, ValueError):
+        conf_val = 0.0
+    if CONFIDENCE_MIN > 0 and conf_val < CONFIDENCE_MIN:
+        total_time = time.time() - req_start
+        state["empty_count"] = state.get("empty_count", 0) + 1
+        print(f"[{call_sid}] LOW-CONFIDENCE drop ({conf_val:.2f} < {CONFIDENCE_MIN}): {user_speech!r} "
+              f"({state['empty_count']} unclear in a row).")
+        _log_latency(call_sid, state.get("stage", 1), 0.0, 0.0, total_time,
+                     path="lowconf", heard="low", confidence=confidence, transcript=user_speech)
+        if state["empty_count"] >= MAX_EMPTY_TURNS:
+            return Response(content=str(await gather_response(
+                request, say_text="I'm having trouble hearing you clearly. I'll call you back later. Goodbye.",
+                end_call=True)), media_type="application/xml")
+        return Response(content=str(await gather_response(
+            request, say_text="Sorry, I didn't catch that clearly. Could you say it once more?",
+            extra_hints=state.get("extra_hints", ""))), media_type="application/xml")
+
+    state["empty_count"] = 0  # reset the no-speech counter on a successful capture
+    print(f"[{call_sid}] Transcribed: {user_speech} (confidence {conf_val:.2f})")
 
     # FAST-TRACK END CALL — if the AI asked "Anything else?" and the user says "No".
     clean_speech = re.sub(r'[^\w\s]', '', user_speech.lower().strip())
@@ -760,8 +1006,9 @@ async def process_speech(request: Request):
     fast = await _try_fast_path(request, user_speech, call_sid, state, history)
     if fast is not None:
         total_time = time.time() - req_start
-        print(f"[{call_sid}] [LATENCY] Fast-path turn took {total_time:.2f}s")
-        _log_latency(call_sid, state["stage"], 0.0, 0.0, total_time)
+        print(_latency_line(call_sid, total_time, label="fast-path"))
+        _log_latency(call_sid, state["stage"], 0.0, 0.0, total_time, path="fast-path",
+                     heard="yes", confidence=confidence, transcript=user_speech)
         return fast
 
     # LLM PATH.
@@ -773,9 +1020,12 @@ async def process_speech(request: Request):
         resp = handle_error(call_sid, history, Exception("Invalid stage state"))
 
     total_time = time.time() - req_start
-    print(f"[{call_sid}] [LATENCY] Total request processing took {total_time:.2f}s")
+    print(_latency_line(call_sid, total_time,
+                        state["metrics"]["llm_latency"], state["metrics"]["tts_latency"],
+                        label=f"stage {state['stage']}"))
     _log_latency(call_sid, state["stage"],
-                 state["metrics"]["llm_latency"], state["metrics"]["tts_latency"], total_time)
+                 state["metrics"]["llm_latency"], state["metrics"]["tts_latency"], total_time,
+                 path="llm", heard="yes", confidence=confidence, transcript=user_speech)
     return resp
 
 
@@ -866,12 +1116,46 @@ async def get_token():
     return JSONResponse({"token": token.to_jwt()})
 
 
+_twilio_rest = None
+
+
+def _twilio_client():
+    """Lazy Twilio REST client (used to start recordings on in-progress calls)."""
+    global _twilio_rest
+    if _twilio_rest is None:
+        sid = os.environ.get("TWILIO_ACCOUNT_SID")
+        tok = os.environ.get("TWILIO_AUTH_TOKEN")
+        if sid and tok:
+            _twilio_rest = Client(sid, tok)
+    return _twilio_rest
+
+
+def _start_call_recording_sync(call_sid: str, base_url: str):
+    """Start recording an in-progress call. Twilio POSTs to /recording_status when done,
+    where the existing handler downloads the mp3 into recordings/."""
+    try:
+        client = _twilio_client()
+        if not client or not call_sid:
+            return
+        client.calls(call_sid).recordings.create(
+            recording_status_callback=f"{base_url}/recording_status",
+            recording_status_callback_event=["completed"],
+        )
+        print(f"[{call_sid}] Recording started for browser call.")
+    except Exception as e:
+        print(f"[{call_sid}] Could not start recording: {e}")
+
+
 @app.post("/voice")
 async def voice(request: Request):
-    """Browser test-client entrypoint (static/index.html). Uses the fixed test number."""
+    """Browser test-client entrypoint (static/index.html). Loads the grooming test record
+    and (optionally) records the call so it can be reviewed afterwards."""
     form_data = await request.form()
     call_sid = form_data.get("CallSid", "")
-    _init_conversation(call_sid, "8273004988")
+    _init_conversation(call_sid, TEST_CALL_IDENTIFIER)
+    if RECORD_BROWSER_CALLS and call_sid:
+        # Fire-and-forget so it never delays the greeting.
+        asyncio.create_task(asyncio.to_thread(_start_call_recording_sync, call_sid, _base_url(request)))
     return await _build_greeting_twiml(request, call_sid)
 
 

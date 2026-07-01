@@ -1,0 +1,13 @@
+# LiveKit Vetic voice agent — Sarvam STT + TTS, Claude LLM.
+livekit-agents[anthropic]~=1.2
+livekit-plugins-sarvam~=1.2
+
+# customer DB
+pandas>=2.0
+openpyxl>=3.1
+python-dotenv>=1.0
+
+# web-call front-end (token + page server)
+fastapi>=0.110
+uvicorn>=0.27
+imageio-ffmpeg>=0.4   # bundles an ffmpeg binary for post-call webm->mp3 conversion

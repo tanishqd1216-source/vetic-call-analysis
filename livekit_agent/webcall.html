@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vetic — Talk to Aarya</title>
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; max-width: 640px; margin: 40px auto; padding: 0 16px; color: #222; }
+    h1 { font-size: 20px; }
+    #status { padding: 10px 14px; border-radius: 8px; background: #eef; margin: 16px 0; font-weight: 600; }
+    button { font-size: 16px; padding: 10px 20px; border-radius: 8px; border: 0; cursor: pointer; margin-right: 8px; }
+    #start { background: #27ae60; color: #fff; }
+    #end { background: #c0392b; color: #fff; }
+    button:disabled { opacity: .5; cursor: not-allowed; }
+    #transcript { margin-top: 20px; border-top: 1px solid #ddd; padding-top: 12px; }
+    #transcript div { margin: 6px 0; line-height: 1.4; }
+    .you { color: #2c3e50; }
+    .aarya { color: #1f7a4d; }
+    small { color: #888; }
+  </style>
+</head>
+<body>
+  <h1>📞 Vetic — Talk to Aarya</h1>
+  <div id="status">Idle. Click “Start Call”, allow the microphone, and wait for Aarya to greet you.</div>
+  <button id="start">Start Call</button>
+  <button id="end" disabled>End Call</button>
+  <div><small id="recinfo"></small></div>
+  <div id="transcript"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/livekit-client@2/dist/livekit-client.umd.min.js"></script>
+  <script>
+    const LK = window.LivekitClient;
+    let room = null;
+    // recording state
+    let audioCtx = null, mixDest = null, mediaRecorder = null, recChunks = [], recTs = null, recStopped = false;
+
+    const statusEl = document.getElementById("status");
+    const startBtn = document.getElementById("start");
+    const endBtn = document.getElementById("end");
+    const recEl = document.getElementById("recinfo");
+    const tEl = document.getElementById("transcript");
+
+    const setStatus = (s) => (statusEl.textContent = s);
+    function log(role, text) {
+      const d = document.createElement("div");
+      d.className = role === "You" ? "you" : "aarya";
+      d.innerHTML = "<b>" + role + ":</b> " + text;
+      tEl.appendChild(d); d.scrollIntoView();
+    }
+    function nowStamp() {
+      const d = new Date(), p = (n) => String(n).padStart(2, "0");
+      return "" + d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + "_" +
+             p(d.getHours()) + p(d.getMinutes()) + p(d.getSeconds());
+    }
+    function cleanup() { endBtn.disabled = true; startBtn.disabled = false; room = null; }
+
+    function stopRecording() {
+      if (recStopped) return;
+      recStopped = true;
+      try { if (mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop(); } catch (e) {}
+    }
+
+    startBtn.onclick = async () => {
+      startBtn.disabled = true;
+      setStatus("Connecting…");
+      recChunks = []; recStopped = false; recTs = nowStamp();
+      try {
+        const res = await fetch("/token");
+        const { token, url } = await res.json();
+
+        room = new LK.Room({ adaptiveStream: true, dynacast: true });
+
+        room.on(LK.RoomEvent.TrackSubscribed, (track) => {
+          if (track.kind !== LK.Track.Kind.Audio) return;
+          const el = track.attach(); el.autoplay = true; document.body.appendChild(el);  // play Aarya
+          try {  // add Aarya's audio to the recording mix
+            if (audioCtx && mixDest && track.mediaStreamTrack) {
+              audioCtx.createMediaStreamSource(new MediaStream([track.mediaStreamTrack])).connect(mixDest);
+            }
+          } catch (e) { console.error("mix add (agent) failed", e); }
+        });
+        room.on(LK.RoomEvent.TranscriptionReceived, (segments, participant) => {
+          const who = participant && participant.identity === "web-caller" ? "You" : "Aarya";
+          segments.forEach((s) => { if (s.final) log(who, s.text); });
+        });
+        room.on(LK.RoomEvent.ParticipantDisconnected, () => {
+          setStatus("Aarya ended the call. ✔ Saving recording…");
+          stopRecording();
+          if (room) room.disconnect();
+          cleanup();
+        });
+        room.on(LK.RoomEvent.Disconnected, () => {
+          stopRecording();
+          setStatus("Call ended. Recording saved."); cleanup();
+        });
+
+        await room.connect(url, token);
+        await room.localParticipant.setMicrophoneEnabled(true);
+
+        // ── start recording: mix your mic + (later) Aarya's audio, record, upload on stop ──
+        try {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          mixDest = audioCtx.createMediaStreamDestination();
+          const micPub = room.localParticipant.getTrackPublication(LK.Track.Source.Microphone);
+          const micTrack = micPub && micPub.track && micPub.track.mediaStreamTrack;
+          if (micTrack) audioCtx.createMediaStreamSource(new MediaStream([micTrack])).connect(mixDest);
+          let opts = {};
+          if (window.MediaRecorder && MediaRecorder.isTypeSupported &&
+              MediaRecorder.isTypeSupported("audio/webm;codecs=opus")) opts = { mimeType: "audio/webm;codecs=opus" };
+          mediaRecorder = new MediaRecorder(mixDest.stream, opts);
+          mediaRecorder.ondataavailable = (e) => { if (e.data && e.data.size) recChunks.push(e.data); };
+          mediaRecorder.onstop = async () => {
+            try {
+              const blob = new Blob(recChunks, { type: "audio/webm" });
+              if (blob.size > 0) {
+                const r = await fetch("/recording?ts=" + recTs, { method: "POST", body: blob });
+                const j = await r.json();
+                recEl.textContent = "Recording saved: " + (j.saved || (recTs + ".webm"));
+              }
+            } catch (e) { console.error("recording upload failed", e); recEl.textContent = "Recording upload failed (see console)."; }
+          };
+          mediaRecorder.start(2000);  // flush a chunk every 2s so a crash doesn't lose everything
+          recEl.textContent = "Recording… → " + recTs + ".webm";
+        } catch (e) { console.error("recording setup failed (call continues)", e); }
+
+        setStatus("In call with Aarya — wait for her greeting, then speak.");
+        endBtn.disabled = false;
+      } catch (e) {
+        setStatus("Error: " + (e && e.message ? e.message : e));
+        startBtn.disabled = false;
+      }
+    };
+
+    endBtn.onclick = async () => { stopRecording(); if (room) await room.disconnect(); };
+  </script>
+</body>
+</html>

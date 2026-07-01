@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>Vetic Pet Care - Browser Calling</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://sdk.twilio.com/js/client/v1.14/twilio.min.js"></script>
+    <!-- Twilio Voice JS SDK v2 (the old js/client/v1.x SDK is deprecated -> "Client version not supported"). -->
+    <script src="https://cdn.jsdelivr.net/npm/@twilio/voice-sdk@2.18.3/dist/twilio.min.js"></script>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f7f6; margin: 0; }
         .container { background-color: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; max-width: 400px; width: 100%; }
@@ -32,64 +33,91 @@
         const statusDiv = document.getElementById('status');
         const makeCallBtn = document.getElementById('make-call');
         const endCallBtn = document.getElementById('end-call');
-        
+
         let device;
+        let activeCall;
+
+        function setStatus(text, color) {
+            statusDiv.innerText = text;
+            statusDiv.style.color = color;
+        }
+
+        async function fetchToken() {
+            const response = await fetch('/token');
+            const data = await response.json();
+            if (data.error) throw new Error(data.error);
+            return data.token;
+        }
 
         async function init() {
             try {
-                const response = await fetch('/token');
-                const data = await response.json();
-                
-                device = new Twilio.Device(data.token, {
+                const token = await fetchToken();
+
+                // v2: the Device does not auto-register; construct, wire events, then register().
+                device = new Twilio.Device(token, {
                     codecPreferences: ['opus', 'pcmu'],
-                    fakeLocalDTMF: true,
-                    enableRingingState: true
                 });
 
-                device.on('ready', () => {
-                    statusDiv.innerText = 'Ready to call';
-                    statusDiv.style.color = '#27ae60';
+                device.on('registered', () => {
+                    setStatus('Ready to call', '#27ae60');
                     makeCallBtn.disabled = false;
                 });
 
                 device.on('error', (error) => {
-                    statusDiv.innerText = 'Error: ' + error.message;
-                    statusDiv.style.color = '#c0392b';
+                    setStatus('Error: ' + (error && error.message ? error.message : error), '#c0392b');
                     console.error('Twilio.Device Error:', error);
                 });
 
-                device.on('connect', (conn) => {
-                    statusDiv.innerText = 'Call connected';
-                    statusDiv.style.color = '#2980b9';
-                    makeCallBtn.style.display = 'none';
-                    endCallBtn.style.display = 'block';
+                // Refresh the token before it expires so long sessions don't drop.
+                device.on('tokenWillExpire', async () => {
+                    try { device.updateToken(await fetchToken()); }
+                    catch (e) { console.error('Token refresh failed:', e); }
                 });
 
-                device.on('disconnect', (conn) => {
-                    statusDiv.innerText = 'Call ended';
-                    statusDiv.style.color = '#f39c12';
-                    makeCallBtn.style.display = 'block';
-                    endCallBtn.style.display = 'none';
-                });
-
+                await device.register();
             } catch (err) {
-                statusDiv.innerText = 'Failed to fetch token';
-                statusDiv.style.color = '#c0392b';
+                setStatus('Failed to initialize: ' + err.message, '#c0392b');
                 console.error(err);
             }
         }
 
-        makeCallBtn.onclick = () => {
-            if (device) {
-                statusDiv.innerText = 'Connecting...';
-                device.connect();
+        function wireCall(call) {
+            activeCall = call;
+            call.on('accept', () => {
+                setStatus('Call connected', '#2980b9');
+                makeCallBtn.style.display = 'none';
+                endCallBtn.style.display = 'block';
+            });
+            const reset = (label) => {
+                setStatus(label, '#f39c12');
+                makeCallBtn.style.display = 'block';
+                endCallBtn.style.display = 'none';
+                activeCall = null;
+            };
+            call.on('disconnect', () => reset('Call ended'));
+            call.on('cancel', () => reset('Call cancelled'));
+            call.on('reject', () => reset('Call rejected'));
+            call.on('error', (error) => {
+                console.error('Call Error:', error);
+                setStatus('Call error: ' + (error && error.message ? error.message : error), '#c0392b');
+            });
+        }
+
+        makeCallBtn.onclick = async () => {
+            if (!device) return;
+            try {
+                setStatus('Connecting...', '#e67e22');
+                // v2: device.connect() is async and resolves to a Call you bind events on.
+                const call = await device.connect({ params: {} });
+                wireCall(call);
+            } catch (err) {
+                setStatus('Could not start call: ' + err.message, '#c0392b');
+                console.error(err);
             }
         };
 
         endCallBtn.onclick = () => {
-            if (device) {
-                device.disconnectAll();
-            }
+            if (device) device.disconnectAll();
         };
 
         // Initialize on load
