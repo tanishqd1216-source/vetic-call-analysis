@@ -13,6 +13,7 @@ import asyncio
 import os
 import re
 import pandas as pd
+import sqlite3
 import time
 import csv
 import httpx
@@ -167,10 +168,12 @@ def _http() -> httpx.AsyncClient:
         _http_client = httpx.AsyncClient(timeout=httpx.Timeout(SARVAM_TIMEOUT))
     return _http_client
 
-# --- Load Excel Database ---
-EXCEL_PATH = r"c:\Users\hp\Desktop\sample data\sample_ticket_summary.xlsx"
+# --- Load SQLite Database ---
+DB_PATH = r"c:\Users\hp\Desktop\sample data\vetic_data.db"
 try:
-    TICKET_DB = pd.read_excel(EXCEL_PATH)
+    conn = sqlite3.connect(DB_PATH)
+    TICKET_DB = pd.read_sql("SELECT * FROM ticket_summary", conn)
+    conn.close()
     print(f"Loaded {len(TICKET_DB)} records from ticket database.")
 except Exception as e:
     print(f"Failed to load ticket database: {e}")
@@ -204,12 +207,12 @@ def get_user_context(identifier=0) -> str:
         else:
             ident = str(identifier).strip()
             target = _phone_digits(ident)
-            if len(target) == 10 and "mobile No." in TICKET_DB.columns:
-                hits = TICKET_DB[TICKET_DB["mobile No."].map(_phone_digits) == target]
+            if len(target) == 10 and "mobile_no." in TICKET_DB.columns:
+                hits = TICKET_DB[TICKET_DB["mobile_no."].map(_phone_digits) == target]
                 if not hits.empty:
                     row = hits.iloc[0]
             if row is None:
-                for col in ("Ticket ID", "user_ids"):
+                for col in ("ticket_id", "user_ids"):
                     if col in TICKET_DB.columns:
                         hits = TICKET_DB[TICKET_DB[col].astype(str).str.strip() == ident]
                         if not hits.empty:
@@ -231,12 +234,12 @@ def get_user_context(identifier=0) -> str:
             "VERIFY each detail with the customer in your own words; do NOT assume it is correct until they confirm:",
         ]
         for label, val in [
-            ("Owner name", g("Full name")),
-            ("Pet name", g("Pet name")),
-            ("Service / appointment type", g("Final App type", "Appt_type", "Type")),
+            ("Owner name", g("full_name")),
+            ("Pet name", g("pet_name")),
+            ("Service / appointment type", g("final_app_type", "appt_type", "type")),
             ("Appointment date", g("appointment_date")),
-            ("Clinic", g("final clinic Name")),
-            ("City", g("City")),
+            ("Clinic", g("final_clinic_name")),
+            ("City", g("city")),
         ]:
             if val:
                 parts.append(f"- {label}: {val}")

@@ -1,0 +1,71 @@
+Loaded 28 records from ticket database.
+[startup] Pre-rendered 10 intent audio clip(s).
+INFO:     127.0.0.1:54274 - "GET /token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53495 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53495 - "GET /token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53495 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53495 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+[CA624609187da82551945a9e10876b6deb] Recording started for browser call.
+INFO:     44.212.57.195:0 - "POST /voice HTTP/1.1" 200 OK
+INFO:     54.224.185.254:0 - "GET /e035ede2-c3de-4863-b6e3-9a6e7df71bdc.wav HTTP/1.1" 200 OK
+[CA624609187da82551945a9e10876b6deb] STT SpeechResult='Hariya Tel MI' | Confidence=0.0
+[CA624609187da82551945a9e10876b6deb] LOW-CONFIDENCE drop (0.00 < 0.3): 'Hariya Tel MI' (1 unclear in a row).
+INFO:     100.27.18.58:0 - "POST /process_speech HTTP/1.1" 200 OK
+INFO:     44.212.25.47:0 - "GET /9ab008d3-c693-4730-8c33-d1febb01098d.wav HTTP/1.1" 200 OK
+[CA624609187da82551945a9e10876b6deb] STT SpeechResult='theek hai' | Confidence=0.08304863
+[CA624609187da82551945a9e10876b6deb] LOW-CONFIDENCE drop (0.08 < 0.3): 'theek hai' (2 unclear in a row).
+INFO:     18.232.67.184:0 - "POST /process_speech HTTP/1.1" 200 OK
+INFO:     52.54.104.28:0 - "GET /98f81321-2fca-42b1-af43-d6596bcba132.wav HTTP/1.1" 200 OK
+[CA624609187da82551945a9e10876b6deb] STT SpeechResult='Tel MI' | Confidence=3.3371467E-5
+[CA624609187da82551945a9e10876b6deb] LOW-CONFIDENCE drop (0.00 < 0.3): 'Tel MI' (3 unclear in a row).
+INFO:     100.48.14.203:0 - "POST /process_speech HTTP/1.1" 200 OK
+INFO:     18.207.232.167:0 - "GET /14898d55-90e7-45ab-b8c8-9f9599cc3e3e.wav HTTP/1.1" 200 OK
+New recording ready: REc0d4146afad2b1db68e8ace29e065f1c. Downloading...
+INFO:     54.161.89.172:0 - "POST /recording_status HTTP/1.1" 204 No Content
+[REc0d4146afad2b1db68e8ace29e065f1c] Successfully saved as recordings\_Unknown\20260630_153935.mp3
+INFO:     127.0.0.1:57731 - "GET /token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58725 - "GET /token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55579 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55579 - "GET /token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58508 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58508 - "GET /token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58508 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58508 - "GET /token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58508 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58508 - "GET /token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58508 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58508 - "GET /token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58508 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58508 - "GET /token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58508 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58508 - "GET /token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57197 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57197 - "GET /token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57197 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+[CA6ac7446ff44dc8604e6345951fc6ab56] Recording started for browser call.
+INFO:     54.196.178.43:0 - "POST /voice HTTP/1.1" 200 OK
+INFO:     13.220.149.164:0 - "GET /be7561c3-332c-443b-afdb-c8640edce60b.wav HTTP/1.1" 200 OK
+[CA6ac7446ff44dc8604e6345951fc6ab56] STT SpeechResult='note Dala Hua Hai' | Confidence=0.389526
+[CA6ac7446ff44dc8604e6345951fc6ab56] Transcribed: note Dala Hua Hai (confidence 0.39)
+[CA6ac7446ff44dc8604e6345951fc6ab56] AI Response (stage 1): I appreciate you reaching out, but I speak only in English. Could you please repeat that in English so I can help you properly?
+[CA6ac7446ff44dc8604e6345951fc6ab56] [LATENCY] LLM 1.38s | TTS-tail 1.88s | clips=2 | hist 1/1 sent | cache read=0 created=0
+[CA6ac7446ff44dc8604e6345951fc6ab56] [LATENCY] stage 1: endpoint~2s (pre-server, Twilio waits for silence) | server 3.27s (LLM 1.38s + TTS-tail 1.88s) | ~caller-perceived 5.27s + network
+INFO:     50.17.173.34:0 - "POST /process_speech HTTP/1.1" 200 OK
+INFO:     44.204.68.241:0 - "GET /21122eb3-44f6-48fb-a279-02ddff6a734d.wav HTTP/1.1" 200 OK
+INFO:     54.81.29.152:0 - "GET /62dd39b9-0a52-44dd-bbf7-6ec832d51e54.wav HTTP/1.1" 200 OK
+New recording ready: RE2bf3929a29c11b400253dd675994afcf. Downloading...
+INFO:     54.234.250.208:0 - "POST /recording_status HTTP/1.1" 204 No Content
+[RE2bf3929a29c11b400253dd675994afcf] Successfully saved as recordings\_Unknown\20260630_180450.mp3
+INFO:     127.0.0.1:65347 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65347 - "GET /token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65347 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53900 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53900 - "GET /token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53900 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54761 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53372 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53372 - "GET /token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53372 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53372 - "GET /token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53372 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53372 - "GET /favicon.ico HTTP/1.1" 404 Not Found

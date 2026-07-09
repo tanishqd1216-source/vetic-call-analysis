@@ -11,3 +11,7 @@ python-dotenv>=1.0
 fastapi>=0.110
 uvicorn>=0.27
 imageio-ffmpeg>=0.4   # bundles an ffmpeg binary for post-call webm->mp3 conversion
+
+# Vector DB
+chromadb
+sentence-transformers

@@ -1,0 +1,442 @@
+# Vetic — Calling Support Agent Knowledge Base
+
+## 1. Company Overview
+- **What Vetic is:** India's largest tech-enabled veterinary clinic chain — 24/7 multi-utility centers for dogs and cats, backed by an in-house tech stack (vet management system, pet lifecycle management, and quick-commerce for pet products).
+- **Founded:** 2022, positioned as India's first tech-driven pet clinic chain startup.
+- **Leadership:** Gaurav Ajmera, CEO (prior experience across Oyo and Pristyn Care, growth and cross-functional team building).
+- **Scale:** 60–65+ clinics across 11 Indian cities, serving 125K+ pet parents and 400+ pets/day at peak.
+- **Cities covered:** Delhi NCR (Delhi, Gurugram/Gurgaon, Noida, Ghaziabad, Faridabad), Mumbai (incl. Navi Mumbai, Thane, Powai), Pune, Bengaluru, Hyderabad, Chennai, Kolkata, and UP.
+- **Model:** Hub-and-spoke — clinic-level routine/outpatient care (primary) plus hospital-grade capabilities (surgery, ICU, in-patient) at larger/select locations (secondary & tertiary care).
+- **Mission framing:** "Bridging the gap in pet healthcare" — accessible, holistic, human-grade care for pets, from vaccination to critical surgery, in one ecosystem.
+
+---
+
+## 2. Services Offered
+### Primary Care
+- Vaccinations (rabies, distemper, parvo, etc.)
+- Deworming
+- Dermatology / skin treatments
+- Tick and flea prevention
+- Dental care / cleaning
+- OPD consultations
+
+### Secondary Care
+- Management of conditions like tick fever, chronic kidney disease, hepatitis, arthritis
+- Diagnostics: in-house X-ray, ultrasound, blood and urine analysis (same-day results for most routine panels)
+
+### Tertiary Care
+- Critical and advanced surgeries (including spaying/neutering, emergency surgery e.g. pyometra)
+- In-patient care with 24/7 monitoring (post-surgical recovery, trauma, viral illness)
+- Physiotherapy — mobility support after surgery or injury
+
+### Grooming
+- Bathing, medicated baths, haircuts, nail trimming, ear cleaning, brushing
+- Performed by vet-certified groomers using vet-approved products
+- A vet health-check typically accompanies grooming sessions to flag skin/coat/ear issues
+
+### Retail / Pharmacy
+- In-house pharmacy (dewormers through advanced/oncology medication)
+- Pet food, accessories, toys, crates, leashes, litter — international brands stocked at clinics and via app/quick-commerce
+
+### Emergency Care
+- Select clinics operate 24/7
+- **SOS flow:** After 8 PM, the Vetic app's SOS button locates the nearest available clinic and provides a call-ahead number so the team can prep before arrival
+- No appointment required for emergencies; walk-ins accepted
+
+### Community Outreach
+- Vaccination drives at shelters/NGOs
+- Free health camps in residential societies (check-ups, vaccination, deworming, advice)
+
+---
+
+## 3. Booking & Access
+- **Primary booking channel:** Vetic app (iOS/Android) — select service, choose clinic/time, confirm. Real-time slot visibility, GPS auto-locates nearest clinic.
+- **Walk-ins:** Welcome at all clinics for non-emergency, routine visits.
+- **Same-day consultations:** Generally available.
+- **Hours:** Most clinics operate extended hours, 7 days a week, including weekends/public holidays. Some locations are 24/7.
+- **Consultation channel:** In-person only by design (Vetic's stated position is that pet health is best assessed physically) — phone support is for triage, booking, and guidance, not remote diagnosis.
+- **First-time offers:** App-exclusive discounts are sometimes run (e.g., first grooming session offers) — confirm current live offers before quoting.
+
+---
+
+## 4. Common Call Reasons & How to Handle Them
+Based on recurring patterns in Vetic's own complaint/ticket analysis, the categories below account for the large majority of inbound calls. Structure triage around these buckets.
+
+### A. Billing & Invoicing
+- Most common complaint theme historically (incorrect billing, invoice clarification, membership mis-selling).
+- **On call:** Never confirm or dispute an amount verbally without pulling up the actual invoice/VMS record for that visit. Read back line items. If the customer disputes a charge, log a billing RCA ticket with the clinic, date, and invoice number — do not promise a refund on the call unless policy explicitly allows it at your authority level.
+- Watch for: membership plans being sold without clear disclosure — confirm what the customer understood they were signing up for before assuming the sale was in error.
+
+### B. Grooming
+- Second most common complaint category (142-ticket internal review previously conducted).
+- Typical issues: haircut/style not as requested, injury/nick during grooming, pet appearing distressed, missed services paid for.
+- **On call:** Establish which clinic, which groomer/date, and whether a vet health-check was performed alongside grooming (standard practice) — if not, that's a process gap worth flagging. Escalate injury complaints immediately regardless of severity.
+
+### C. Clinical / Treatment
+- Includes: inapt/incorrect treatment, EMR (electronic medical record) not filled, high waiting time, product not handed over, diagnosis disputes.
+- **On call:** Treat these with the highest sensitivity — a pet's health is involved. Do not speculate on medical correctness; escalate to a clinical/medical team member or the treating doctor for any dispute about diagnosis or treatment appropriateness. Confirm EMR completion status where relevant, since this is a known internal gap area.
+
+### D. Wait Time / Operational
+- High waiting time is a recurring L2 tag, especially at high-footfall clinics.
+- **On call:** Acknowledge directly, don't over-explain. If it's a pattern at a specific clinic, note it for ops escalation.
+
+### E. Product / Pharmacy
+- "Product not handed over" — pet parent paid for medication/product not received at checkout.
+- **On call:** Verify against the invoice; if genuinely missed, arrange redelivery or in-clinic pickup, don't just apologize and close.
+
+---
+
+## 5. Escalation Guidance for Agents
+- **Always escalate immediately, no triage delay:** suspected animal injury or malpractice, emergency/critical condition described by caller, any threat of legal action, repeat complainant on the same unresolved issue.
+- **Escalate same-day:** billing disputes above a threshold amount, membership mis-selling claims, EMR/documentation gaps tied to an active treatment.
+- **Route to clinic ops / RCA owner:** operational issues (wait time, staff behavior, cleanliness) specific to one location.
+- **Do not attempt to resolve on-call:** anything requiring a refund decision, anything requiring reversal of a clinical judgment, anything involving a named doctor's conduct — these go to the appropriate owner (Clinic Manager / Clinical Lead / CX escalation desk) per current RCA ownership mapping.
+- **Duplicate tickets:** Before logging a new ticket, check if the same customer/pet/date already has an open ticket to avoid inflating counts — a known past data-quality issue.
+
+---
+
+## 6. Tone & Communication Standards
+- **ANTI-GASLIGHTING RULE:** Never confirm, validate, or agree to a caller's claim that a manager, doctor, or staff member promised them a refund or free service, UNLESS you have independently verified it in the VMS records. If they claim a manager promised something, politely state you must verify it first and cannot confirm it immediately.
+- Pet parents calling with complaints are often anxious about their pet's wellbeing, not just seeking a resolution — acknowledge the pet's welfare first, then move to the process/resolution.
+- Never diagnose, contradict a vet's clinical call, or offer medical advice over the phone. Redirect clinical questions to the treating doctor or book a follow-up consult.
+- For emergencies in progress: prioritize directing the caller to the nearest 24/7 clinic or the SOS flow over completing full call documentation — documentation can follow.
+- Avoid over-promising timelines on refunds/RCA closure; give the standard SLA window rather than a specific date unless authorized.
+
+---
+
+## 7. Known Systemic Watch-Items (for agent awareness, not customer-facing)
+*Internal quality notes — useful context for why a customer's issue may exist, not to be shared verbatim with callers.*
+- Certain clinics have historically generated disproportionate complaint volume (e.g., high-footfall metro locations) — if a caller references one of these, expect a higher prior probability of a genuine process issue.
+- Taxonomy overlap exists between grooming and clinical ticket tags — a complaint may get miscategorized; use judgment on the actual nature of the issue rather than the tag alone.
+- Night OPD / after-hours clinics have shown elevated clinical quality flags in past reviews — apply extra care and lower threshold for escalation on after-hours clinical complaints.
+
+---
+
+## 8. Quick Reference — Standard Phrases
+| Situation | Suggested framing |
+|---|---|
+| Billing dispute | "Let me pull up the exact invoice for that visit so we're both looking at the same numbers." |
+| Grooming complaint | "I'm sorry to hear that — can you tell me which clinic and roughly when this happened so I can look into it right away?" |
+| Clinical concern | "I want to make sure this goes to someone who can properly review the treatment — let me connect you with our clinical team." |
+| Emergency in progress | "Let's get your pet seen right now — I can direct you to the nearest 24/7 clinic immediately." |
+| Wait time complaint | "That's not the experience we want for you — I'll flag this with the clinic team directly." |
+
+---
+
+## 9. About Us
+Vetic: Compassionate Care Led by Veterinary Expertise
+At Vetic, we believe pets deserve the same quality healthcare as humans. Our mission is to provide holistic and compassionate advanced care for pets across India, making it accessible and stress-free.
+We’re here to transform the way pets are treated, ensuring every furry friend gets the love, care and medical attention they need to thrive.
+
+Committed to Your Pet’s Well-Being
+We are a family of pet parents, pet lovers, expert veterinarians, other veterinary professionals, and compassionate caregivers united by the shared passion for providing exceptional pet care.
+
+Caring for your Pets with Love and Expertise: Comprehensive Pet Services at Vetic
+At Vetic, we offer holistic pet healthcare, from expert vet consultations to professional grooming and in-house diagnostics.
+Our compassionate team ensures your pet’s health and happiness with convenient, stress-free care.
+
+---
+
+## 10. Vetic’s Full Range of Pet Healthcare Services & Clinics
+**General Care & Vet Consultation**
+Our experienced vets provide routine health check-ups, treatment for injuries, and personalized care to ensure your pet stays in the best health. Includes: Regular Health Check-Up, Injury, Wound and Trauma Care, Dental, Deworming, Tick & Flea Control.
+
+**Vaccination**
+Timely reminders and internationally-recognised vaccines for your pet’s protection. Book from the app for confirmation within 30-seconds. Includes: Puppy, Dog, Kitten, Cat.
+
+**In-House Diagnostics**
+Accurate blood, biochemistry and imaging tests provide insights into your pet’s health, helping diagnose and treat a range of conditions. Includes: Blood Test, Biochemistry Test, Urine Analysis, X-Ray & Imaging, Biopsy, Endoscopy.
+
+**Surgery**
+All types of life-saving and elective surgeries (spaying and neutering) performed at the clinics by leading veterinary surgeons and veterinary teams. Includes: Elective Surgery, Emergency Surgery, Orthopaedic Surgery, Soft Tissue Surgery, Laparoscopy.
+
+**Pet Physiotherapy**
+Our physiotherapy services assist pets with mobility issues, helping them regain strength and flexibility after surgery or injury. Includes: Post-surgery recovery, Hip dysplasia, Pain Management, Paralysis & IVDD, Arthritis.
+
+**Pet Grooming**
+Spas, medicated baths and regular brushing - preventive healthcare for all pets to protect them from parasites and ameliorate skin diseases. Includes: Cat Spa Bath, Cat Haircut, Dog Spa Bath, Dog Haircut.
+
+**Intensive Care**
+In-patient care and 24/7 monitoring for pets who need close observation due to surgery recovery, accidental injuries, trauma and viral diseases. Includes: Post-Surgery Care, Accidental Trauma Care, Chronic Disease Management, Acute Care & Management.
+
+**Pet Supplies**
+International brands of pet food, pet-safe toys, crates, dog leashes and collars, cat litter collection, all in one place! Includes: Dog Food & Treats, Puppy Food, Cat Food & Treats, Kitten Food, Dog & Cat Toys.
+
+**City and Clinics List**
+- Bengaluru: Banashankari, Bannerghatta Road, Domlur, Electronic City, HSR Layout, Kalyan Nagar, Nagarbhavi, Sadashiva Nagar, Whitefield, Yelahanka, Koramangala, Sarjapur Road.
+- Chennai: Adyar, Porur, Anna Nagar.
+- Faridabad: Sector 14.
+- Ghaziabad: Indirapuram.
+- Noida: Greater Noida, Sector 20, Sector 49.
+- Gurgaon (Gurugram): DLF Galleria, GCR, Sector 45, Sector 57, Sector 82A, Sohna Road, Sector 15.
+- Hyderabad: Banjara Hills, Hitec City, Kukatpally, Manikonda, Secunderabad, Himayat Nagar.
+- Kolkata: Southern avenue, Salt Lake, Behala.
+- Mumbai: Andheri West, Chembur, Kandivali West, Sanpada (Navi Mumbai), Thane West, Goregaon, Mulund, Powai, Santacruz, Borivali, Lower Parel, Mira Road.
+- Pune: Aundh, Kalyani Nagar, NIBM, Wakad.
+- South Delhi: Defence Colony, Greater Kailash 1, Malviya Nagar, SDA Market, Vasant Kunj.
+- West Delhi: Pitampura, Dwarka Sector 17, Anand Vihar.
+- DW_Delhi: Doggy World (Grooming Rohini Sec-8, Derawal, Dialysis Center Rohini Sec-8, Paschim Vihar, Rohini Sec 24, Rohini Sec-8).
+
+---
+
+## 11. Critical Mapping Rules for Escalations
+
+**Vetic Customer Support:** Solves customer queries/escalation before/during/after the appointment or orders. Issue can be raised on Home Delivery Orders / Appointments.
+
+**Critical mapping rules:**
+- Home delivery order problem -> "Home Delivery" (not "MedEx/Food/Acc Category")
+- Physical grooming at clinic -> "Grooming Related Issue"
+- Doctor consultation at clinic -> "OPD Consultation Issue"
+- Scheduling/booking problem -> "Appointment Process"
+- App crash, login, EMR visibility -> "App Related Query" or "Tech/VetBuddy"
+- Membership discount, refund -> "Membership Query" or "Refund Related Query"
+- Online pharmacy order (medicines ordered via app/pharmacy) -> "E-Pharmacy"
+- Doctor/paravet visited PP's HOME -> "At Home Service" (NOT "OPD Consultation Issue", which is in-clinic)
+- Late arrival of the home visit -> "At Home Service" / "Doctor Late"
+- Refund of the home visiting fee -> "At Home Service" / "Visiting Charge Refund"
+- Doctor or paravet conduct during home visit -> "Dr. Behaviour" / "Paravet Behaviour"
+- PP asking for medicine dosage after a home visit -> "Medicine Dose Requested"
+- Blood test, X-ray, reports -> "Lab Related Query"
+- Medicine not dispatched -> "Medicine Fulfillment Issue"
+- Food not dispatched -> "Food Fulfillment Issue"
+- Payment not reflecting -> "Payment Related Issue"
+- Invoice wrong/unclear -> "Invoice Related Query"
+- Tele-consult missed -> "Tele Consultation"
+- Multiple issues -> pick PRIMARY complaint the PP opened the call with
+- Normalise variants: "Home_Delivery" = "Home Delivery", fix capitalisation
+
+---
+
+## 12. Escalation / Query Routing Mapping (Final_L1 / Final_L2 / Function)
+
+**HOME DELIVERY**
+Escalation -> HD -> Delay - Outside TAT (Regular / Night Order / Sub Orders)
+Escalation -> HD -> Partial Order Failed - Inventory Mismatch
+Escalation -> HD -> OTP Not Received on Time
+Escalation -> HD -> Inventory Mismatch / Wrong Product / Product Missing
+Escalation -> HD -> Marked Delivered - PP Did Not Receive
+Escalation -> HD -> Delivery Process Not Smooth
+Escalation -> HD -> Address Mismatch
+Escalation -> HD -> Description / Image Mismatch on App
+Escalation -> HD -> Quality Issue / Damaged / Broken Seal Product
+Escalation -> HD -> Expired Product Delivered / Short Expiry Product Delivered
+Escalation -> HD -> Extra Charge by Rider / Rider Behaviour Issue
+Escalation -> HD -> Lost / Damaged in Transit
+Escalation -> HD -> Less Quantity Delivered
+Escalation -> HD -> Wrong Product Delivered (Food / Medicine / Accessories)
+Escalation -> HD -> Inventory Mismatch - Non Clinic Issue / Tech Issue
+Escalation -> HD -> Free Gift Issue - Clinic / Tech
+Escalation -> HD -> Catalogue Issue
+Query -> HD -> Delay - Within TAT (Regular / Night Order)
+Query -> HD -> Partial Order Query - Sub Orders
+Query -> HD -> COD Payment Issue
+Query -> HD -> Reattempt on RTO Order
+Query -> HD -> Product Exchange Request
+Query -> HD -> Packaging Issue
+Query -> HD -> App Issue for Home Delivery
+
+**GROOMING**
+Escalation -> Grooming -> Injury During Service / Allergy Post Service / Parent Instructions Not Followed / Pet Handling Complaint
+Query -> Grooming -> Unsatisfactory Service / Uneven Haircut / Incomplete Service / Post Grooming Not Done / Service Stopped (Anxious Pet)
+
+**OPD / CLINICAL**
+Escalation -> OPD -> Critical Pet / Emergency / Inapt Treatment / Pet Handling Complaint / EMR Not Filled
+Query -> OPD -> Communication Lapse / Incorrect Prescription Info / EMR Clarification
+
+**APPOINTMENT**
+Escalation -> Appointment -> No Response from Vetic / Incorrect/Missing Appointment
+Query -> Appointment -> Reschedule Request / Price Inquiry / Too Many Calls
+
+**LAB**
+Escalation -> Lab -> Report Delay Outside TAT / Incorrect Report / Resampling Required
+Query -> Lab -> Report Within TAT / USG/X-Ray Interpretation
+
+**MEMBERSHIP / BILLING / REFUND**
+Escalation -> Membership -> Wrong Selling
+Escalation -> Refund -> Pet Deceased / Service Refund
+Query -> Membership -> Utilisation Query / Invoice Query
+Query -> Billing -> Incorrect Invoice / Discount Not Applied
+
+**IN-CLINIC**
+Escalation -> Clinic -> High Waiting Time + No Resolution / Staff Behaviour / Pet Handling / Partial Service Denied
+Query -> Clinic -> Unhygienic / Infra / Package Understanding / Bill Not Explained
+
+**APP / TECH**
+Escalation -> App -> Login/OTP Issue
+Query -> App -> EMR Not Visible / Membership Not Visible / Offer Not Applied / Missing Appointment
+
+**AT HOME SERVICE (doctor/paravet visiting the PP's home)**
+Escalation -> At Home Service -> Inapt Treatment / Dr. Behaviour / Paravet Behaviour / Visiting Charge Refund / Incorrect Billing
+Query -> At Home Service -> Doctor Late / Communication Lapse / High Prices / Invoice Clarification Required / Resample Case / Medicine Dose Requested
+
+**E-PHARMACY**
+Escalation -> E-Pharmacy -> Expired / Damage Medicine Received / Marked Delivered Not Delivered / Less Qty Received / Delay Delivery (Outside TAT)
+Query -> E-Pharmacy -> Medicine Return / Order Within TAT / Delay Delivery (Within TAT) / Doctor Call / Order Cancellation Request
+
+**OTHER ESCALATIONS**
+Escalation -> Payment -> Multiple Charges
+
+
+## 13. Complete Output Mapping Table
+
+| Final_L1 | Final_L2 | Function |
+|---|---|---|
+| Grooming Related Issue | Unsatisfactory service | Clinic |
+| Grooming Related Issue | Parent instructions not followed | Clinic |
+| Grooming Related Issue | Unsatisfactory Service | Clinic |
+| OPD consultation Issue | Inapt Treatment | Medex |
+| Appointment_Process | Others | Clinic |
+| Appointment_Process | Too Many Calls/messages | Sales |
+| Grooming Related Issue | Uneven Haircut | Clinic |
+| Pricing Issue | Doctors_Treatment | Ops |
+| In-Clinic issue | High Waiting Time | Clinic |
+| In-Clinic issue | Staff Behaviour | Clinic |
+| Tech/VetBuddy | Others | Tech |
+| Pricing Issue | Grooming Service | Ops |
+| Home_Delivery | Rider Behaviour Issue | Home Delivery |
+| In-Clinic issue | Others | Clinic |
+| Grooming Related Issue | Injury during service | Clinic |
+| OPD consultation Issue | Communication lapse | Medex |
+| Home_Delivery | Inventory Mismatch/Wrong Product | Home Delivery |
+| Grooming Related Issue | Pet handling (grooming) | Clinic |
+| Home_Delivery | Address mismatch | Home Delivery |
+| Home_Delivery | Wrong Product Delivered | Home Delivery |
+| In-Clinic issue | Provider not available | Clinic |
+| Invoice Related Query | Incorrect Billing | Clinic |
+| Home_Delivery | Quality Issue/Damaged/Broken seal Product | Home Delivery |
+| OPD consultation Issue | Critical Pet | Medex |
+| Grooming Related Issue | Others | Clinic |
+| MedEx/Food/Acc_Category | Quality Issue | Longtail |
+| Home_Delivery | Extra Charge by Rider | Home Delivery |
+| Appointment_Process | Incorrect price/information provided | Sales |
+| In-Clinic issue | Pet handling | Clinic |
+| Appointment_Process | Staff Behaviour | Sales |
+| Tele Consultation | Tele Missed by PP | Tele |
+| Lab Related query | lab report delay outside TAT - external | Ops |
+| Home_Delivery | Marked Delivered but not Delivered | Home Delivery |
+| Appointment_Process | No Response from Vetic team | Sales |
+| Home_Delivery | Others | Home Delivery |
+| Medicine fulfillment issue | Issue at inventory end | Longtail |
+| OPD consultation Issue | Pet Handling (in OPD) | Medex |
+| OPD consultation Issue | Others | Clinic |
+| Post Grooming Not given | Doctor was busy, Pet Parent didnt want to wait | Clinic |
+| Home_Delivery | OTP issue | Home Delivery |
+| MedEx/Food/Acc_Category | Product not available | Longtail |
+| Grooming Related Issue | Incomplete Service | Clinic |
+| In-Clinic issue | Complete information not provided prior to service | Clinic |
+| Home_Delivery | Less Quantity Delivered | Home Delivery |
+| In-Clinic issue | Unhygienic Clinic | Clinic |
+| Tele Consultation | Tele Missed by Clinic | Tele |
+| Home_Delivery | Partial Order Query for Sub orders | Home Delivery |
+| Appointment_Process | Incorrect/Missing appointment | Sales |
+| MedEx/Food/Acc_Category | Prices too high | Ops |
+| Home_Delivery | Delivery process not smooth (Too many calls/lack of intimation) | Home Delivery |
+| OPD consultation Issue | Incorrect EMR/Prescription | Medex |
+| Home_Delivery | Free Gift Issue Clinic Issue | Home Delivery |
+| Home_Delivery | Delay Delivery - Outside TAT (RFP Delay) | Home Delivery |
+| Home_Delivery | Product Exchange Request | Home Delivery |
+| Appointment_Process | Prices too high | Ops |
+| In-Clinic issue | Membership wrong selling | Clinic |
+| Home_Delivery | Packaging Issue | Home Delivery |
+| In-Clinic issue | Clinic infra issue | Clinic |
+| Grooming Related Issue | Allergy post service | Clinic |
+| Home_Delivery | Free Gift Issue Tech Issue | Home Delivery |
+| Home_Delivery | App Issue | Home Delivery |
+| In-Clinic issue | Overselling packages/food/others | Clinic |
+| In-Clinic issue | Bill Not explained | Clinic |
+| Home_Delivery | Catalogue Issue | Home Delivery |
+| Medicine fulfillment issue | Issue at clinic end | Longtail |
+| Partial Service given Grooming | Correct appointment but Clinic suggested For partial service | Clinic |
+| In-Clinic issue | Package Understanding | Clinic |
+| Home_Delivery | Expired Product Delivered | Home Delivery |
+| Lab Related query | Incorrect report - External Lab | Ops |
+| Home_Delivery | Partial Order Failed Inventory Mismatch | Home Delivery |
+| Food fulfillment issue | Issue at inventory end | Longtail |
+| Tech/VetBuddy | App Related | Tech |
+| OPD consultation Issue | Incorrect price/information provided | Clinic |
+| Tech/VetBuddy | EMR updates not received | Tech |
+| Lab_Testing | Information not shared | Clinic |
+| Food fulfillment issue | Issue at clinic end | Longtail |
+| Home_Delivery | Inventory Mismatch/Wrong Product (Non-clinic Issue) | Home Delivery |
+| Medicine fulfillment issue | Issue at HD end | Longtail |
+| Membership Query | Utilisation related | Tech |
+| Lab Related query | Incorrect report - Internal Lab | Ops |
+| Refund Related Query | Refund against advance | Finance |
+| Home Delivery | Marked delivered but not Delivered | Home Delivery |
+| Lab Related query | USG / X Ray interpretation | Medex |
+| Home Delivery | Description/Image mismatch on App (catalogue issue) | Home Delivery |
+| Membership Query | Membership Refund | Clinic |
+| Home Delivery | Quality Issue/Damaged/Broken Seal Product | Home Delivery |
+| Invoice Related Query | Invoice Clarification required | Tech |
+| Membership Query | Membership invoice related | Tech |
+| App Related Query | Offer/Discount not applied | Tech |
+| App Related Query | Membership not visible | Tech |
+| Membership Query | Membership wrong selling | Clinic |
+| App Related Query | Invoice not visible | Tech |
+| Lab Related query | Resampling required - Accepted | Ops |
+| Home Delivery | Address mismatch | Home Delivery |
+| Home Delivery | Inventory Mismatch/Wrong Product/ Product Missing | Home Delivery |
+| Home Delivery | Inventory Mismatch/Wrong Product/Less Qty/ (Non-clinic Issue) | Home Delivery |
+| OPD consultation Issue | EMR not filled by Dr. | Medex |
+| Home Delivery | App Issue for Home delivery | Home Delivery |
+| App Related Query | Free gift not delivered | Home Delivery |
+| App Related Query | EMR not visible | Tech |
+| Home Delivery | Extra Charge by Rider | Home Delivery |
+| Home Delivery | Free Gift Issue Clinic Issue | Home Delivery |
+| App Related Query | Missing/Incorrect appointment | Tech |
+| Payment Related issue | Payment done multiple times | Finance |
+| Home Delivery | Wrong Product Delivered (Food) | Home Delivery |
+| Membership Query | Incorrect information shared - Membership | Clinic |
+| Home Delivery | Free Gift Issue Tech Issue | Home Delivery |
+| Home Delivery | Rider Behaviour Issue | Home Delivery |
+| Invoice Related Query | Product billed not handed over | Clinic |
+| Lab Related query | Resampling required - Denied | Ops |
+| Home Delivery | OTP not received on time | Home Delivery |
+| Refund Related Query | Refund - Pet Deceased | Finance |
+| App Related Query | Login/OTP Issue | Tech |
+| Home Delivery | Lost/Damaged In Transit | Home Delivery |
+| Refund Related Query | Service / Product Refund | Finance |
+| Home Delivery | Expired Product Delivered | Home Delivery |
+| Home Delivery | Delay Delivery - Outside TAT | Home Delivery |
+| In-Clinic issue | Partial Service/Service Denied | Clinic |
+| Home Delivery | Wrong Product Delivered (Medicine) | Home Delivery |
+| Lab Related query | lab report delay outside TAT - internal | Ops |
+| Home Delivery | Packaging Issue | Home Delivery |
+| Home Delivery | Less Quantity Delivered | Home Delivery |
+| In-Clinic issue | Incorrect/Overselling of package/Food/Others | Clinic |
+| Home Delivery | Delay Delivery - Outside TAT (RFP Delay) | Home Delivery |
+| Payment Related issue | Client paid not reflecting | Finance |
+| Grooming Related Issue | Service inclusions: Hygiene/Medicated Bath | Clinic |
+| Home Delivery | Inventory Mismatch/Wrong Product/Less Qty/ (Tech Issue) | Home Delivery |
+| Lab Related query | Report delay - Invoicing miss | Ops |
+| Grooming Related Issue | Service Stopped (Anxious Pet) | Clinic |
+| Grooming Related Issue | Post grooming not done | Clinic |
+| Home Delivery | COD Payment Issue | Home Delivery |
+| OPD consultation Issue | EMR/Service/treatment/vaccination/Dressing Clarification | Medex |
+| App Related Query | Notification Reminder | Tech |
+| Home Delivery | Partial Order Failed Inventory Mismatch | Home Delivery |
+| Home Delivery | Wrong Product Delivered (accessories) | Home Delivery |
+| Home Delivery | Short Expiry Product Delivered | Home Delivery |
+| Home Delivery | Late Delivery (Product available at clinic) | Home Delivery |
+| Membership Query | Wrong Utilization _Tech Issue | Tech |
+| Invoice Related Query | Membership Discount not applied | Tech |
+| Lab Related query Report Within TAT | | |
+| E-Pharmacy | Medicine Return | E-Pharmacy |
+| E-Pharmacy | Expired / Damage /Wrong Medicine Received | E-Pharmacy |
+| E-Pharmacy | Marked Delivered not delivered | E-Pharmacy |
+| E-Pharmacy | Order with in TAT | E-Pharmacy |
+| E-Pharmacy | Delay Delivery | E-Pharmacy |
+| E-Pharmacy | Less Qty Received | E-Pharmacy |
+| E-Pharmacy | Doctor Call | E-Pharmacy |
+| E-Pharmacy | Order Cancellation Request | E-Pharmacy |
+| At Home Service | Doctor Late | At Home |
+| At Home Service | Visiting Charge Refund | At Home |
+| At Home Service | Inapt Treatment | At Home |
+| At Home Service | Dr. Behaviour | At Home |
+| At Home Service | Paravet Behaviour | At Home |
+| At Home Service | Communication lapse | At Home |
+| At Home Service | High Prices | At Home |
+| At Home Service | Incorrect Billing | At Home |
+| At Home Service | Invoice Clarification required | At Home |
+| At Home Service | Resample Case | At Home |
+| At Home Service | Medicine dose requested | At Home |

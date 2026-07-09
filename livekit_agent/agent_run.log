@@ -1,0 +1,8 @@
+[db] Loaded 28 records from C:\Users\hp\Desktop\sample data\sample_ticket_summary.xlsx
+2026-07-01 11:59:24,151 - [36mDEBUG[0m asyncio - Using proactor: IocpProactor [90m[0m
+2026-07-01 11:59:24,151 - [32mINFO[0m livekit.agents - starting worker [90m{"version": "1.6.4", "rtc-version": "1.1.12"}[0m
+2026-07-01 11:59:24,151 - [32mINFO[0m livekit.agents - plugin registered [90m{"plugin": "livekit.plugins.anthropic", "version": "1.6.4"}[0m
+2026-07-01 11:59:24,151 - [32mINFO[0m livekit.agents - plugin registered [90m{"plugin": "livekit.plugins.openai", "version": "1.6.4"}[0m
+2026-07-01 11:59:24,151 - [32mINFO[0m livekit.agents - plugin registered [90m{"plugin": "livekit.plugins.sarvam", "version": "1.6.4"}[0m
+2026-07-01 11:59:24,173 - [32mINFO[0m livekit.agents - HTTP server listening on :53273 [90m[0m
+2026-07-01 11:59:24,424 - [32mINFO[0m livekit.agents - registered worker [90m{"agent_name": "", "deployment": "", "id": "AW_prbag9NkhBBp", "url": "wss://calling-stt-jund89m9.livekit.cloud", "region": "India West", "protocol": 17}[0m
