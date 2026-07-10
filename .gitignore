@@ -1,0 +1,31 @@
+# Secrets — never commit
+.env
+.env.*
+*.env
+**/conversation_history.json
+**/load_csv.py
+**/make_call.py
+**/download_recordings.py
+
+# Python caches & virtual environments
+__pycache__/
+*.pyc
+*.pyo
+venv/
+**/venv/
+.venv/
+
+# Windows artifacts
+desktop.ini
+Thumbs.db
+*.lnk
+
+# Customer data & recordings — never commit (PII)
+**/Call Analysis*.csv
+**/audio/
+**/recordings/
+
+# Large binaries & logs
+**/cloudflared.exe
+**/cloudflared.log
+*.log

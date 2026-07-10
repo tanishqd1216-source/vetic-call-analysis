@@ -1,0 +1,32 @@
+Test ID,Total Turns,Transcript
+1,17,"AARYA: Good morning, am I speaking with Test User? This is Aarya calling from Vetic.
+USER (From PDF): Yes, speaking.
+AARYA: How's Buddy doing today? I'm calling about the grooming appointment on July 10 that you weren't satisfied with. Can you tell me a little bit about what happened during that visit?
+USER (From PDF): No, the concern has not been resolved yet.
+AARYA: Let me check that for you. <function=consult_background_worker>{""query"": ""unresolved concern with grooming appointment on July 10 for Test User's pet, Buddy""} </function>
+
+You mentioned that the issue hasn't been resolved yet. Can you tell me more about what you're not satisfied with? What specifically didn't meet your expectations?
+USER (From PDF): I used the continuous service yesterday. The invoice shows a different amount than what I paid. I think it shows 102 and 20, but the amount I paid is 1483, right?
+AARYA: You're saying that the invoice shows a different amount, ₹102 and ₹20, but you paid ₹1483. Let me confirm that in your account. I understand that this discrepancy is causing you concern. Can you tell me exactly how you paid for the service, was it online or over the phone?
+USER (From PDF): What purchase did I make?
+AARYA: Based on your account, it appears that the purchase was for a Grooming service for Buddy on July 10.
+USER (From PDF): But I did not get the invoice for that either.
+AARYA: I understand that you didn't receive an invoice for the grooming service, and now you're seeing a discrepancy in the amount shown on the invoice. Let me check that for you. <function=consult_background_worker>{""query"": ""missing invoice for grooming service on July 10 for Test User's pet, Buddy""} </function>
+
+You're saying that you didn't receive an invoice for the service, and you paid a different amount, ₹1483, but it's showing ₹102 and ₹20 on the invoice. I want to make sure I understand everything correctly.
+USER (From PDF): I am not sure about Rs. 125. But Rs. 125 could be the charge for the medicated bath.
+AARYA: So, it seems like the ₹125 might be related to the medicated bath that Buddy received during the grooming service. I'll make sure to look into this further. Let me check that for you. <function=consult_background_worker>{""query"": ""medicated bath charge on grooming service on July 10 for Test User's pet, Buddy""} </function>
+
+I understand that you're still concerned about the invoice and the payment amount. I want to assure you that we'll do our best to clarify this and resolve the issue for you. 
+
+I'm going to escalate this to our grooming team and they will contact you within the next 2-3 hours to resolve this issue. Is there anything else I can do for you?
+USER (From PDF): No, sir. Earlier, I had taken the service from the vet clinic and the spa bath. I did not get any invoice for that.
+AARYA: I understand that you had taken the service from the vet clinic and the spa bath, but you didn't receive an invoice for it. I'm going to raise an escalation ticket with our team to investigate this further and make sure you receive a proper invoice for the services you availed. 
+
+I'm going to have our team follow up with you within the next 2-3 hours to resolve this issue. Is there anything else I can do for you?
+USER (From PDF): I agree that we charge for the medicated bath. But the other invoice… That is not included, sir.
+AARYA: I understand that the medicated bath charge is correct, but there's another invoice that's missing. I'm going to make sure that our team includes that in the resolution and provides you with a comprehensive invoice for all the services Buddy received during the grooming visit on July 10.
+
+I'm going to go ahead and escalate this to our team, and they will contact you within the next 2-3 hours to resolve this issue. Is there anything else I can do for you?
+USER (From PDF): Okay.
+AARYA: [Used Tool(s)] [Agent calls end_call tool and hangs up]"
