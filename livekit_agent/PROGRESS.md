@@ -46,3 +46,50 @@ entries for project architecture + the "never hard-delete" rule. Created this fi
 4. Update `README.md` to reflect the actual gpt-4o-mini + Headroom architecture.
 5. Once the large on-disk reorg is confirmed intentional, stage it as a commit (currently
    uncommitted).
+
+---
+
+## 2026-07-24 — Session: git cleanup landed on main; Fly.io hosting explored then shelved
+
+**Git cleanup (this landed on `main`, see commits `0aa539b9` / `843cb73d`):** the on-disk reorg
+from the previous session was committed as two separate commits — untracking a stale
+`venv/`/`twilio_test/venv/` (already moved to `archive/stale_venv/` and
+`archive/legacy_twilio/venv/` on disk, now gitignored), then the actual reorg + code changes
+(`agent_inbound.py`, tests/tools/logs restructuring, knowledge base updates). `origin` pointed at
+a GitHub repo that no longer existed — recreated (`tanishqd1216-source/vetic-call-analysis`,
+private) and pushed. Full history is ~425MB (old venv/media commits pre-cleanup) — GitHub warned
+about a few >50MB files baked into old commits; not blocking, worth a history squash later.
+
+**Fly.io hosting — built, NOT merged, decision reversed on cost grounds:** production hosting
+was picked as the mission priority, scoped to worker reliability only (no telephony yet). Built
+out a full Fly.io deployment (portable path-default fixes, `data/vetic_data.db` bundling,
+mode-selectable `run.py` entrypoint, `Dockerfile`/`.dockerignore`/`fly.toml` for `bom` region,
+structured `latency_metric` log lines, README production-deployment section) on branch
+**`deploy/fly-io-worker-hosting`** (pushed to origin, PR link available, NOT merged into main).
+
+Got as far as installing `flyctl` locally (blocked by this machine's Application Control policy
+at first — resolved by the user allowing it — then authenticated via `flyctl auth login`) before
+discovering Fly.io no longer has a real free tier: any always-on machine is billed usage-based.
+**User wants $0 hosting cost**, which Fly.io can't satisfy for an always-on process. Decision:
+**stay on local hosting for now** (same as before — `start_call_environment.ps1` on a dev
+machine) rather than pay for Fly, and rather than compromise on "always-on" by using a
+scale-to-zero free host (bad fit for a voice agent that needs instant call dispatch).
+
+Real zero-cost always-on alternative surfaced but not pursued yet: **Oracle Cloud's free-forever
+tier** (small ARM VM, always-on, genuinely $0) — requires a credit card for identity verification
+(never charged if within free-tier limits) and the free VM is ARM, so the existing Dockerfile
+would need a base-image tweak. Worth revisiting if $0 hosting is wanted again later; the branch's
+Docker/fly.toml work is largely reusable (swap `fly.toml` for an Oracle VM + systemd unit, or
+adapt the Dockerfile for ARM).
+
+**Current reality:** `main` does NOT have the path-default fixes or Dockerfile — those only
+exist on the unmerged `deploy/fly-io-worker-hosting` branch. The agent still only runs via local
+dev commands on whichever machine has `start_call_environment.ps1` running.
+
+**Next steps:**
+1. Since hosting is deferred, the next highest-leverage mission item (per priority order
+   correctness → cost → latency) is the still-unverified **Headroom proxy / prompt-caching cost
+   question** from the first session entry above — pick that back up.
+2. If $0 always-on hosting becomes wanted again, revisit Oracle Cloud free tier using
+   `deploy/fly-io-worker-hosting` as a starting point (adjust `fly.toml`→Oracle equivalent, ARM
+   base image).
