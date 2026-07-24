@@ -6,8 +6,9 @@ import re
 import pandas as pd
 import sqlite3
 
+_HERE = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.environ.get(
-    "TICKET_DB_PATH", r"C:\Users\hp\Documents\sample data\vetic_data.db"
+    "TICKET_DB_PATH", os.path.join(_HERE, "data", "vetic_data.db")
 )
 
 try:

@@ -80,7 +80,9 @@ def setup_langsmith():
 # LiveKit emits separate metric events (EOU, LLM, TTS) per turn, correlated by
 # speech_id. We assemble them into one row and write the perceived response latency
 # (time from the caller stopping → Aarya starting to speak) to latency_logs.csv.
-LATENCY_CSV = os.environ.get("LATENCY_CSV_PATH") or r"C:\Users\hp\Documents\claude_WO_API\livekit_agent\logs\latency_logs_outbound.csv"
+LATENCY_CSV = os.environ.get("LATENCY_CSV_PATH") or os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "logs", "latency_logs_outbound.csv"
+)
 LATENCY_HEADER = ["Timestamp", "Call_ID", "Turn", "Speech_ID", "EOU_delay_s", "Transcription_delay_s",
                   "LLM_TTFT_s", "TTS_TTFB_s", "Response_latency_s",
                   "Input_Tokens", "Output_Tokens"]
@@ -163,7 +165,14 @@ def make_metrics_handler(call_id: str):
                     f"{eou:.3f}", f"{tr:.3f}", f"{llm:.3f}", f"{tts:.3f}", f"{total:.3f}",
                     input_tokens, output_tokens,
                 ])
-                logger.info("Successfully called _write_latency_row.")
+                # Structured line (key=value) so it's greppable/parseable straight out of
+                # `fly logs` or any log aggregator, independent of the CSV file above —
+                # the CSV lives on the container's ephemeral disk and doesn't survive redeploys.
+                logger.info(
+                    f"latency_metric call_id={call_id} turn={turn_no} eou_s={eou:.3f} "
+                    f"llm_ttft_s={llm:.3f} tts_ttfb_s={tts:.3f} response_latency_s={total:.3f} "
+                    f"input_tokens={input_tokens} output_tokens={output_tokens}"
+                )
             except Exception as e:
                 logger.error(f"Error calling _write_latency_row: {e}", exc_info=True)
 

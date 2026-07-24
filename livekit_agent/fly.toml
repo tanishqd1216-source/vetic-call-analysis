@@ -1,0 +1,30 @@
+# Fly.io app config for the Vetic LiveKit agent worker.
+# `app` must be globally unique on Fly — rename if this is already taken, then
+# `fly apps create <name>` (or let `fly launch` do it) before `fly deploy`.
+app = "vetic-voice-agent"
+primary_region = "bom"
+
+[build]
+
+[env]
+  AGENT_ENTRYPOINT = "inbound" # or "outbound" — switch here and redeploy
+
+# Always-on: a single voice-agent worker can't scale to zero, since dispatch
+# needs to be instant when a call comes in.
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "1gb"
+
+[http_service]
+  internal_port = 8081
+  force_https = false
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    interval = "15s"
+    timeout = "5s"
+    grace_period = "30s"
+    method = "GET"
+    path = "/"
