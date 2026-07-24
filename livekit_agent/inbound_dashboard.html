@@ -1,0 +1,723 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vetic Agent — Inbound Live Console</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page:        #f6f6f3;
+    --surface:     #ffffff;
+    --surface-2:   #fbfbf9;
+    --ink:         #0b0b0b;
+    --ink-2:       #52514e;
+    --muted:       #8b897f;
+    --grid:        #e1e0d9;
+    --border:      rgba(11,11,11,0.09);
+    --border-2:    rgba(11,11,11,0.14);
+    --series-1:    #2a78d6;
+    --series-2:    #1baf7a;
+    --series-3:    #eb6834;
+    --st-good:     #0ca30c;
+    --st-warning:  #d98a06;
+    --st-serious:  #ec835a;
+    --st-critical: #d03b3b;
+    --shadow:      0 1px 2px rgba(11,11,11,0.04), 0 6px 20px rgba(11,11,11,0.05);
+    --radius:      14px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --page: #0b0b0c; --surface: #171716; --surface-2: #141413; --ink: #f5f4f1; --ink-2: #c3c2b7;
+      --muted: #8b897f; --grid: #2c2c2a; --border: rgba(255,255,255,0.09); --border-2: rgba(255,255,255,0.16);
+      --series-1: #4b93ea; --series-2: #24c98a; --series-3: #f0834a;
+      --st-warning: #f0ad2c;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 10px 30px rgba(0,0,0,0.35);
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--page); color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page { max-width: 1180px; margin: 0 auto; padding: 22px 24px 70px; }
+  @media (max-width: 640px) { .page { padding: 16px 14px 50px; } }
+
+  /* ── Header ───────────────────────────────────────────────────────────── */
+  header.topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 22px; gap: 14px; flex-wrap: wrap;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand .mark {
+    width: 38px; height: 38px; border-radius: 11px; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(155deg, var(--series-1), #1c5aa8); color: #fff; font-size: 1.05rem; flex: none;
+    box-shadow: var(--shadow);
+  }
+  .brand h1 { font-size: 1.12rem; margin: 0; letter-spacing: -0.01em; }
+  .brand .subtitle { font-size: 0.78rem; color: var(--muted); margin: 1px 0 0; }
+  .header-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+  .status-pill {
+    display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 600; color: var(--ink-2);
+    background: var(--surface); border: 1px solid var(--border); border-radius: 30px; padding: 7px 14px 7px 11px;
+    box-shadow: var(--shadow);
+  }
+  .dot-live { width: 8px; height: 8px; border-radius: 50%; background: var(--st-good); box-shadow: 0 0 0 0 rgba(12,163,12,0.5); animation: pulse 1.6s infinite; flex: none; }
+  .dot-idle { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); flex: none; }
+  @keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(12,163,12,0.45); }
+    70%  { box-shadow: 0 0 0 7px rgba(12,163,12,0); }
+    100% { box-shadow: 0 0 0 0 rgba(12,163,12,0); }
+  }
+  a.back-btn {
+    font-size: 0.8rem; font-weight: 600; color: var(--ink-2); text-decoration: none;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 30px; padding: 8px 14px;
+    transition: color .15s ease, border-color .15s ease;
+  }
+  a.back-btn:hover { color: var(--series-1); border-color: var(--series-1); }
+
+  /* ── Layout grid ──────────────────────────────────────────────────────── */
+  .layout { display: grid; grid-template-columns: 1.55fr 1fr; gap: 18px; align-items: start; }
+  @media (max-width: 880px) { .layout { grid-template-columns: 1fr; } }
+  .col-main, .col-side { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+  .col-side { position: sticky; top: 18px; }
+  @media (max-width: 880px) { .col-side { position: static; } }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 20px 22px; box-shadow: var(--shadow);
+  }
+  .card h2 {
+    font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted);
+    font-weight: 700; margin: 0 0 14px;
+  }
+
+  /* ── Hero call card ───────────────────────────────────────────────────── */
+  .hero-call { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  .call-orb {
+    width: 64px; height: 64px; border-radius: 50%; flex: none; display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem; background: var(--surface-2); border: 1px solid var(--border); transition: all .25s ease;
+  }
+  .call-orb.live {
+    background: linear-gradient(155deg, var(--series-2), #0f8f60); color: #fff; border-color: transparent;
+    box-shadow: 0 0 0 0 rgba(27,175,122,0.45); animation: orbpulse 1.8s infinite;
+  }
+  @keyframes orbpulse {
+    0%   { box-shadow: 0 0 0 0 rgba(27,175,122,0.4); }
+    70%  { box-shadow: 0 0 0 14px rgba(27,175,122,0); }
+    100% { box-shadow: 0 0 0 0 rgba(27,175,122,0); }
+  }
+  .hero-body { flex: 1; min-width: 200px; }
+  .hero-title { font-size: 1.02rem; font-weight: 700; margin: 0 0 3px; }
+  #callStatusText { font-size: 0.85rem; color: var(--muted); margin: 0 0 12px; display: block; }
+
+  .call-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  button {
+    font: inherit; cursor: pointer; border-radius: 9px; border: 1px solid var(--border-2);
+    padding: 10px 18px; font-size: 0.85rem; font-weight: 700; background: var(--surface-2); color: var(--ink);
+    transition: transform .1s ease, background .15s ease, border-color .15s ease;
+  }
+  button:hover:not(:disabled) { transform: translateY(-1px); }
+  button.primary { background: var(--series-1); border-color: var(--series-1); color: #fff; }
+  button.danger { background: var(--st-critical); border-color: var(--st-critical); color: #fff; }
+  button:disabled { opacity: 0.45; cursor: default; transform: none; }
+
+  /* ── Idle states ──────────────────────────────────────────────────────── */
+  .idle-card { text-align: center; padding: 40px 24px; }
+  .idle-card .idle-icon {
+    width: 46px; height: 46px; margin: 0 auto 14px; border-radius: 50%; background: var(--surface-2);
+    border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+  }
+  .idle-card h3 { margin: 0 0 6px; font-size: 0.98rem; }
+  .idle-card p { margin: 0; color: var(--muted); font-size: 0.85rem; }
+
+  #lat-idle-banner {
+    text-align: center; padding: 34px 20px; color: var(--muted); font-size: 0.88rem;
+  }
+  #lat-idle-banner::before {
+    content: "⚡"; display: block; font-size: 1.3rem; margin-bottom: 10px; opacity: 0.6;
+  }
+
+  /* ── Phase stepper ────────────────────────────────────────────────────── */
+  .phase-track { display: flex; align-items: center; margin-bottom: 16px; overflow-x: auto; padding-bottom: 2px; }
+  .phase-chip {
+    position: relative; font-size: 0.68rem; font-weight: 700; padding: 6px 13px; border-radius: 20px;
+    background: var(--surface-2); border: 1px solid var(--border); color: var(--muted); white-space: nowrap;
+    flex: none; transition: all .2s ease;
+  }
+  .phase-chip:not(:last-child)::after {
+    content: ""; display: inline-block; width: 14px; height: 1.5px; background: var(--border-2); margin: 0 2px; vertical-align: middle;
+  }
+  .phase-chip.active { background: var(--series-1); border-color: var(--series-1); color: #fff; box-shadow: 0 2px 8px rgba(42,120,214,0.35); }
+  .phase-chip.done { color: var(--series-2); border-color: var(--series-2); background: color-mix(in srgb, var(--series-2) 10%, var(--surface)); }
+  .phase-chip.ended { background: var(--st-critical); border-color: var(--st-critical); color: #fff; }
+
+  .kv { display: flex; flex-direction: column; gap: 12px; }
+  .kv .row { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; }
+  .kv .row .label { font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 700; margin-bottom: 3px; }
+  .kv .row .value { font-size: 0.9rem; line-height: 1.4; }
+  .kv .row .value.empty { color: var(--muted); font-style: italic; }
+
+  /* ── Identity card ────────────────────────────────────────────────────── */
+  .identity-header { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+  .avatar {
+    width: 46px; height: 46px; border-radius: 50%; flex: none; display: flex; align-items: center; justify-content: center;
+    font-size: 1.05rem; font-weight: 700; color: #fff; background: linear-gradient(155deg, var(--series-2), #0f8f60);
+  }
+  .identity-name { font-size: 1rem; font-weight: 700; }
+  .identity-pet { font-size: 0.82rem; color: var(--muted); }
+
+  .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 14px; }
+  @media (max-width: 520px) { .info-grid { grid-template-columns: 1fr; } }
+  .info-field { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 13px; }
+  .info-field .label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 700; margin-bottom: 3px; }
+  .info-field .value { font-size: 0.88rem; }
+  .info-field .value.empty { color: var(--muted); font-style: italic; }
+
+  /* ── Transcript ───────────────────────────────────────────────────────── */
+  #transcript { max-height: 480px; overflow-y: auto; font-size: 0.83rem; }
+  #transcript div { padding: 7px 0; border-bottom: 1px solid var(--border); line-height: 1.45; }
+  #transcript div:last-child { border-bottom: none; }
+  #transcript b { margin-right: 6px; }
+  #transcript b:first-child { color: var(--series-1); }
+
+  /* ── Latency section (collapsible) ───────────────────────────────────── */
+  details.lat-details { background: transparent; }
+  details.lat-details > summary {
+    cursor: pointer; list-style: none; display: flex; align-items: center; gap: 8px;
+    font-size: 0.82rem; font-weight: 700; color: var(--ink-2); padding: 10px 4px; user-select: none;
+  }
+  details.lat-details > summary::-webkit-details-marker { display: none; }
+  details.lat-details > summary::before { content: "▸"; display: inline-block; transition: transform .15s ease; color: var(--muted); }
+  details.lat-details[open] > summary::before { transform: rotate(90deg); }
+  .lat-body { display: flex; flex-direction: column; gap: 16px; margin-top: 4px; }
+
+  .latest-grid { display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: center; }
+  @media (max-width: 640px) { .latest-grid { grid-template-columns: 1fr; } }
+  .latest-value { font-size: 2.3rem; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; }
+  .latest-value small { font-size: 1rem; color: var(--ink-2); font-weight: 500; margin-left: 4px; }
+  .latest-meta { font-size: 0.78rem; color: var(--muted); margin-top: 6px; }
+  .chain-bar { display: flex; height: 32px; border-radius: 8px; overflow: hidden; gap: 2px; margin-top: 4px; }
+  .chain-seg { display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.68rem; font-weight: 700; font-variant-numeric: tabular-nums; text-shadow: 0 1px 1px rgba(0,0,0,0.25); white-space: nowrap; overflow: hidden; }
+  .chain-legend { display: flex; gap: 14px; margin-top: 8px; font-size: 0.72rem; color: var(--ink-2); flex-wrap: wrap; }
+  .chain-legend span.sw { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 5px; }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .kpi { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+  .kpi .label { font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 700; margin-bottom: 6px; }
+  .kpi .value { font-size: 1.25rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+  .strip-wrap { position: relative; padding-top: 16px; }
+  .strip { display: flex; align-items: flex-end; gap: 3px; height: 90px; position: relative; }
+  .strip .bar-col { flex: 1; min-width: 4px; height: 100%; display: flex; flex-direction: column-reverse; border-radius: 3px 3px 0 0; overflow: hidden; transition: height .25s ease; cursor: pointer; }
+  .strip .bar-col .seg { width: 100%; }
+  .target-ref { position: absolute; left: 0; right: 0; border-top: 1.5px dashed var(--st-critical); pointer-events: none; }
+  .target-ref-label { position: absolute; right: 0; top: -15px; font-size: 0.64rem; color: var(--st-critical); font-weight: 700; }
+  .strip-legend { display: flex; gap: 14px; margin-top: 10px; font-size: 0.72rem; color: var(--ink-2); flex-wrap: wrap; }
+  .strip-legend span.sw { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 5px; }
+
+  .target-banner { display: flex; align-items: center; gap: 10px; border-left: 4px solid var(--st-good); font-size: 0.85rem; }
+  .target-banner .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--st-good); flex: none; }
+  .target-banner.warn { border-left-color: var(--st-warning); }
+  .target-banner.warn .dot { background: var(--st-warning); }
+  .target-banner.crit { border-left-color: var(--st-critical); }
+  .target-banner.crit .dot { background: var(--st-critical); }
+
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+  th { text-align: left; padding: 7px 10px; font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); border-bottom: 1px solid var(--border); }
+  td { padding: 7px 10px; border-bottom: 1px solid var(--border); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 600; padding: 3px 9px 3px 7px; border-radius: 20px; background: var(--surface-2); border: 1px solid var(--border); }
+  .chip .dot { width: 7px; height: 7px; border-radius: 50%; }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="topbar">
+    <div class="brand">
+      <span class="mark">🐾</span>
+      <div>
+        <h1>Inbound Agent — Live Console</h1>
+        <p class="subtitle">Real-time view of calls handled by Aarya</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="status-pill" id="status"><span class="dot-idle"></span><span id="status-text">connecting…</span></div>
+      <a class="back-btn" href="/">&larr; Agent selector</a>
+    </div>
+  </header>
+
+  <div class="layout">
+    <div class="col-main">
+      <div class="card hero-call">
+        <div class="call-orb" id="callOrb">📞</div>
+        <div class="hero-body">
+          <div class="hero-title">Test Call</div>
+          <span id="callStatusText">Not connected.</span>
+          <div class="call-controls">
+            <button class="primary" id="startBtn">Start Test Call</button>
+            <button class="danger" id="endBtn" disabled>End Call</button>
+            <button id="muteBtn" disabled>Mute</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="idle-banner" class="card idle-card">
+        <div class="idle-icon">☎️</div>
+        <h3>Waiting for a call</h3>
+        <p>This section fills in automatically once a caller is identified.</p>
+      </div>
+
+      <div id="live-content" style="display:none;">
+        <div class="card">
+          <h2>Call Progress</h2>
+          <div class="phase-track" id="phase-track"></div>
+          <div class="kv" id="progress-kv">
+            <div class="row">
+              <div class="label">Detected category</div>
+              <div class="value" id="val-category">–</div>
+            </div>
+            <div class="row">
+              <div class="label">Resolution being offered</div>
+              <div class="value" id="val-resolution">–</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Information Section — Identified Caller</h2>
+          <div class="identity-header">
+            <div class="avatar" id="identity-avatar">–</div>
+            <div>
+              <div class="identity-name" id="identity-name">–</div>
+              <div class="identity-pet" id="identity-pet">–</div>
+            </div>
+          </div>
+          <div class="info-grid">
+            <div class="info-field"><div class="label">Owner</div><div class="value" id="val-owner">–</div></div>
+            <div class="info-field"><div class="label">Pet</div><div class="value" id="val-pet">–</div></div>
+            <div class="info-field"><div class="label">Service / Appointment</div><div class="value" id="val-service">–</div></div>
+            <div class="info-field"><div class="label">Date</div><div class="value" id="val-date">–</div></div>
+            <div class="info-field"><div class="label">Clinic</div><div class="value" id="val-clinic">–</div></div>
+            <div class="info-field"><div class="label">City</div><div class="value" id="val-city">–</div></div>
+          </div>
+        </div>
+      </div>
+
+      <details class="lat-details" open>
+        <summary>⚡ Live Latency</summary>
+        <div class="lat-body">
+          <div id="lat-idle-banner" class="card" style="display:none;"></div>
+
+          <div id="lat-live-content" style="display:none;">
+            <div class="card target-banner" id="lat-target-banner">
+              <span class="dot"></span>
+              <span id="lat-target-banner-text">–</span>
+            </div>
+
+            <div class="card">
+              <h2>Most recent turn (inbound)</h2>
+              <div class="latest-grid">
+                <div>
+                  <div class="latest-value" id="lat-latest-total">–<small>s</small></div>
+                  <div class="latest-meta" id="lat-latest-meta">–</div>
+                  <div class="latest-meta" id="lat-latest-tokens">Tokens: –</div>
+                </div>
+                <div>
+                  <div class="chain-bar" id="lat-chain-bar"></div>
+                  <div class="chain-legend" id="lat-chain-legend"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h2>Rolling stats (last <span id="lat-rolling-n">20</span> turns)</h2>
+              <div class="kpi-grid">
+                <div class="kpi"><div class="label">Median</div><div class="value" id="lat-roll-p50">–</div></div>
+                <div class="kpi"><div class="label">P95</div><div class="value" id="lat-roll-p95">–</div></div>
+                <div class="kpi"><div class="label">Mean</div><div class="value" id="lat-roll-mean">–</div></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h2>Recent turns (last <span id="lat-strip-n">40</span>) — latency budget vs. 800ms target</h2>
+              <div class="strip-wrap">
+                <div class="strip" id="lat-strip"></div>
+              </div>
+              <div class="strip-legend">
+                <span><span class="sw" style="background:var(--series-1)"></span>EOU wait</span>
+                <span><span class="sw" style="background:var(--series-3)"></span>LLM TTFT</span>
+                <span><span class="sw" style="background:var(--series-2)"></span>TTS TTFB</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <h2>Turn-by-turn</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Time</th><th>EOU</th><th>LLM</th><th>TTS</th><th>Total</th><th>Health</th></tr></thead>
+                  <tbody id="lat-table-body"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <div class="col-side">
+      <div class="card">
+        <h2>Transcript</h2>
+        <div id="transcript"><div style="color:var(--muted);font-style:italic;">No call yet.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/livekit-client@2/dist/livekit-client.umd.min.js"></script>
+<script>
+const LK = LivekitClient;
+const PHASES = ["Introduction", "Listening", "Resolution Lookup", "Offering Resolution", "Wrapping Up", "Ended"];
+
+let room = null;
+let isMuted = false;
+
+// ── Test-call controls (same connect/transcribe pattern as webcall.html, trimmed) ──
+const startBtn = document.getElementById("startBtn");
+const endBtn = document.getElementById("endBtn");
+const muteBtn = document.getElementById("muteBtn");
+const callStatusText = document.getElementById("callStatusText");
+const callOrb = document.getElementById("callOrb");
+const transcriptEl = document.getElementById("transcript");
+
+function logLine(who, text) {
+  if (transcriptEl.children.length === 1 && transcriptEl.children[0].textContent === "No call yet.") {
+    transcriptEl.innerHTML = "";
+  }
+  const d = document.createElement("div");
+  d.innerHTML = `<b>${who}:</b> ${text}`;
+  transcriptEl.appendChild(d);
+  transcriptEl.scrollTop = transcriptEl.scrollHeight;
+}
+
+function cleanupCall() {
+  startBtn.disabled = false;
+  endBtn.disabled = true;
+  muteBtn.disabled = true;
+  callOrb.classList.remove("live");
+  callOrb.textContent = "📞";
+  room = null;
+}
+
+startBtn.onclick = async () => {
+  startBtn.disabled = true;
+  callStatusText.textContent = "Connecting…";
+  try {
+    const res = await fetch("/token");
+    const { token, url } = await res.json();
+
+    room = new LK.Room({ adaptiveStream: true, dynacast: true });
+
+    room.on(LK.RoomEvent.TrackSubscribed, (track) => {
+      if (track.kind !== LK.Track.Kind.Audio) return;
+      const el = track.attach(); el.autoplay = true; document.body.appendChild(el);
+    });
+
+    let interimDivs = {};
+    room.on(LK.RoomEvent.TranscriptionReceived, (segments, participant) => {
+      const who = participant && participant.identity === "web-caller" ? "You" : "Aarya";
+      segments.forEach((s) => {
+        if (s.final) {
+          if (interimDivs[s.id]) { delete interimDivs[s.id]; }
+          logLine(who, s.text);
+        }
+      });
+    });
+
+    room.on(LK.RoomEvent.ParticipantDisconnected, () => {
+      callStatusText.textContent = "Aarya ended the call.";
+      if (room) room.disconnect();
+      cleanupCall();
+    });
+    room.on(LK.RoomEvent.Disconnected, () => {
+      callStatusText.textContent = "Call ended.";
+      cleanupCall();
+    });
+
+    await room.connect(url, token);
+    await room.localParticipant.setMicrophoneEnabled(true, {
+      echoCancellation: true, noiseSuppression: true, autoGainControl: true,
+    });
+
+    callStatusText.textContent = "Connected — speak to Aarya.";
+    callOrb.classList.add("live");
+    callOrb.textContent = "🎙";
+    endBtn.disabled = false;
+    muteBtn.disabled = false;
+    isMuted = false;
+    muteBtn.textContent = "Mute";
+  } catch (e) {
+    console.error(e);
+    callStatusText.textContent = "Failed to connect: " + e.message;
+    startBtn.disabled = false;
+  }
+};
+
+endBtn.onclick = async () => { if (room) await room.disconnect(); };
+muteBtn.onclick = async () => {
+  if (!room || !room.localParticipant) return;
+  isMuted = !isMuted;
+  await room.localParticipant.setMicrophoneEnabled(!isMuted);
+  muteBtn.textContent = isMuted ? "Unmute" : "Mute";
+};
+
+// ── Live inbound-state polling (read-only; never feeds back into the agent) ──
+function setText(id, val, emptyLabel) {
+  const el = document.getElementById(id);
+  if (val) { el.textContent = val; el.classList.remove("empty"); }
+  else { el.textContent = emptyLabel || "–"; el.classList.add("empty"); }
+}
+
+function renderPhaseTrack(currentPhase) {
+  const track = document.getElementById("phase-track");
+  track.innerHTML = "";
+  const idx = PHASES.indexOf(currentPhase);
+  PHASES.forEach((p, i) => {
+    const chip = document.createElement("span");
+    chip.className = "phase-chip";
+    if (p === "Ended" && currentPhase === "Ended") chip.classList.add("ended");
+    else if (i === idx) chip.classList.add("active");
+    else if (idx > i) chip.classList.add("done");
+    chip.textContent = p;
+    track.appendChild(chip);
+  });
+}
+
+function updateIdentityHeader(owner, pet) {
+  const avatar = document.getElementById("identity-avatar");
+  const nameEl = document.getElementById("identity-name");
+  const petEl = document.getElementById("identity-pet");
+  const initial = (owner || "?").trim().charAt(0).toUpperCase() || "?";
+  avatar.textContent = initial;
+  nameEl.textContent = owner || "Unknown caller";
+  petEl.textContent = pet ? `Pet: ${pet}` : "Pet: not on file";
+}
+
+async function pollState() {
+  let data;
+  try {
+    const res = await fetch("/api/inbound/state", { cache: "no-store" });
+    data = await res.json();
+  } catch (e) {
+    document.getElementById("status-text").textContent = "server unreachable";
+    document.getElementById("status").querySelector("span:first-child").className = "dot-idle";
+    return;
+  }
+
+  const statusDot = document.getElementById("status").querySelector("span:first-child");
+  const statusText = document.getElementById("status-text");
+
+  if (data.active) {
+    statusDot.className = "dot-live";
+    statusText.textContent = "call in progress — phase: " + (data.phase || "Introduction");
+  } else if (data.identified) {
+    statusDot.className = "dot-idle";
+    statusText.textContent = "last call ended";
+  } else {
+    statusDot.className = "dot-idle";
+    statusText.textContent = "idle — waiting for a call";
+  }
+
+  const idleBanner = document.getElementById("idle-banner");
+  const liveContent = document.getElementById("live-content");
+
+  if (!data.identified) {
+    idleBanner.style.display = "block";
+    liveContent.style.display = "none";
+    return;
+  }
+  idleBanner.style.display = "none";
+  liveContent.style.display = "block";
+
+  renderPhaseTrack(data.phase || "Introduction");
+  setText("val-category", data.category, "Not yet detected");
+  setText("val-resolution", data.resolution, "Not yet offered");
+
+  setText("val-owner", data.owner);
+  setText("val-pet", data.pet);
+  setText("val-service", data.service);
+  setText("val-date", data.date);
+  setText("val-clinic", data.clinic);
+  setText("val-city", data.city);
+  updateIdentityHeader(data.owner, data.pet);
+}
+
+// This page is the INBOUND console — make sure the inbound worker (agent_inbound.py)
+// is the one running, launching it automatically if nothing is up, or switching over
+// if the outbound worker was left running from the /outbound page (only one agent
+// worker runs at a time, since both register with LiveKit under the same agent name).
+async function autoStartInboundAgent() {
+  try {
+    const res = await fetch("/api/agent/status");
+    const data = await res.json();
+    if (data.status === "running" && data.mode === "inbound") return;
+    await fetch("/api/agent/start", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ mode: "inbound" }),
+    });
+  } catch (e) {
+    console.error("auto-start inbound agent failed", e);
+  }
+}
+
+// ── Live latency (reads agent_inbound.py's own latency_logs_inbound.csv via
+// /api/inbound/latency_live — same visual language as live_dashboard.html, kept
+// separate so inbound and outbound call metrics never mix) ──
+const TIER_COLOR = {
+  instant: 'var(--st-good)', acceptable: 'var(--st-warning)',
+  sluggish: 'var(--st-serious)', broken: 'var(--st-critical)',
+};
+const TIER_LABEL = { instant: 'Good', acceptable: 'Fair', sluggish: 'Slow', broken: 'Critical' };
+const TARGET_S = 0.8; // hard round-trip latency budget for this pipeline
+
+function fmtS(v) { return (Math.round(v * 100) / 100).toFixed(2); }
+function fmtTime(t) {
+  const parts = (t || '').split(' ');
+  return parts[1] || t || '–';
+}
+
+async function pollLatency() {
+  let data;
+  try {
+    const res = await fetch('/api/inbound/latency_live?recent=40&rolling=20', { cache: 'no-store' });
+    data = await res.json();
+  } catch (e) {
+    return;
+  }
+
+  const idleBanner = document.getElementById('lat-idle-banner');
+  const liveContent = document.getElementById('lat-live-content');
+
+  if (data.error || !data.latest) {
+    idleBanner.style.display = 'block';
+    idleBanner.textContent = data.error ? data.error : 'No inbound turns logged yet — start a call to see live latency here.';
+    liveContent.style.display = 'none';
+    return;
+  }
+  idleBanner.style.display = 'none';
+  liveContent.style.display = 'block';
+
+  const latest = data.latest;
+  document.getElementById('lat-latest-total').innerHTML = `${fmtS(latest.total)}<small>s</small>`;
+  document.getElementById('lat-latest-meta').textContent =
+    `${fmtTime(latest.t)} · ${latest.id} · ${TIER_LABEL[latest.bucket] || latest.bucket}`;
+  document.getElementById('lat-latest-tokens').textContent =
+    `Tokens: ${(latest.in_tok ?? 0).toLocaleString()} in · ${(latest.out_tok ?? 0).toLocaleString()} out`;
+
+  const chainBar = document.getElementById('lat-chain-bar');
+  const chainLegend = document.getElementById('lat-chain-legend');
+  chainBar.innerHTML = '';
+  chainLegend.innerHTML = '';
+  const parts = [
+    { label: 'EOU wait', color: 'var(--series-1)', v: latest.eou },
+    { label: 'LLM TTFT', color: 'var(--series-3)', v: latest.llm },
+    { label: 'TTS TTFB', color: 'var(--series-2)', v: latest.tts },
+  ];
+  const sum = parts.reduce((s, p) => s + p.v, 0) || 1;
+  parts.forEach(p => {
+    const pct = p.v / sum * 100;
+    const seg = document.createElement('div');
+    seg.className = 'chain-seg';
+    seg.style.flex = Math.max(pct, 0.001);
+    seg.style.background = p.color;
+    seg.textContent = pct >= 12 ? fmtS(p.v) + 's' : '';
+    chainBar.appendChild(seg);
+    const leg = document.createElement('span');
+    leg.innerHTML = `<span class="sw" style="background:${p.color}"></span>${p.label} ${fmtS(p.v)}s`;
+    chainLegend.appendChild(leg);
+  });
+
+  if (data.rolling) {
+    document.getElementById('lat-rolling-n').textContent = data.rolling.count;
+    document.getElementById('lat-roll-p50').textContent = fmtS(data.rolling.p50) + 's';
+    document.getElementById('lat-roll-p95').textContent = fmtS(data.rolling.p95) + 's';
+    document.getElementById('lat-roll-mean').textContent = fmtS(data.rolling.mean) + 's';
+  }
+
+  const recentForBanner = data.recent || [];
+  if (recentForBanner.length) {
+    const overCount = recentForBanner.filter(r => r.total > TARGET_S).length;
+    const pct = Math.round((overCount / recentForBanner.length) * 100);
+    const banner = document.getElementById('lat-target-banner');
+    banner.classList.remove('warn', 'crit');
+    if (pct > 50) banner.classList.add('crit');
+    else if (pct > 20) banner.classList.add('warn');
+    document.getElementById('lat-target-banner-text').innerHTML =
+      `<b>${overCount}/${recentForBanner.length} of the last ${recentForBanner.length} turns</b> exceeded the 800ms round-trip target (${pct}%)`;
+  }
+
+  const strip = document.getElementById('lat-strip');
+  strip.innerHTML = '';
+  const recent = data.recent || [];
+  document.getElementById('lat-strip-n').textContent = recent.length;
+  const maxV = Math.max(...recent.map(r => r.total), TARGET_S * 1.15, 1);
+  recent.forEach(r => {
+    const col = document.createElement('div');
+    col.className = 'bar-col';
+    col.style.height = Math.max((r.total / maxV) * 100, 3) + '%';
+    col.title = `${fmtTime(r.t)} — EOU ${fmtS(r.eou)}s · LLM ${fmtS(r.llm)}s · TTS ${fmtS(r.tts)}s · total ${fmtS(r.total)}s (${TIER_LABEL[r.bucket]})`;
+    const segs = [
+      { v: r.eou, color: 'var(--series-1)' },
+      { v: r.llm, color: 'var(--series-3)' },
+      { v: r.tts, color: 'var(--series-2)' },
+    ];
+    const segSum = segs.reduce((s, p) => s + p.v, 0) || 1;
+    segs.forEach(p => {
+      const seg = document.createElement('div');
+      seg.className = 'seg';
+      seg.style.height = (p.v / segSum * 100) + '%';
+      seg.style.background = p.color;
+      col.appendChild(seg);
+    });
+    strip.appendChild(col);
+  });
+
+  const targetPct = Math.min((TARGET_S / maxV) * 100, 100);
+  let targetRef = strip.querySelector('.target-ref');
+  if (!targetRef) {
+    targetRef = document.createElement('div');
+    targetRef.className = 'target-ref';
+    const label = document.createElement('span');
+    label.className = 'target-ref-label';
+    label.textContent = '800ms';
+    targetRef.appendChild(label);
+    strip.appendChild(targetRef);
+  }
+  targetRef.style.bottom = targetPct + '%';
+
+  const tbody = document.getElementById('lat-table-body');
+  tbody.innerHTML = recent.slice().reverse().slice(0, 15).map(r => `
+    <tr>
+      <td>${fmtTime(r.t)}</td>
+      <td>${fmtS(r.eou)}s</td>
+      <td>${fmtS(r.llm)}s</td>
+      <td>${fmtS(r.tts)}s</td>
+      <td><b>${fmtS(r.total)}s</b></td>
+      <td><span class="chip"><span class="dot" style="background:${TIER_COLOR[r.bucket]}"></span>${TIER_LABEL[r.bucket]}</span></td>
+    </tr>
+  `).join('');
+}
+
+autoStartInboundAgent();
+pollState();
+setInterval(pollState, 1500);
+pollLatency();
+setInterval(pollLatency, 1500);
+</script>
+</body>
+</html>

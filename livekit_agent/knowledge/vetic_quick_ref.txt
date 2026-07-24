@@ -70,7 +70,7 @@ Based on recurring patterns in Vetic's own complaint/ticket analysis, the catego
 ### B. Grooming
 - Second most common complaint category (142-ticket internal review previously conducted).
 - Typical issues: haircut/style not as requested, injury/nick during grooming, pet appearing distressed, missed services paid for.
-- **On call:** Establish which clinic, which groomer/date, and whether a vet health-check was performed alongside grooming (standard practice) — if not, that's a process gap worth flagging. Escalate injury complaints immediately regardless of severity.
+- **On call:** Establish which clinic, which groomer/date, and whether a vet health-check was performed alongside grooming (standard practice) — if not, that's a process gap worth flagging. For cuts or injuries during grooming, DO NOT mention raising an escalation ticket. The resolution to offer is an online video consultation by a senior vet doctor. Ask what time they are available for the video call. After confirming the time, tell them the appointment is added and they will receive a notification 5 mins before on the Vetic app. If the user asks for a home visit, explicitly reply: "Sorry, we can't do that right now." If they do not agree to the video consultation, offer a free OPD at the clinic, ask when they are available, and book the appointment.
 
 ### C. Clinical / Treatment
 - Includes: inapt/incorrect treatment, EMR (electronic medical record) not filled, high waiting time, product not handed over, diagnosis disputes.
@@ -207,33 +207,6 @@ International brands of pet food, pet-safe toys, crates, dog leashes and collars
 
 ---
 
-## 12. Escalation / Query Routing Mapping (Final_L1 / Final_L2 / Function)
-
-**HOME DELIVERY**
-Escalation -> HD -> Delay - Outside TAT (Regular / Night Order / Sub Orders)
-Escalation -> HD -> Partial Order Failed - Inventory Mismatch
-Escalation -> HD -> OTP Not Received on Time
-Escalation -> HD -> Inventory Mismatch / Wrong Product / Product Missing
-Escalation -> HD -> Marked Delivered - PP Did Not Receive
-Escalation -> HD -> Delivery Process Not Smooth
-Escalation -> HD -> Address Mismatch
-Escalation -> HD -> Description / Image Mismatch on App
-Escalation -> HD -> Quality Issue / Damaged / Broken Seal Product
-Escalation -> HD -> Expired Product Delivered / Short Expiry Product Delivered
-Escalation -> HD -> Extra Charge by Rider / Rider Behaviour Issue
-Escalation -> HD -> Lost / Damaged in Transit
-Escalation -> HD -> Less Quantity Delivered
-Escalation -> HD -> Wrong Product Delivered (Food / Medicine / Accessories)
-Escalation -> HD -> Inventory Mismatch - Non Clinic Issue / Tech Issue
-Escalation -> HD -> Free Gift Issue - Clinic / Tech
-Escalation -> HD -> Catalogue Issue
-Query -> HD -> Delay - Within TAT (Regular / Night Order)
-Query -> HD -> Partial Order Query - Sub Orders
-Query -> HD -> COD Payment Issue
-Query -> HD -> Reattempt on RTO Order
-Query -> HD -> Product Exchange Request
-Query -> HD -> Packaging Issue
-Query -> HD -> App Issue for Home Delivery
 
 **GROOMING**
 Escalation -> Grooming -> Injury During Service / Allergy Post Service / Parent Instructions Not Followed / Pet Handling Complaint

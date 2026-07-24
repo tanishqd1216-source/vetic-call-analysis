@@ -14,6 +14,8 @@ __pycache__/
 venv/
 **/venv/
 .venv/
+**/.venv/
+archive/stale_venv/
 
 # Windows artifacts
 desktop.ini
@@ -29,3 +31,4 @@ Thumbs.db
 **/cloudflared.exe
 **/cloudflared.log
 *.log
+livekit_agent/logs/

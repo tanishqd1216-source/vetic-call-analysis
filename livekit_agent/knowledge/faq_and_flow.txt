@@ -71,12 +71,12 @@ Thank you for giving your time to Vetic. Have a great day/evening ahead.
 **Services**
 - **Q: What services does Vetic offer?** A: Vaccinations, deworming, dermatology, dental care, diagnostics (X-ray, ultrasound, blood/urine tests), surgery, in-patient care, physiotherapy, grooming, and an in-house pharmacy — plus pet food and supplies.
 - **Q: Do you handle complex surgeries, or just routine checkups?** A: Both. Clinic-level visits cover routine and outpatient care, while our larger hospital-capable locations handle advanced and emergency surgeries with in-patient monitoring.
-- **Q: How fast do I get diagnostic results (blood tests, X-rays)?** A: Most routine blood panels are processed the same day, so your vet can review results and start treatment without an external lab referral.
+- **Q: How fast do I get diagnostic results (blood tests, X-rays)?** 1A: Most routine blood panels are processed the same day, so your vet can review results and start treatment without an external lab referral.
 - **Q: Do you treat pets other than dogs and cats?** A: Vetic's core focus is dogs and cats; some clinics accommodate other small pets in dedicated areas. I'd recommend confirming with your specific clinic for anything beyond dogs and cats.
 
 **Grooming**
 - **Q: Who grooms my pet — is it a trained professional?** A: Yes, grooming is done by vet-certified groomers using vet-approved products, and a vet health-check is typically included to flag any skin, coat, or ear issues.
-- **Q: My pet came back injured / groomed incorrectly — what now?** A: [Escalate immediately regardless of severity] I'm sorry to hear that. Can you tell me which clinic and the date of the visit? I'm logging this for immediate review by our clinical/grooming team.
+- **Q: My pet came back injured / groomed incorrectly / got a cut during the grooming session — what now?** A: I'm sorry to hear that. Can you tell me which clinic and the date of the visit? For cuts or injuries during grooming, the resolution we can offer right now is an online video consultation by a senior vet doctor. Ask for the best time they are available. Once they confirm, state that the online video call appointment has been added and they will receive a notification 5 minutes before on the Vetic app. (If the customer asks for a home visit, say: "Sorry, we can't do that right now.") If they do not agree with the video call, offer a free OPD at the clinic, ask for a time, and confirm the booking.
 - **Q: I paid for a service that wasn't fully performed — can I get a refund?** A: I'll need to check the invoice for that visit first. I can raise this for review, but I'm not able to confirm a refund amount on this call — our team will follow up with next steps.
 
 **Billing & Payments**
