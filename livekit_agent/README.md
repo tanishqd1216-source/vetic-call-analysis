@@ -10,8 +10,10 @@ The agent utilizes **LiveKit** to handle transport and turn-taking, passing audi
 
 - **Transport**: LiveKit (WebRTC) handles low-latency audio streaming.
 - **STT (Speech-to-Text)**: **Sarvam** (`saaras:v3`). We use the official `livekit-plugins-sarvam` plugin. Sarvam is optimized for Indian English, fixing the garbled transcripts seen in standard STT models. It includes its own Voice Activity Detection (VAD).
-- **LLM (Logic)**: **Anthropic Claude 3.5**. Claude powers the core decision-making and call flow logic based on a highly structured system prompt.
+- **LLM (Logic)**: **`gpt-4o-mini` via OpenAI** (`livekit-plugins-openai`) powers the core decision-making and call flow logic based on a highly structured system prompt. Optionally routed through a local **Headroom proxy** (`HEADROOM_PROXY_URL`) that compresses the outgoing prompt before it hits OpenAI to cut token cost; falls back to calling OpenAI directly if unset. In practice OpenAI's automatic prompt caching already handles the bulk of the ~5000-token/turn system prompt for free (turn 2+ of a call sees ~97-99% cache hits), so this is mostly a no-op today.
 - **TTS (Text-to-Speech)**: **Sarvam** (`bulbul:v3` / `priya` voice). This maintains the required "Aarya" persona.
+
+There are two agent entrypoints sharing this stack: `agent.py` (outbound service-recovery — customer record is pre-loaded before the call) and `agent_inbound.py` (inbound support — the caller starts unidentified and is verified via a `lookup_customer` tool call or SIP caller ID before the same resolution flow runs).
 
 ## 2. Prompt Engineering & Call Flow
 
@@ -53,7 +55,8 @@ Fields injected into the prompt include: `owner`, `pet`, `service`, `date`, `cli
 |---|---|
 | `LIVEKIT_URL`, `LIVEKIT_API_KEY`, `LIVEKIT_API_SECRET` | From your LiveKit Cloud dashboard |
 | `SARVAM_API_KEY` | Powers both STT and TTS |
-| `ANTHROPIC_API_KEY` | Powers the LLM |
+| `OPENAI_API_KEY` | Powers the LLM (`gpt-4o-mini`, hardcoded — no model-selection env var) |
+| `HEADROOM_PROXY_URL` | Optional — routes LLM calls through a local Headroom proxy for prompt compression |
 
 *(Note: Deepgram is no longer used, as Sarvam handles STT natively).*
 
@@ -76,7 +79,8 @@ copy .env.example .env
 
 ### Running the Agent
 ```bat
-python agent.py dev
+python agent.py dev            :: outbound (service-recovery)
+python agent_inbound.py dev    :: inbound (support)
 ```
 This connects your agent to your LiveKit Cloud project.
 

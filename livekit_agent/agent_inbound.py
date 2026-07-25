@@ -1,6 +1,6 @@
-"""Vetic INBOUND customer-support voice agent on LiveKit — Sarvam STT + TTS, Claude LLM.
+"""Vetic INBOUND customer-support voice agent on LiveKit — Sarvam STT + TTS, gpt-4o-mini LLM.
 
-Pipeline:  caller (WebRTC/SIP) -> Sarvam STT (saaras:v3) -> Claude -> Sarvam TTS
+Pipeline:  caller (WebRTC/SIP) -> Sarvam STT (saaras:v3) -> gpt-4o-mini -> Sarvam TTS
            (bulbul:v3, "priya") -> caller.
 
 This is the inbound counterpart to agent.py (the outbound service-recovery / win-back
@@ -44,7 +44,7 @@ from livekit.agents import (
 from livekit.agents import inference
 from livekit.agents.voice import Agent, AgentSession
 from livekit.agents.llm import ChatMessage
-from livekit.plugins import openai, noise_cancellation, sarvam, silero, anthropic
+from livekit.plugins import openai, noise_cancellation, sarvam, silero
 from livekit.agents.telemetry import set_tracer_provider
 from opentelemetry.sdk.trace import TracerProvider
 

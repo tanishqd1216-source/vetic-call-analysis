@@ -11,12 +11,42 @@ sys.path.append(r"c:\Users\hp\Documents\claude_WO_API\livekit_agent")
 from dotenv import load_dotenv
 load_dotenv(r"c:\Users\hp\Documents\claude_WO_API\livekit_agent\.env", override=True)
 
-from openai import OpenAI
+from openai import BadRequestError, OpenAI
 from agent import build_instructions
 
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 client = OpenAI(api_key=OPENAI_API_KEY)
-MODEL = "gpt-4o-mini"
+# AGENT_MODEL is the one under test (override via env var to compare models); the
+# simulated customer stays fixed so only the agent's behavior/cost varies between runs.
+AGENT_MODEL = os.environ.get("STRESS_TEST_MODEL", "gpt-4o-mini")
+CUSTOMER_MODEL = "gpt-4o-mini"
+MODEL = AGENT_MODEL  # backwards-compat alias, unused below
+
+# Running per-model token totals, for a real cost comparison across runs.
+USAGE = {"agent": {"prompt": 0, "completion": 0, "cached": 0}, "customer": {"prompt": 0, "completion": 0}}
+
+
+def _complete(model: str, messages: list, max_tokens: int, temperature: float):
+    """Some newer models (e.g. gpt-5.x) reject `max_tokens` in favor of
+    `max_completion_tokens`. Try the classic param first, fall back once."""
+    try:
+        return client.chat.completions.create(
+            model=model, messages=messages, max_tokens=max_tokens, temperature=temperature
+        )
+    except BadRequestError as e:
+        if "max_completion_tokens" in str(e):
+            return client.chat.completions.create(
+                model=model, messages=messages, max_completion_tokens=max_tokens, temperature=temperature
+            )
+        raise
+
+
+def _track(role: str, resp) -> None:
+    u = resp.usage
+    USAGE[role]["prompt"] += u.prompt_tokens
+    USAGE[role]["completion"] += u.completion_tokens
+    if role == "agent":
+        USAGE[role]["cached"] += getattr(u.prompt_tokens_details, "cached_tokens", 0) or 0
 
 # Read FAQ knowledge base
 with open(r"c:\Users\hp\Documents\claude_WO_API\livekit_agent\knowledge\faq_and_flow.txt", "r", encoding="utf-8") as f:
@@ -79,12 +109,13 @@ def run_multiturn_test(query: dict) -> dict:
     MAX_TURNS = 8  # Max agent/customer turns each
 
     # Agent greets first
-    agent_resp = client.chat.completions.create(
-        model=MODEL,
-        messages=agent_messages + [{"role": "user", "content": "(Call connected. Start the call with your greeting.)"}],
+    agent_resp = _complete(
+        AGENT_MODEL,
+        agent_messages + [{"role": "user", "content": "(Call connected. Start the call with your greeting.)"}],
         max_tokens=120,
         temperature=0.0
     )
+    _track("agent", agent_resp)
     agent_text = agent_resp.choices[0].message.content.strip()
     if "end_call" in agent_text.lower():
         agent_text = re.sub(r'\bend_call\b', '', agent_text).strip()
@@ -95,24 +126,16 @@ def run_multiturn_test(query: dict) -> dict:
 
     for turn in range(MAX_TURNS):
         # Customer turn
-        cust_resp = client.chat.completions.create(
-            model=MODEL,
-            messages=customer_messages,
-            max_tokens=80,
-            temperature=0.5
-        )
+        cust_resp = _complete(CUSTOMER_MODEL, customer_messages, max_tokens=80, temperature=0.5)
+        _track("customer", cust_resp)
         cust_text = cust_resp.choices[0].message.content.strip()
         transcript.append(f"**Customer:** {cust_text}")
         customer_messages.append({"role": "assistant", "content": cust_text})
         agent_messages.append({"role": "user", "content": cust_text})
 
         # Agent turn
-        agent_resp = client.chat.completions.create(
-            model=MODEL,
-            messages=agent_messages,
-            max_tokens=150,
-            temperature=0.0
-        )
+        agent_resp = _complete(AGENT_MODEL, agent_messages, max_tokens=150, temperature=0.0)
+        _track("agent", agent_resp)
         agent_text = agent_resp.choices[0].message.content.strip()
         
         # Detect if end_call was triggered
@@ -148,16 +171,16 @@ def run_multiturn_test(query: dict) -> dict:
 
 
 def main():
-    print(f"Running multi-turn stress test on {len(QUERIES)} queries...\n")
+    print(f"Running multi-turn stress test on {len(QUERIES)} queries against AGENT_MODEL={AGENT_MODEL}...\n")
     all_results = []
-    
+
     for q in QUERIES:
         print(f"Testing Query {q['id']}: {q['category']} — {q['sub']}...")
         result = run_multiturn_test(q)
         all_results.append(result)
 
     # Build markdown output
-    out = ["# Vetic Agent Stress Test — Full Transcripts & Resolutions\n"]
+    out = [f"# Vetic Agent Stress Test — Full Transcripts & Resolutions (agent model: {AGENT_MODEL})\n"]
     out.append("---\n")
     
     # Summary table
@@ -181,11 +204,20 @@ def main():
         out.append(f"**📋 Final Resolution Offered:**\n> {r['resolution']}\n")
         out.append("\n---\n")
 
-    out_path = r"c:\Users\hp\Documents\claude_WO_API\livekit_agent\tests\results\stress_test_results_full.md"
+    agent_usage = USAGE["agent"]
+    out.append("\n## Token Usage (agent side only, this run)\n")
+    out.append(f"- Model: `{AGENT_MODEL}`\n")
+    out.append(f"- Prompt tokens: {agent_usage['prompt']}\n")
+    out.append(f"- Cached prompt tokens: {agent_usage['cached']}\n")
+    out.append(f"- Completion tokens: {agent_usage['completion']}\n")
+
+    safe_model = AGENT_MODEL.replace(".", "_").replace("/", "_")
+    out_path = rf"c:\Users\hp\Documents\claude_WO_API\livekit_agent\tests\results\stress_test_results_full_{safe_model}.md"
     with open(out_path, "w", encoding="utf-8") as f:
         f.write("".join(out))
-    
+
     print(f"\nDone. Full results saved to: {out_path}")
+    print(f"Agent-side usage: prompt={agent_usage['prompt']} (cached={agent_usage['cached']}) completion={agent_usage['completion']}")
 
 
 if __name__ == "__main__":

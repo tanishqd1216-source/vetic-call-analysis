@@ -93,3 +93,105 @@ dev commands on whichever machine has `start_call_environment.ps1` running.
 2. If $0 always-on hosting becomes wanted again, revisit Oracle Cloud free tier using
    `deploy/fly-io-worker-hosting` as a starting point (adjust `fly.toml`→Oracle equivalent, ARM
    base image).
+
+---
+
+## 2026-07-24 — Session: verified prompt caching is already working; found a model question
+
+**Verified (empirically, via 2 real `gpt-4o-mini` API calls using the actual `build_instructions()`
+system prompt against the live OpenAI API):** OpenAI's automatic prompt caching **is already
+active with zero code changes** — turn 1 of a simulated call showed `cached_tokens=0` (expected,
+first time seeing that exact prefix), turn 2 (same system prompt + one more turn appended, as
+happens in every real call) showed `cached_tokens=4864` out of `4907` prompt tokens — **~99% of
+the input was a cache hit**. This resolves the open question from the first session entry:
+Headroom's 0% compression (already documented, disabled in `.env`) doesn't matter here because
+OpenAI's native caching already handles the static ~5000-token system prompt for free, turn 2
+onward within a call. No further action needed on this thread — it was already solved, just
+unverified.
+
+**New finding, not yet acted on:** `gpt-4o-mini` no longer appears on OpenAI's current pricing
+page (`developers.openai.com/api/docs/pricing`) — checked the deprecations page too, it's **not
+officially deprecated**, just absent from the current flagship pricing table (OpenAI's lineup has
+moved to a gpt-5.x family since this was originally wired up). Current cheapest actively-listed
+tier is **`gpt-5.4-nano`** at $0.20/1M input / $1.25/1M output (vs. legacy `gpt-4o-mini` pricing
+that isn't independently confirmable from the current page). Notably `gpt-5.4-nano`'s *output*
+price is over 2x `gpt-4o-mini`'s historical output price — so this is NOT a clear cost win, and
+swapping the core LLM is a correctness-affecting change (priority #1 in the mission order) that
+needs validation against the existing 100-query stress-test suite before switching, not a
+speculative swap. Flagged to user; awaiting direction before touching the model.
+
+**Next steps:**
+1. If asked to proceed: run `tests/run_stress_test.py` / `run_stress_test_inbound.py` against
+   `gpt-5.4-nano` alongside the existing `gpt-4o-mini` results, compare correctness AND actual
+   per-call cost/latency before recommending a switch.
+2. Otherwise, cost/latency thread is now in a good state (caching confirmed working) — next
+   mission focus is open.
+
+---
+
+## 2026-07-24 — Session: gpt-5.4-nano evaluated on the stress suite — rejected, staying on gpt-4o-mini
+
+Ran the 100-query outbound stress suite (`tests/run_stress_test.py`, now parametrized via
+`STRESS_TEST_MODEL` env var — simulated customer stays fixed on `gpt-4o-mini` so only the
+agent's model varies between runs) against both models for a controlled comparison:
+
+- **`gpt-4o-mini` (re-run on the same instrumented harness, results:
+  `tests/results/stress_test_results_full_gpt-4o-mini.md`):** completed the full 100-query sweep
+  in ~14 minutes. Agent-side usage: 5,455,196 prompt tokens, **5,277,312 (96.7%) cache hits**,
+  14,989 completion tokens.
+- **`gpt-5.4-nano`:** a single-query smoke test worked correctly (sensible resolution, tool-call-free
+  chat completions, cache hits present too — 55,296/68,837 prompt tokens cached within that one
+  call) but required `max_completion_tokens` instead of `max_tokens` (handled via a fallback helper
+  in the test script). The full 100-query run was **killed after running far longer than the
+  gpt-4o-mini run without finishing** — noticeably higher per-call latency was already visible in
+  the single-query smoke test, and held up across the full run. **Decision: keep `gpt-4o-mini`.**
+  Given nano's higher output-token price (see prior entry) and now confirmed-worse latency, there
+  was no upside left to chase.
+
+**Outcome:** the model stays `gpt-4o-mini`. The cost/latency thread that opened this investigation
+(is anything cutting the ~5000-token/turn cost) is now fully closed: prompt caching handles it
+automatically, already confirmed working, no cheaper/faster alternative model found. Mission focus
+is open again — next highest-leverage item to be picked at the next session/request.
+
+**Housekeeping:** `tests/run_stress_test.py`'s model-parametrization change is not yet committed.
+`tests/results/stress_test_results_full_gpt-4o-mini.md` is a new file alongside the original
+`stress_test_results_full.md` (same content in spirit, regenerated with token-usage tracking) —
+minor duplication, not cleaned up.
+
+---
+
+## 2026-07-25 — Session: verified inbound latency metrics; cleaned up stale Claude-era docs
+
+**Verified the inbound metrics-capture gap flagged since the first session was never a real bug.**
+Cross-checked the historical worker log `logs/agent_inbound_run.log` (a real inbound test run,
+2026-07-24 13:13–13:17) and confirmed `EOUMetrics`/`LLMMetrics`/`TTSMetrics` correlate correctly by
+`speech_id` and produce real non-zero values across ~13 turns (e.g. one turn: EOU 3.18s, LLM 3.13s,
+6377 input / 23 output tokens). The `make_metrics_handler` logic in `agent.py` and `agent_inbound.py`
+is byte-identical — there's no code-level asymmetry between outbound and inbound. The all-zero rows
+sitting in the current `logs/latency_logs_inbound.csv` (3 rows, one short webcall test, Call_ID
+`web-call-35afe6a5`) are from a call that ended before any real STT→LLM turn completed — an
+artifact of that one short test, not a systemic capture gap. **No code change needed; this item is
+closed.** If inbound latency numbers are needed going forward, run a longer inbound test call (or
+`tests/run_stress_test_inbound.py`) to get a fresh, trustworthy CSV sample.
+
+**Fixed stale Claude-era docs/comments (mission item flagged repeatedly, never actioned):** found
+and removed a dead `from livekit.plugins import ... anthropic` import in both `agent.py` and
+`agent_inbound.py` (grepped for `anthropic.` usage — zero hits, fully dead since the Claude→OpenAI
+migration). Updated module docstrings, `README.md` (LLM section, env var table, added the
+previously-undocumented `agent_inbound.py` entrypoint and its run command, noted the Headroom
+proxy + confirmed-working OpenAI prompt caching), `.env.example` (`ANTHROPIC_API_KEY` →
+`OPENAI_API_KEY` + optional `HEADROOM_PROXY_URL`, removed the dead `LLM_MODEL` var — the model is
+hardcoded `gpt-4o-mini` in code, no env override exists), and `requirements.txt`
+(`livekit-agents[anthropic]` → `livekit-agents[openai]`, matching what's actually imported and
+installed in `.venv`). This closes the "Known stale/messy state" README item from project memory.
+
+**Also committed this session:** the previously-uncommitted `tests/run_stress_test.py`
+model-parametrization change and the new `tests/results/stress_test_results_full_gpt-4o-mini.md`
+(from the gpt-5.4-nano vs gpt-4o-mini comparison two sessions ago) — this was finished work sitting
+uncommitted since then.
+
+**Next steps:** mission focus is open again. Candidates not yet done: squash the ~425MB git
+history (old venv/media commits pre-cleanup — not urgent), or revisit Oracle Cloud free-tier
+hosting if $0 always-on hosting is wanted again (see architecture memory). Otherwise, no open
+correctness/cost/latency items remain — next session should scan for a new highest-leverage item
+per the standing mission priority order.

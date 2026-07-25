@@ -1,5 +1,5 @@
-# LiveKit Vetic voice agent — Sarvam STT + TTS, Claude LLM.
-livekit-agents[anthropic]~=1.2
+# LiveKit Vetic voice agent — Sarvam STT + TTS, gpt-4o-mini LLM (via livekit-plugins-openai).
+livekit-agents[openai]~=1.2
 livekit-plugins-sarvam~=1.2
 livekit-plugins-noise-cancellation>=0.3.0  # >=0.3.0 required — 0.2.6's NC() panics on session teardown
 
