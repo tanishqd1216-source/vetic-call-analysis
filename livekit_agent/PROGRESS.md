@@ -247,3 +247,66 @@ did — this fix addresses the 2 specific bugs found, not a systematic audit of 
 patched prompts would give a real before/after regression check (skipped this session per user's
 choice of a cheaper targeted verification). Otherwise, mission focus is open again — git history
 squash and Oracle Cloud hosting are the remaining known candidates.
+
+---
+
+## 2026-07-25 — Session: additive call-event instrumentation for the new ai-call-agent dashboard
+
+A separate project (`C:\Users\hp\ai-call-agent`, private GitHub repo under this same account) is
+building the persistence + dashboard layer this agent has never had — call history, per-turn
+latency, resolution outcomes, all in a real database with a Next.js UI. The explicit decision
+there was to **wrap this agent, not replace or rewrite it**: `agent.py`/`agent_inbound.py` already
+satisfy the #1 mission priority (correctness), backed by this week's real bug fixes, so nothing
+about the prompts, business rules, or resolution flow changes here.
+
+**What changed (purely additive, ~99 lines across 5 files):**
+- New `event_reporter.py` — a `fire_event(call_id, direction, event_type, payload)` helper that
+  POSTs to the dashboard backend's ingestion endpoint via `httpx`, fire-and-forget
+  (`asyncio.create_task`, reusing the same strong-reference `background_tasks`-set pattern already
+  used elsewhere in both agent files). Every failure is caught and logged, never raised — a
+  backend outage or slow network can never break a live call.
+- `agent.py` / `agent_inbound.py`: one import line each, plus `fire_event(...)` calls at the points
+  that were already computing the relevant data — no new logic:
+  - `call_started` — right after each file's existing "STARTING CALL" log line.
+  - `turn` — inside `_on_metrics`'s `TTSMetrics` branch, immediately after the existing
+    `_write_latency_row(...)` call, using the exact same local variables already assembled for
+    the CSV row.
+  - `call_ended` — in both the `end_call` function tool and the silence-timeout forced-end path
+    in `silence_watcher` (two independent hangup paths in each file).
+  - `phase_change` (inbound only) — inside `report_dashboard_state`, the one already-existing
+    phase-transition hook the LLM calls itself; no prompt change needed. `agent.py` has no
+    equivalent hook today (no category/resolution tracking exists in the outbound file at all) —
+    deliberately left uninstrumented rather than inventing one, per the "no new business logic"
+    constraint.
+- `requirements.txt`: added `httpx>=0.27` (not previously a dependency of either agent file).
+- `.env.example`: added optional `EVENTS_API_URL` (defaults to `http://localhost:4000/api/events`
+  if unset — nothing breaks if the dashboard backend isn't running).
+
+**Verified:**
+- Both files still parse cleanly (`ast.parse`) after every edit.
+- Could not exercise the real LiveKit call flow in this environment (no venv, no API keys, no
+  network to LiveKit/Sarvam/OpenAI here) — that's real end-to-end verification for a future
+  session with the actual runtime. Instead, verified what's actually testable: ran
+  `event_reporter.report_event()` directly against a live instance of the new dashboard backend
+  with the exact payload shapes each instrumentation point sends (call_started → turn →
+  phase_change → call_ended, using agent_inbound.py's full `_dashboard_state` shape). Confirmed via
+  the backend's `GET /api/calls/:id` that the call row, turn row, and all three events landed
+  correctly — the wiring between what this agent sends and what the dashboard expects is correct.
+- This branch was rebased onto the latest `main` (this repo's local `main` had 3 commits — the
+  emergency-location/NO-ETA fix among them — not yet pushed to `origin` when this session started;
+  rebasing here, not just merging, made sure the instrumentation was written against the *current*
+  file content, not the stale `origin/main` version).
+
+**Not done / explicitly deferred:**
+- No re-run of the 100-query stress suites — this change touches zero prompt/business-logic
+  lines, so a correctness regression from it specifically would be surprising, but a real call
+  through the actual runtime is still the only true verification and hasn't happened yet.
+- `agent.py` (outbound) has no `phase_change` equivalent — would need a new function_tool + a
+  prompt instruction telling the LLM to call it, which is a business-logic-adjacent change outside
+  this session's scope.
+
+**Next steps:** place one real test call through the actual runtime (browser test call via
+`webcall_server.py` is easiest) and confirm it shows up correctly in the ai-call-agent dashboard
+end-to-end — the one piece of verification this session couldn't do. Pushed as its own branch/PR
+rather than straight to `main`, since local `main` had unpushed prior work this session didn't
+originate.

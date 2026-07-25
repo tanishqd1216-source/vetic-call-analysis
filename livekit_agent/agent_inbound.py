@@ -49,6 +49,7 @@ from livekit.agents.telemetry import set_tracer_provider
 from opentelemetry.sdk.trace import TracerProvider
 
 from vetic_db import get_user_context, owner_first_name
+from event_reporter import fire_event
 
 load_dotenv(override=True)
 load_dotenv("../.env", override=True)
@@ -229,6 +230,17 @@ def make_metrics_handler(call_id: str):
                     input_tokens, output_tokens,
                 ])
                 logger.info("Successfully called _write_latency_row.")
+                fire_event(call_id, "inbound", "turn", {
+                    "turn": turn_no,
+                    "speechId": sid,
+                    "eouDelaySeconds": eou,
+                    "transcriptionDelaySeconds": tr,
+                    "llmTtftSeconds": llm,
+                    "ttsTtfbSeconds": tts,
+                    "responseLatencySeconds": total,
+                    "inputTokens": input_tokens,
+                    "outputTokens": output_tokens,
+                })
             except Exception as e:
                 logger.error(f"Error calling _write_latency_row: {e}", exc_info=True)
 
@@ -653,6 +665,7 @@ class InboundVeticAgent(Agent):
         if resolution:
             self._dashboard_state["resolution"] = resolution
         _write_dashboard_state(self._dashboard_state)
+        fire_event(get_job_context().room.name, "inbound", "phase_change", self._dashboard_state)
         return "noted"
 
     @function_tool
@@ -683,6 +696,7 @@ class InboundVeticAgent(Agent):
             "updated_at": datetime.datetime.now().isoformat(),
         })
         _write_dashboard_state(self._dashboard_state)
+        fire_event(get_job_context().room.name, "inbound", "call_ended", self._dashboard_state)
         if self.silence_end:
             bye = (
                 f"I'm sorry, I did not hear anything from you, {self._owner_name}. Please feel free to call us back. Thank you, Goodbye."
@@ -714,6 +728,7 @@ async def entrypoint(ctx: JobContext) -> None:
     await ctx.connect()
 
     logger.info("--- STARTING INBOUND CALL (caller identity unknown until mobile number is provided) ---")
+    fire_event(ctx.room.name, "inbound", "call_started", {})
 
     greeting = (
         "Hello! Good morning, this is Aarya from Vetic Pet Care. How can I help you today?"
@@ -822,6 +837,7 @@ async def entrypoint(ctx: JobContext) -> None:
                                     "updated_at": datetime.datetime.now().isoformat(),
                                 })
                                 _write_dashboard_state(vetic_agent._dashboard_state)
+                                fire_event(ctx.room.name, "inbound", "call_ended", vetic_agent._dashboard_state)
                                 # Read the owner name dynamically — it may have been
                                 # resolved mid-call via lookup_customer, unlike the
                                 # outbound agent which knows it from the start.

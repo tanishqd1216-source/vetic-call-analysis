@@ -39,6 +39,7 @@ from livekit.agents.telemetry import set_tracer_provider
 from opentelemetry.sdk.trace import TracerProvider
 
 from vetic_db import get_user_context, owner_first_name
+from event_reporter import fire_event
 
 load_dotenv(override=True)
 load_dotenv("../.env", override=True)
@@ -164,6 +165,17 @@ def make_metrics_handler(call_id: str):
                     input_tokens, output_tokens,
                 ])
                 logger.info("Successfully called _write_latency_row.")
+                fire_event(call_id, "outbound", "turn", {
+                    "turn": turn_no,
+                    "speechId": sid,
+                    "eouDelaySeconds": eou,
+                    "transcriptionDelaySeconds": tr,
+                    "llmTtftSeconds": llm,
+                    "ttsTtfbSeconds": tts,
+                    "responseLatencySeconds": total,
+                    "inputTokens": input_tokens,
+                    "outputTokens": output_tokens,
+                })
             except Exception as e:
                 logger.error(f"Error calling _write_latency_row: {e}", exc_info=True)
 
@@ -569,6 +581,10 @@ class VeticAgent(Agent):
             await lkapi.room.delete_room(api.DeleteRoomRequest(room=room_name))
             await lkapi.aclose()
             logger.info("deleted room %s to end the call for the caller", room_name)
+            fire_event(room_name, "outbound", "call_ended", {
+                "owner": self._owner_name,
+                "reason": "silence_timeout" if self.silence_end else "normal",
+            })
         except Exception as e:
             logger.warning("delete_room failed: %s", e)
 
@@ -586,7 +602,14 @@ async def entrypoint(ctx: JobContext) -> None:
     name = owner_first_name(user_context)
     
     logger.info(f"--- STARTING CALL FOR USER ID: {identifier}, NAME: {name} ---")
-    
+    fire_event(ctx.room.name, "outbound", "call_started", {
+        "owner": name,
+        # Raw context blob, not yet parsed into structured fields here (unlike
+        # agent_inbound.py's _parse_context_fields) — kept for the audit-trail
+        # payload; doesn't map onto a Call column.
+        "rawUserContext": user_context,
+    })
+
     greeting = (
         f"Good morning, am I speaking with {name}? This is Aarya calling from Vetic."
         if name
@@ -733,6 +756,10 @@ async def entrypoint(ctx: JobContext) -> None:
                                 lkapi = api.LiveKitAPI()
                                 await lkapi.room.delete_room(api.DeleteRoomRequest(room=ctx.room.name))
                                 await lkapi.aclose()
+                                fire_event(ctx.room.name, "outbound", "call_ended", {
+                                    "owner": name,
+                                    "reason": "silence_timeout",
+                                })
                                 break
                             except Exception as e:
                                 logger.warning(f"Failed to end call on timeout: {e}")
