@@ -200,6 +200,7 @@ HARD RULES:
 - PREMATURE END RULE: If the customer asks to end the call before the issue is resolved (e.g. "I have to go", "call me later"), you MUST ask them what SPECIFIC time would be a good time to call back. Wait for their answer. Once they give you a time, confirm it in one sentence (e.g. "I understand. Just to confirm, I will call you back at 6 PM.") and then IMMEDIATELY invoke the end_call tool WITHOUT outputting any goodbye message. The tool will automatically say goodbye and disconnect.
 - STT ROBUSTNESS RULE: The user's speech is automatically transcribed (Speech-to-Text) and might contain phonetic errors, misheard words, or random noise transcribed as weird words. Use common sense to deduce what the user actually meant based on the conversation context. If a single word drastically derails the conversation in a way that makes no sense, assume it was a transcription error and gently ask for clarification instead of blindly following the wrong word.
 - INTERRUPTION HANDLING RULE: If the user interrupts you mid-sentence, you must acknowledge the interruption naturally and then REPEAT the task or question you were asking before the interruption.
+- NO-ETA RULE (CRITICAL): NEVER state, imply, or invent any timeframe, duration, or turnaround window for an escalation, callback, or follow-up — not "a few business days", not "standard turnaround time", not any number of hours or days, even a vague one. This applies even if the caller presses you repeatedly for a number. If asked how long something will take, you MUST say only that you cannot commit to a specific timeframe and that the relevant team will follow up as soon as possible — then stop there. Do not soften this by offering a duration anyway.
 """
 
 # Consolidated call flow (the four Twilio stages, rewritten WITHOUT spoken control tags).
@@ -260,8 +261,10 @@ CRITICAL PACING RULE: NEVER combine two steps into one response. Do NOT ask two 
    CATEGORY: Pet is in critical condition / urgent emergency
    RESOLUTION:
      ACTION 1 — Act urgently. State: "Please use the SOS button in the Vetic app immediately to locate your nearest available clinic and alert the team."
-     ACTION 2 — Ask: "What is your current location so I can direct you to the nearest Vetic clinic right now?" Wait for their reply.
-     ACTION 3 — Direct them to the nearest clinic based on their location.
+     ACTION 2 — FIRST LOCATION ATTEMPT: Ask: "What is your current location so I can direct you to the nearest Vetic clinic right now?" Wait for their reply.
+     ACTION 3 — If their reply names a real place (a city, area, neighborhood, or landmark), direct them to the nearest clinic based on that location. You are now DONE with location — do not ask again.
+     ACTION 3b — SECOND LOCATION ATTEMPT (only if ACTION 2's reply did NOT contain a real place name — e.g. it was vague, off-topic, or just repeated your question back): This is your one and only retry. Ask, rephrased: "I just need the name of your city or area to find the nearest clinic — where are you right now?" Wait for their reply.
+     ACTION 4 — FALLBACK (MANDATORY the instant ACTION 3b's reply ALSO lacks a real place name): That was your second unclear answer in a row — you are NOT allowed to ask a third time, under any circumstance. Immediately say: "I'm having trouble getting your location clearly. Please use the SOS button in the Vetic app right now, or go directly to your nearest vet clinic or emergency vet." Then continue helping with anything else you can.
      NOTE: Do NOT promise a callback or raise a ticket—this is an emergency that needs immediate action.
 
    CATEGORY: Wrong dosage or incorrect prescription
@@ -390,6 +393,8 @@ CRITICAL PACING RULE: NEVER combine two steps into one response. Do NOT ask two 
      - If they say no (meaning that is all): proceed to CONCLUSION.
 
    CRITICAL NO-REPETITION RULE: Once you have offered the resolution, do NOT repeat the exact same resolution text again under any circumstances. If the customer accepts, move to the conclusion. If they decline, offer an alternative. Do NOT loop or state the resolution multiple times.
+
+   CRITICAL NO-ETA REMINDER: If the customer asks how long any escalation, ticket, or follow-up will take — at STEP 2, STEP 5, or any other point in the call — you MUST apply the NO-ETA RULE from HARD RULES above: do NOT name a duration, not even a vague one like "a few business days" or "shortly." Say only that you cannot commit to a specific timeframe and the relevant team will follow up as soon as possible.
 
  4. CONCLUSION: 
     When the customer indicates they don't need any more help (or explicitly signals the call is over), you MUST IMMEDIATELY invoke the `end_call` function tool to disconnect the call.

@@ -195,3 +195,55 @@ history (old venv/media commits pre-cleanup — not urgent), or revisit Oracle C
 hosting if $0 always-on hosting is wanted again (see architecture memory). Otherwise, no open
 correctness/cost/latency items remain — next session should scan for a new highest-leverage item
 per the standing mission priority order.
+
+---
+
+## 2026-07-25 — Session (cont'd): two real correctness bugs found in inbound results, fixed + verified
+
+Went back into `tests/results/stress_test_results_inbound.md` to root-cause the 4 rows the
+summary table flagged as `Not reached`, instead of trusting the "90/100" headline stat. Found:
+
+- **Row 100** (dropped-call edge case) and **Row 24** (a pure FAQ question, correctly answered
+  inline with no ticket needed) are false positives of the test harness's keyword-based
+  resolution detector — not agent bugs.
+- **Row 14 (OPD — Critical Pet) is a real bug:** in a life-threatening-emergency scenario, the
+  agent asked "What is your current location?" **six times in a row** and never reached its own
+  documented fallback ("only if their location is still unclear after 2 attempts") — the count-based
+  trigger relies on `gpt-4o-mini` reliably counting its own prior attempts across turns, which it
+  isn't doing. Also found `agent.py` (outbound) had no fallback for this at all.
+- **Row 19 (Appointment_Process — Too Many Calls) is a real bug:** after resolving a
+  do-not-disturb request, the customer asked "how long will it take?" and the agent replied
+  "typically takes a few business days" — directly violating its own NO-ETA RULE, which names
+  that exact phrase as forbidden. Investigating further found **`agent.py` (outbound) had no
+  NO-ETA RULE in its HARD RULES at all** — it only ever existed in `agent_inbound.py`. Given the
+  business rule is core policy (documented in README's "Core Business Logic & Constraints"), this
+  was a real gap in the production outbound prompt, not just a one-off model slip.
+
+**Fix approach (per user direction — keep the existing rule structures, make them more explicit
+rather than redesigning the logic):**
+1. Rewrote the critical-condition emergency RESOLUTION in both `agent.py` and `agent_inbound.py`:
+   split the vague "ACTION 4 (FALLBACK — after 2 attempts)" into explicit numbered steps —
+   ACTION 2 (first attempt) → ACTION 3 (success path) → ACTION 3b (one explicit retry, only if
+   ACTION 2's reply lacked a real place name) → ACTION 4 (mandatory fallback the instant ACTION 3b
+   also lacks a real place name, explicitly forbidding a 3rd attempt). Content-anchored ("lacks a
+   real place name") rather than pure attempt-counting.
+2. Added the missing `NO-ETA RULE` to `agent.py`'s HARD RULES (copied from `agent_inbound.py`,
+   now present in both).
+3. Added a `CRITICAL NO-ETA REMINDER` inline in both files' shared STRICT 5-STEP resolution
+   pattern (right after the no-repetition rule), since that's the point in the flow where a
+   "how long will it take" follow-up is most likely to land.
+
+**Verified via a targeted scripted re-run** (not the full 100/200-query suite — 4 scripted,
+deterministic-customer-turn conversations against live `gpt-4o-mini`, reusing
+`tests/run_stress_test_inbound.py`'s real tool-calling harness pattern): both the emergency-location
+fallback and the NO-ETA compliance now behave correctly in **both** `agent.py` and
+`agent_inbound.py`. Ad hoc verification script was scratch-only (job tmp dir), not committed.
+
+**Not yet investigated:** whether other categories in the RESOLUTION LOOKUP TABLE have similar
+"freeform improvisation, no scripted NO-ETA-safe phrasing" gaps the way the do-not-disturb bullet
+did — this fix addresses the 2 specific bugs found, not a systematic audit of every category.
+
+**Next steps:** if continuing this thread, a full 100-query re-run of both suites against the
+patched prompts would give a real before/after regression check (skipped this session per user's
+choice of a cheaper targeted verification). Otherwise, mission focus is open again — git history
+squash and Oracle Cloud hosting are the remaining known candidates.
