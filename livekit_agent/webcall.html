@@ -22,6 +22,13 @@
       --danger-hover: #dc2828;
       --border: rgba(255, 255, 255, 0.08);
       --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+      --series-1: #4b93ea;
+      --series-2: #24c98a;
+      --series-3: #f0834a;
+      --st-good: #10b981;
+      --st-warning: #f0ad2c;
+      --st-serious: #ec835a;
+      --st-critical: #ef4444;
     }
 
     body {
@@ -603,6 +610,295 @@
       white-space: pre-wrap;
       word-wrap: break-word;
     }
+
+    /* Live Latency widget — mirrors the embedded panel in inbound_dashboard.html,
+       pointed at the outbound agent's own /api/latency_live feed. */
+    details.lat-details {
+      width: 100%;
+      margin-top: 24px;
+    }
+
+    details.lat-details>summary {
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      padding: 10px 4px;
+      user-select: none;
+    }
+
+    details.lat-details>summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details.lat-details>summary::before {
+      content: "▸";
+      display: inline-block;
+      transition: transform 0.15s ease;
+      color: var(--text-muted);
+    }
+
+    details.lat-details[open]>summary::before {
+      transform: rotate(90deg);
+    }
+
+    .lat-body {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 4px;
+    }
+
+    .lat-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 20px;
+    }
+
+    .lat-card h2 {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin: 0 0 14px;
+    }
+
+    #lat-idle-banner {
+      text-align: center;
+      padding: 30px 20px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .latest-grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    @media (max-width: 640px) {
+      .latest-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .latest-value {
+      font-size: 2.2rem;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+      color: white;
+    }
+
+    .latest-value small {
+      font-size: 1rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-left: 4px;
+    }
+
+    .latest-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .chain-bar {
+      display: flex;
+      height: 32px;
+      border-radius: 8px;
+      overflow: hidden;
+      gap: 2px;
+      margin-top: 4px;
+    }
+
+    .chain-seg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .chain-legend,
+    .strip-legend {
+      display: flex;
+      gap: 14px;
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+    }
+
+    .chain-legend span.sw,
+    .strip-legend span.sw {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      margin-right: 5px;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .kpi {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+
+    .kpi .label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .kpi .value {
+      font-size: 1.2rem;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      color: white;
+    }
+
+    .strip-wrap {
+      position: relative;
+      padding-top: 16px;
+    }
+
+    .strip {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 90px;
+      position: relative;
+    }
+
+    .strip .bar-col {
+      flex: 1;
+      min-width: 4px;
+      height: 100%;
+      display: flex;
+      flex-direction: column-reverse;
+      border-radius: 3px 3px 0 0;
+      overflow: hidden;
+      transition: height 0.25s ease;
+      cursor: pointer;
+    }
+
+    .strip .bar-col .seg {
+      width: 100%;
+    }
+
+    .target-ref {
+      position: absolute;
+      left: 0;
+      right: 0;
+      border-top: 1.5px dashed var(--st-critical);
+      pointer-events: none;
+    }
+
+    .target-ref-label {
+      position: absolute;
+      right: 0;
+      top: -15px;
+      font-size: 11px;
+      color: var(--st-critical);
+      font-weight: 700;
+    }
+
+    .target-banner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-left: 4px solid var(--st-good);
+      font-size: 13px;
+    }
+
+    .target-banner .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--st-good);
+      flex: none;
+    }
+
+    .target-banner.warn {
+      border-left-color: var(--st-warning);
+    }
+
+    .target-banner.warn .dot {
+      background: var(--st-warning);
+    }
+
+    .target-banner.crit {
+      border-left-color: var(--st-critical);
+    }
+
+    .target-banner.crit .dot {
+      background: var(--st-critical);
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 9px 3px 7px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+    }
+
+    .chip .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+
+    .lat-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .lat-table th {
+      text-align: left;
+      padding: 7px 10px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .lat-table td {
+      padding: 6px 10px;
+      border-bottom: 1px solid var(--border);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      color: var(--text-color);
+    }
   </style>
 </head>
 
@@ -669,6 +965,68 @@
         </div>
       </div>
     </div>
+
+    <!-- Live Latency (same widget as inbound_dashboard.html, reading the
+         outbound agent's own latency log via /api/latency_live) -->
+    <details class="lat-details">
+      <summary>⚡ Live Latency</summary>
+      <div class="lat-body">
+        <div id="lat-idle-banner" class="lat-card" style="display:none;"></div>
+
+        <div id="lat-live-content" style="display:none;">
+          <div class="lat-card target-banner" id="lat-target-banner">
+            <span class="dot"></span>
+            <span id="lat-target-banner-text">–</span>
+          </div>
+
+          <div class="lat-card">
+            <h2>Most recent turn</h2>
+            <div class="latest-grid">
+              <div>
+                <div class="latest-value" id="lat-latest-total">–<small>s</small></div>
+                <div class="latest-meta" id="lat-latest-meta">–</div>
+                <div class="latest-meta" id="lat-latest-tokens">Tokens: –</div>
+              </div>
+              <div>
+                <div class="chain-bar" id="lat-chain-bar"></div>
+                <div class="chain-legend" id="lat-chain-legend"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lat-card">
+            <h2>Rolling stats (last <span id="lat-rolling-n">20</span> turns)</h2>
+            <div class="kpi-grid">
+              <div class="kpi"><div class="label">Median</div><div class="value" id="lat-roll-p50">–</div></div>
+              <div class="kpi"><div class="label">P95</div><div class="value" id="lat-roll-p95">–</div></div>
+              <div class="kpi"><div class="label">Mean</div><div class="value" id="lat-roll-mean">–</div></div>
+            </div>
+          </div>
+
+          <div class="lat-card">
+            <h2>Recent turns (last <span id="lat-strip-n">40</span>) — latency budget vs. 800ms target</h2>
+            <div class="strip-wrap">
+              <div class="strip" id="lat-strip"></div>
+            </div>
+            <div class="strip-legend">
+              <span><span class="sw" style="background:var(--series-1)"></span>EOU wait</span>
+              <span><span class="sw" style="background:var(--series-3)"></span>LLM TTFT</span>
+              <span><span class="sw" style="background:var(--series-2)"></span>TTS TTFB</span>
+            </div>
+          </div>
+
+          <div class="lat-card">
+            <h2>Turn-by-turn</h2>
+            <div style="overflow-x:auto;">
+              <table class="lat-table">
+                <thead><tr><th>Time</th><th>EOU</th><th>LLM</th><th>TTS</th><th>Total</th><th>Health</th></tr></thead>
+                <tbody id="lat-table-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </details>
   </div>
 
   <!-- Admin Toggle Button -->
@@ -1363,6 +1721,147 @@
     };
 
     endBtn.onclick = async () => { stopRecording(); if (room) await room.disconnect(); };
+
+    // ── Live latency (reads agent.py's own latency_logs_outbound.csv via
+    // /api/latency_live — same widget/visual language as inbound_dashboard.html,
+    // kept on its own endpoint so outbound and inbound call metrics never mix) ──
+    const LAT_TIER_COLOR = {
+      instant: 'var(--st-good)', acceptable: 'var(--st-warning)',
+      sluggish: 'var(--st-serious)', broken: 'var(--st-critical)',
+    };
+    const LAT_TIER_LABEL = { instant: 'Good', acceptable: 'Fair', sluggish: 'Slow', broken: 'Critical' };
+    const LAT_TARGET_S = 0.8; // hard round-trip latency budget for this pipeline
+
+    function latFmtS(v) { return (Math.round(v * 100) / 100).toFixed(2); }
+    function latFmtTime(t) {
+      const parts = (t || '').split(' ');
+      return parts[1] || t || '–';
+    }
+
+    async function pollLatency() {
+      let data;
+      try {
+        const res = await fetch('/api/latency_live?recent=40&rolling=20', { cache: 'no-store' });
+        data = await res.json();
+      } catch (e) {
+        return;
+      }
+
+      const idleBanner = document.getElementById('lat-idle-banner');
+      const liveContent = document.getElementById('lat-live-content');
+
+      if (data.error || !data.latest) {
+        idleBanner.style.display = 'block';
+        idleBanner.textContent = data.error ? data.error : 'No turns logged yet — start a call to see live latency here.';
+        liveContent.style.display = 'none';
+        return;
+      }
+      idleBanner.style.display = 'none';
+      liveContent.style.display = 'block';
+
+      const latest = data.latest;
+      document.getElementById('lat-latest-total').innerHTML = `${latFmtS(latest.total)}<small>s</small>`;
+      document.getElementById('lat-latest-meta').textContent =
+        `${latFmtTime(latest.t)} · ${latest.id} · ${LAT_TIER_LABEL[latest.bucket] || latest.bucket}`;
+      document.getElementById('lat-latest-tokens').textContent =
+        `Tokens: ${(latest.in_tok ?? 0).toLocaleString()} in · ${(latest.out_tok ?? 0).toLocaleString()} out`;
+
+      const chainBar = document.getElementById('lat-chain-bar');
+      const chainLegend = document.getElementById('lat-chain-legend');
+      chainBar.innerHTML = '';
+      chainLegend.innerHTML = '';
+      const parts = [
+        { label: 'EOU wait', color: 'var(--series-1)', v: latest.eou },
+        { label: 'LLM TTFT', color: 'var(--series-3)', v: latest.llm },
+        { label: 'TTS TTFB', color: 'var(--series-2)', v: latest.tts },
+      ];
+      const sum = parts.reduce((s, p) => s + p.v, 0) || 1;
+      parts.forEach(p => {
+        const pct = p.v / sum * 100;
+        const seg = document.createElement('div');
+        seg.className = 'chain-seg';
+        seg.style.flex = Math.max(pct, 0.001);
+        seg.style.background = p.color;
+        seg.textContent = pct >= 12 ? latFmtS(p.v) + 's' : '';
+        chainBar.appendChild(seg);
+        const leg = document.createElement('span');
+        leg.innerHTML = `<span class="sw" style="background:${p.color}"></span>${p.label} ${latFmtS(p.v)}s`;
+        chainLegend.appendChild(leg);
+      });
+
+      if (data.rolling) {
+        document.getElementById('lat-rolling-n').textContent = data.rolling.count;
+        document.getElementById('lat-roll-p50').textContent = latFmtS(data.rolling.p50) + 's';
+        document.getElementById('lat-roll-p95').textContent = latFmtS(data.rolling.p95) + 's';
+        document.getElementById('lat-roll-mean').textContent = latFmtS(data.rolling.mean) + 's';
+      }
+
+      const recentForBanner = data.recent || [];
+      if (recentForBanner.length) {
+        const overCount = recentForBanner.filter(r => r.total > LAT_TARGET_S).length;
+        const pct = Math.round((overCount / recentForBanner.length) * 100);
+        const banner = document.getElementById('lat-target-banner');
+        banner.classList.remove('warn', 'crit');
+        if (pct > 50) banner.classList.add('crit');
+        else if (pct > 20) banner.classList.add('warn');
+        document.getElementById('lat-target-banner-text').innerHTML =
+          `<b>${overCount}/${recentForBanner.length} of the last ${recentForBanner.length} turns</b> exceeded the 800ms round-trip target (${pct}%)`;
+      }
+
+      const strip = document.getElementById('lat-strip');
+      strip.innerHTML = '';
+      const recent = data.recent || [];
+      document.getElementById('lat-strip-n').textContent = recent.length;
+      const maxV = Math.max(...recent.map(r => r.total), LAT_TARGET_S * 1.15, 1);
+      recent.forEach(r => {
+        const col = document.createElement('div');
+        col.className = 'bar-col';
+        col.style.height = Math.max((r.total / maxV) * 100, 3) + '%';
+        col.title = `${latFmtTime(r.t)} — EOU ${latFmtS(r.eou)}s · LLM ${latFmtS(r.llm)}s · TTS ${latFmtS(r.tts)}s · total ${latFmtS(r.total)}s (${LAT_TIER_LABEL[r.bucket]})`;
+        const segs = [
+          { v: r.eou, color: 'var(--series-1)' },
+          { v: r.llm, color: 'var(--series-3)' },
+          { v: r.tts, color: 'var(--series-2)' },
+        ];
+        const segSum = segs.reduce((s, p) => s + p.v, 0) || 1;
+        segs.forEach(p => {
+          const seg = document.createElement('div');
+          seg.className = 'seg';
+          seg.style.height = (p.v / segSum * 100) + '%';
+          seg.style.background = p.color;
+          col.appendChild(seg);
+        });
+        strip.appendChild(col);
+      });
+
+      const targetPct = Math.min((LAT_TARGET_S / maxV) * 100, 100);
+      let targetRef = strip.querySelector('.target-ref');
+      if (!targetRef) {
+        targetRef = document.createElement('div');
+        targetRef.className = 'target-ref';
+        const label = document.createElement('span');
+        label.className = 'target-ref-label';
+        label.textContent = '800ms';
+        targetRef.appendChild(label);
+        strip.appendChild(targetRef);
+      }
+      targetRef.style.bottom = targetPct + '%';
+
+      const tbody = document.getElementById('lat-table-body');
+      tbody.innerHTML = recent.slice().reverse().slice(0, 15).map(r => `
+        <tr>
+          <td>${latFmtTime(r.t)}</td>
+          <td>${latFmtS(r.eou)}s</td>
+          <td>${latFmtS(r.llm)}s</td>
+          <td>${latFmtS(r.tts)}s</td>
+          <td><b>${latFmtS(r.total)}s</b></td>
+          <td><span class="chip"><span class="dot" style="background:${LAT_TIER_COLOR[r.bucket]}"></span>${LAT_TIER_LABEL[r.bucket]}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    pollLatency();
+    setInterval(pollLatency, 1500);
   </script>
 </body>
 
