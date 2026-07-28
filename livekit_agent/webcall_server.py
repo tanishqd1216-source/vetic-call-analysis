@@ -18,7 +18,7 @@ import sys
 
 from dotenv import load_dotenv, dotenv_values, set_key
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from livekit import api
 import vetic_db
 import chromadb
@@ -27,19 +27,6 @@ load_dotenv()
 app = FastAPI()
 HERE = os.path.dirname(os.path.abspath(__file__))
 ENV_PATH = os.path.join(HERE, ".env")
-
-# --- Session auth (in-memory) ---
-# Simple cookie-session gate in front of the outbound/inbound consoles — one
-# process, one small admin team, so a signed-in-memory token set (no DB, no
-# extra deps like itsdangerous) is enough. Credentials come from the .env
-# ADMIN_EMAIL / ADMIN_PASSWORD (see .env.example), with dev-only defaults.
-SESSION_COOKIE = "vetic_session"
-active_sessions: set[str] = set()
-
-
-def _is_authed(request: Request) -> bool:
-    token = request.cookies.get(SESSION_COOKIE)
-    return bool(token) and token in active_sessions
 
 # Global to hold the agent subprocess, and which mode it's running as (dynamic /
 # scripted / inbound) — only one worker runs at a time, since agent.py and
@@ -108,62 +95,18 @@ async def index():
 
 
 @app.get("/outbound")
-async def outbound(request: Request):
+async def outbound():
     """The existing outbound call console, unchanged — just reachable at its own path now."""
-    if not _is_authed(request):
-        return RedirectResponse("/")
     with open(os.path.join(HERE, "webcall.html"), encoding="utf-8") as f:
         return HTMLResponse(f.read())
 
 
 @app.get("/inbound")
-async def inbound(request: Request):
+async def inbound():
     """Live inbound-call ops dashboard: idle until a caller is identified, then shows
     their record and live phase/category/resolution as agent_inbound.py reports it."""
-    if not _is_authed(request):
-        return RedirectResponse("/")
     with open(os.path.join(HERE, "inbound_dashboard.html"), encoding="utf-8") as f:
         return HTMLResponse(f.read())
-
-
-@app.get("/api/session")
-async def get_session(request: Request):
-    return JSONResponse({"authenticated": _is_authed(request)})
-
-
-@app.post("/api/login")
-async def login(request: Request):
-    try:
-        body = await request.json()
-    except Exception:
-        body = {}
-    email = (body.get("email") or "").strip().lower()
-    password = body.get("password") or ""
-
-    expected_email = os.environ.get("ADMIN_EMAIL", "admin@vetic.in").strip().lower()
-    expected_password = os.environ.get("ADMIN_PASSWORD", "vetic123")
-
-    if email != expected_email or not secrets.compare_digest(password, expected_password):
-        return JSONResponse({"status": "error", "message": "Invalid email or password."}, status_code=401)
-
-    token = secrets.token_urlsafe(32)
-    active_sessions.add(token)
-    response = JSONResponse({"status": "ok"})
-    response.set_cookie(
-        SESSION_COOKIE, token,
-        httponly=True, samesite="lax", max_age=60 * 60 * 12,  # 12h
-    )
-    return response
-
-
-@app.post("/api/logout")
-async def logout(request: Request):
-    token = request.cookies.get(SESSION_COOKIE)
-    if token:
-        active_sessions.discard(token)
-    response = JSONResponse({"status": "ok"})
-    response.delete_cookie(SESSION_COOKIE)
-    return response
 
 
 @app.get("/token")
