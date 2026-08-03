@@ -7,6 +7,7 @@ livekit-plugins-noise-cancellation>=0.3.0  # >=0.3.0 required — 0.2.6's NC() p
 pandas>=2.0
 openpyxl>=3.1
 python-dotenv>=1.0
+pymongo>=4.6  # live customer lookup (vetic_live_db.py), falls back to vetic_db.py's static file if unset
 
 # web-call front-end (token + page server)
 fastapi>=0.110

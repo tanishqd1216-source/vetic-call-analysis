@@ -15,9 +15,9 @@ if ($port8080) {
 Write-Host "Starting Webcall Server on port 8080..."
 Start-Process -NoNewWindow -FilePath ".venv\Scripts\python.exe" -ArgumentList "webcall_server.py"
 
-# Start agent.py dev in the background
+# Start agent_outbound.py dev in the background
 Write-Host "Starting LiveKit Agent..."
-Start-Process -NoNewWindow -FilePath ".venv\Scripts\python.exe" -ArgumentList "agent.py dev"
+Start-Process -NoNewWindow -FilePath ".venv\Scripts\python.exe" -ArgumentList "agent_outbound.py dev"
 
 Write-Host "Call environment started successfully. Waiting for services to initialize..."
 Start-Sleep -Seconds 3

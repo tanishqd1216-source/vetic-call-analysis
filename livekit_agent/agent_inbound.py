@@ -3,12 +3,12 @@
 Pipeline:  caller (WebRTC/SIP) -> Sarvam STT (saaras:v3) -> gpt-4o-mini -> Sarvam TTS
            (bulbul:v3, "priya") -> caller.
 
-This is the inbound counterpart to agent.py (the outbound service-recovery / win-back
+This is the inbound counterpart to agent_outbound.py (the outbound service-recovery / win-back
 agent). Same tech stack, same DB, same knowledge base, same core business rules
 (zero-refund policy, no-ETA / no-callback-promise escalations, no-repetition on
 resolutions) — the only thing that genuinely differs is the start of the call:
 
-  - Outbound (agent.py): Vetic already knows who it's calling and why (a prior bad
+  - Outbound (agent_outbound.py): Vetic already knows who it's calling and why (a prior bad
     feedback record), so the customer record is loaded BEFORE the call and baked into
     the system prompt up front.
   - Inbound (this file): the caller dials in with no prior context loaded. Aarya opens
@@ -18,7 +18,7 @@ resolutions) — the only thing that genuinely differs is the start of the call:
     says to just use the number they're calling from) before falling into the same
     LISTEN -> RESOLUTION -> CONCLUSION flow, using the concern they already stated.
 
-Does NOT modify agent.py in any way.
+Does NOT modify agent_outbound.py in any way.
 """
 import csv
 import datetime
@@ -48,7 +48,7 @@ from livekit.plugins import openai, noise_cancellation, sarvam, silero
 from livekit.agents.telemetry import set_tracer_provider
 from opentelemetry.sdk.trace import TracerProvider
 
-from vetic_db import get_user_context, owner_first_name
+from vetic_live_db import get_user_context, owner_first_name
 from event_reporter import fire_event
 
 load_dotenv(override=True)
@@ -148,7 +148,7 @@ def setup_langsmith():
 
 
 # ── Per-turn latency logging ──────────────────────────────────────────────────
-# Same mechanism as agent.py, written to a SEPARATE csv (own default filename) so
+# Same mechanism as agent_outbound.py, written to a SEPARATE csv (own default filename) so
 # inbound and outbound call metrics don't get interleaved in one log.
 LATENCY_CSV = os.environ.get("INBOUND_LATENCY_CSV_PATH") or r"C:\Users\hp\Documents\claude_WO_API\livekit_agent\logs\latency_logs_inbound.csv"
 LATENCY_HEADER = ["Timestamp", "Call_ID", "Turn", "Speech_ID", "EOU_delay_s", "Transcription_delay_s",
@@ -248,7 +248,7 @@ def make_metrics_handler(call_id: str):
 
     return _on_metrics
 
-# Persona + hard rules — same as agent.py's BASE_RULES, with the identity/verification
+# Persona + hard rules — same as agent_outbound.py's BASE_RULES, with the identity/verification
 # section rewritten for inbound (caller starts unidentified) instead of assuming a
 # pre-loaded customer record.
 BASE_RULES = """You are Aarya, an AI customer-support agent for Vetic Pet Care.
@@ -284,7 +284,7 @@ HARD RULES:
 - DASHBOARD REPORTING RULE: Silently call the report_dashboard_state tool whenever you move into a new phase of the call, so an internal ops dashboard can track progress — this has NO effect on the conversation and the caller must NEVER be told about it or hear it mentioned. Call it: (1) with phase="Listening" right when you begin the LISTEN & UNDERSTAND stage, (2) with phase="Resolution Lookup" and the matched category name right when you identify the complaint category and begin RESOLUTION, (3) with phase="Offering Resolution" and a short one-sentence summary of the resolution right after you state it to the caller, and (4) with phase="Wrapping Up" right before CONCLUSION. Never skip these calls, and never let them delay or change what you actually say to the caller.
 """
 
-# Consolidated call flow — identical business logic/resolution rules to agent.py's
+# Consolidated call flow — identical business logic/resolution rules to agent_outbound.py's
 # CALL_FLOW (same RESOLUTION LOOKUP TABLE, same 5-step confirm/schedule/wrap-up
 # pattern, same no-repetition rule). Stage 1 is inbound-specific: the greeting itself
 # asks how Aarya can help, then on the very next turn she asks for the caller's name
@@ -295,7 +295,7 @@ CRITICAL PACING RULE: NEVER combine two steps into one response. Do NOT ask two 
 
 1. INTRODUCTION & IDENTITY VERIFICATION (STRICT TURN-BY-TURN — the pacing rule above applies to every step):
    - Your opening greeting already welcomes the caller and asks how you can help; wait for their reply — this is their concern.
-   - Step 1A: Give a brief one-sentence acknowledgment of their concern (e.g. "I understand, let me pull up your account for that."), but do NOT start resolving it yet — you still need to verify their account first. Ask EXACTLY: "Can you please confirm your name and mobile number?" Wait for their reply.
+   - Step 1A: Give a brief one-sentence acknowledgment of their concern (e.g. "I understand, let me pull up your account for that."), but do NOT start resolving it yet — you still need to verify their account first. Check whether they already told you their name (in their greeting reply or anywhere earlier in the call). If they did, acknowledge it by name and ask ONLY for their mobile number (e.g. "Thanks, [Name] — can you confirm the mobile number on your account?"). If they did NOT already give a name, ask EXACTLY: "Can you please confirm your name and mobile number?" Either way, wait for their reply before continuing.
    - Step 1B: They will typically give both their name and their mobile number in this one reply. If they give you digits for the mobile number, call the `lookup_customer` tool with those digits. If instead they say something like "that's the number I'm calling from", "use my caller ID", or "same number" — without speaking digits — call the `use_caller_id` tool instead. Do not ask any other question in the same turn.
    - Step 1C (after the tool returns):
      - IF A MATCH IS FOUND: read back the owner name (and pet name, if present) in one short, plain sentence and ask them to confirm it's correct (e.g. "I have your account here under [Owner Name] with [Pet Name] — is that right?"). If you also mention the last service/appointment type and date from the record, you MUST frame it explicitly as their most recent PAST visit — e.g. "your last appointment was a [service] on [date]" — never as "you have an appointment scheduled for [date]" or any phrasing implying it is upcoming; this is historical record data, not a future booking. Wait for their reply.
@@ -472,7 +472,7 @@ CRITICAL PACING RULE: NEVER combine two steps into one response. Do NOT ask two 
        - Any appointment that needs to be booked on this call
      CRITICAL: For video consultations and appointments, DO NOT move forward or confirm the booking until the user has explicitly provided and confirmed a specific time. If they haven't provided a time, you must keep asking for their availability.
      Resolutions that do NOT require a time (escalation tickets, records review, tech escalations):
-       - Simply confirm the action: "I will raise the escalation ticket now."
+       - Do NOT repeat or restate the resolution/escalation action — you already said it in STEP 1. Simply acknowledge briefly (e.g. "Thank you for your patience." or "Understood, thank you.") and move straight to STEP 5.
 
    STEP 4 — CONFIRM (after customer gives a time):
      Repeat the time back to them and confirm the booking.
@@ -513,6 +513,8 @@ def build_instructions(user_context: str = "", owner_name: str = "") -> str:
 
 class InboundVeticAgent(Agent):
     silence_end: bool = False  # Set to True when call ends due to user silence/no response
+    call_ended_reported: bool = False  # Guards the shutdown-callback fallback below from
+    # double-firing call_ended when end_call/silence_watcher already reported it themselves.
 
     def __init__(self, instructions: str, greeting: str) -> None:
         super().__init__(
@@ -538,6 +540,13 @@ class InboundVeticAgent(Agent):
                 start_speech_volume_threshold=_env_num("SARVAM_START_VOLUME_THRESHOLD", float),
                 min_speech_frames=_env_num("SARVAM_MIN_SPEECH_FRAMES", int),
                 first_turn_min_speech_frames=_env_num("SARVAM_FIRST_TURN_MIN_SPEECH_FRAMES", int),
+                # See agent_outbound.py for the rationale: raises how much sustained
+                # speech Sarvam requires before treating mid-agent-speech audio as a
+                # real interruption attempt, rather than an echoed/noise fragment.
+                interrupt_min_speech_frames=_env_num("SARVAM_INTERRUPT_MIN_SPEECH_FRAMES", int),
+                # See agent_outbound.py / .env for the rationale — prevents clipping the
+                # onset of the first utterance of a call.
+                pre_speech_pad_frames=_env_num("SARVAM_PRE_SPEECH_PAD_FRAMES", int),
             ),
             llm=openai.LLM(
                 model="gpt-4o-mini",
@@ -549,6 +558,13 @@ class InboundVeticAgent(Agent):
                 model=os.environ.get("SARVAM_TTS_MODEL", "bulbul:v3"),
                 speaker=os.environ.get("SARVAM_SPEAKER", "priya"),
                 speech_sample_rate=int(os.environ.get("SARVAM_SAMPLE_RATE", "22050")),
+                # linear16 (raw PCM) instead of the plugin default "mp3": the framework
+                # decodes non-PCM TTS output via a streaming PyAV decoder per utterance,
+                # and MP3's decoder needs a short warm-up (bit-reservoir priming) before
+                # it decodes cleanly -- audible as crackling right after playback starts,
+                # on every single agent utterance since a fresh decoder spins up each
+                # time. linear16 skips that decode path entirely (raw frame slicing only).
+                output_audio_codec=os.environ.get("SARVAM_OUTPUT_AUDIO_CODEC", "linear16"),
             ),
         )
         self._greeting = greeting
@@ -698,6 +714,7 @@ class InboundVeticAgent(Agent):
             "updated_at": datetime.datetime.now().isoformat(),
         })
         _write_dashboard_state(self._dashboard_state)
+        self.call_ended_reported = True
         fire_event(get_job_context().room.name, "inbound", "call_ended", self._dashboard_state)
         if self.silence_end:
             bye = (
@@ -736,13 +753,20 @@ async def entrypoint(ctx: JobContext) -> None:
         "Hello! Good morning, this is Aarya from Vetic Pet Care. How can I help you today?"
     )
 
-    # Same turn-handling / endpointing tuning as the outbound agent (see agent.py for
+    # Same turn-handling / endpointing tuning as the outbound agent (see agent_outbound.py for
     # the detailed rationale on each of these values).
+    # interruption.min_words=0 (framework default): min_words>0 was measured adding ~1.9s
+    # before the agent even paused on a real call (see agent_outbound.py for the full
+    # trace) by forcing a wait for STT content before any pause could happen. Reverted
+    # to fast VAD-based pausing + resume_false_interruption's native false-interruption
+    # resume; noise/echo defense now lives at the Sarvam layer
+    # (SARVAM_INTERRUPT_MIN_SPEECH_FRAMES) instead.
     session = AgentSession(
         turn_handling={
-            "turn_detection": inference.TurnDetector(unlikely_threshold={"en": 0.40}),
+            "turn_detection": inference.TurnDetector(),
             "preemptive_generation": {"preemptive_tts": True},
-            "endpointing": {"max_delay": 1.5},
+            "endpointing": {"max_delay": 2.5},
+            "interruption": {"min_duration": 0.5, "min_words": 0},
         },
     )
     vetic_agent = InboundVeticAgent(build_instructions(), greeting)
@@ -750,7 +774,25 @@ async def entrypoint(ctx: JobContext) -> None:
     # specific call and its turns read in order via the Turn column.
     session.on("metrics_collected", make_metrics_handler(ctx.room.name))
 
-    # --- Silence Timeout Watcher (identical mechanics to agent.py) ---
+    # Fallback for the one hangup path neither end_call nor the silence watcher
+    # covers: the CALLER disconnecting first (e.g. hanging up the phone). Both
+    # of those already set vetic_agent.call_ended_reported themselves, so this
+    # only fires call_ended when nothing else already did (see agent_outbound.py
+    # for the real caller-disconnect test that surfaced this gap).
+    async def _report_call_ended_fallback() -> None:
+        if vetic_agent.call_ended_reported:
+            return
+        vetic_agent.call_ended_reported = True
+        vetic_agent._dashboard_state.update({
+            "active": False,
+            "phase": "Ended",
+            "updated_at": datetime.datetime.now().isoformat(),
+        })
+        fire_event(ctx.room.name, "inbound", "call_ended", vetic_agent._dashboard_state)
+
+    ctx.add_shutdown_callback(_report_call_ended_fallback)
+
+    # --- Silence Timeout Watcher (identical mechanics to agent_outbound.py) ---
     last_activity_time = asyncio.get_event_loop().time()
     last_user_spoke_time = asyncio.get_event_loop().time()
     is_agent_speaking = False
@@ -781,31 +823,38 @@ async def entrypoint(ctx: JobContext) -> None:
         last_activity_time = asyncio.get_event_loop().time()
         logger.info(f"Agent state changed: {state_str}")
 
-    @session.on("speech_created")
-    def on_speech_created(event):
-        handle = event.speech_handle
-        interrupted_at: float = 0.0
+    # Log what Aarya actually says each turn — see agent_outbound.py for the rationale.
+    @session.on("conversation_item_added")
+    def on_conversation_item_added(event):
+        item = event.item
+        role = getattr(item, "role", None)
+        text = getattr(item, "text_content", None)
+        if role and text:
+            logger.info(f"[transcript] {role}: {text!r}")
 
-        async def watch_interruption():
-            nonlocal interrupted_at
-            try:
-                await handle.wait_for_playout()
-            except Exception:
-                pass
+    # Temporary diagnostics for the "agent doesn't stop talking on interruption"
+    # report — see agent_outbound.py for the rationale.
+    @session.on("user_input_transcribed")
+    def on_user_input_transcribed(event):
+        logger.info(
+            f"[interrupt-debug] transcript={event.transcript!r} is_final={event.is_final} "
+            f"agent_speaking={is_agent_speaking}"
+        )
 
-            if handle.interrupted:
-                interrupted_at = asyncio.get_event_loop().time()
-                logger.info("Speech was interrupted. Waiting 2.0s to see if user actually speaks...")
-                await asyncio.sleep(2.0)
-                user_spoke_after_interrupt = last_user_spoke_time > interrupted_at
-                if not is_user_speaking and not is_agent_speaking and not user_spoke_after_interrupt:
-                    logger.info("Speech was interrupted by noise, but no words were transcribed. Remaining silent.")
-                else:
-                    logger.info("Skipping restart — user spoke after interruption, framework will handle reply.")
+    @session.on("agent_false_interruption")
+    def on_agent_false_interruption(event):
+        logger.info(f"[interrupt-debug] agent_false_interruption resumed={event.resumed}")
 
-        task = asyncio.create_task(watch_interruption())
-        background_tasks.add(task)
-        task.add_done_callback(background_tasks.discard)
+    # NOTE: a hand-rolled "wait 2s after an interruption, and if no words came through,
+    # assume it was noise and stay silent" watcher used to live here (on speech_created).
+    # It duplicated, and raced against, the framework's own resume_false_interruption /
+    # false_interruption_timeout mechanism, which already pauses (not fully cuts) the
+    # agent's speech on a VAD blip and resumes it from where it paused if nothing real
+    # follows within false_interruption_timeout -- strictly better than this file's old
+    # behavior of going silent and losing the rest of the sentence. Combined with
+    # interruption.min_words=1 above (which stops most noise blips from even
+    # registering as an interruption attempt), it was removed rather than kept as an
+    # uncoordinated second opinion. See agent_outbound.py for the fuller rationale.
 
     async def silence_watcher():
         nonlocal last_activity_time, is_user_speaking, is_agent_speaking, continuous_nudges
@@ -839,6 +888,7 @@ async def entrypoint(ctx: JobContext) -> None:
                                     "updated_at": datetime.datetime.now().isoformat(),
                                 })
                                 _write_dashboard_state(vetic_agent._dashboard_state)
+                                vetic_agent.call_ended_reported = True
                                 fire_event(ctx.room.name, "inbound", "call_ended", vetic_agent._dashboard_state)
                                 # Read the owner name dynamically — it may have been
                                 # resolved mid-call via lookup_customer, unlike the
@@ -908,4 +958,4 @@ async def entrypoint(ctx: JobContext) -> None:
 
 if __name__ == "__main__":
     setup_langsmith()
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint, agent_name="vetic_inbound"))

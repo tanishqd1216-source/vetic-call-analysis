@@ -17,7 +17,7 @@ EVENTS_API_URL = os.environ.get("EVENTS_API_URL", "http://localhost:4000/api/eve
 
 # Keep strong references to fire-and-forget tasks so they aren't garbage
 # collected mid-flight — same pattern already used for background_tasks in
-# agent.py / agent_inbound.py.
+# agent_outbound.py / agent_inbound.py.
 _background_tasks: set = set()
 
 

@@ -1,9 +1,10 @@
 """Tiny web-call front-end for the LiveKit Vetic agent.
 
 Serves a one-button page (webcall.html) and mints a LiveKit access token so the
-browser can join a fresh room. The running `python agent.py dev` worker auto-dispatches
-Aarya into that room. When Aarya finishes (its end_call tool fires), the agent leaves
-the room and the page detects that and ends the call automatically.
+browser can join a fresh room, explicitly dispatching the "vetic_outbound" or
+"vetic_inbound" agent (whichever /api/agent/start currently has running) into
+that room. When Aarya finishes (its end_call tool fires), the agent leaves the
+room and the page detects that and ends the call automatically.
 
 Run:  python webcall_server.py   →  open http://localhost:8080
 """
@@ -20,6 +21,8 @@ from dotenv import load_dotenv, dotenv_values, set_key
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from livekit import api
+from livekit.protocol.agent_dispatch import RoomAgentDispatch
+from livekit.protocol.room import RoomConfiguration
 import vetic_db
 import chromadb
 
@@ -29,9 +32,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ENV_PATH = os.path.join(HERE, ".env")
 
 # Global to hold the agent subprocess, and which mode it's running as (dynamic /
-# scripted / inbound) — only one worker runs at a time, since agent.py and
-# agent_inbound.py both register with LiveKit under the same empty agent_name, and
-# having two workers live at once makes room dispatch ambiguous.
+# scripted / inbound). agent_outbound.py and agent_inbound.py now register under
+# distinct agent_names (explicit dispatch), so they could run concurrently, but
+# this local test harness still runs one at a time to keep /token's dispatch
+# target (see dispatch_agent_name below) unambiguous.
 agent_process = None
 agent_mode = None
 
@@ -87,18 +91,21 @@ async def save_recording(request: Request):
     return JSONResponse({"saved": webm_path, "format": "webm", "convert_error": err})
 
 
+_NO_CACHE_HEADERS = {"Cache-Control": "no-store"}
+
+
 @app.get("/")
 async def index():
     """Landing view — the agent selector (Outbound / Inbound)."""
     with open(os.path.join(HERE, "landing.html"), encoding="utf-8") as f:
-        return HTMLResponse(f.read())
+        return HTMLResponse(f.read(), headers=_NO_CACHE_HEADERS)
 
 
 @app.get("/outbound")
 async def outbound():
     """The existing outbound call console, unchanged — just reachable at its own path now."""
     with open(os.path.join(HERE, "webcall.html"), encoding="utf-8") as f:
-        return HTMLResponse(f.read())
+        return HTMLResponse(f.read(), headers=_NO_CACHE_HEADERS)
 
 
 @app.get("/inbound")
@@ -106,19 +113,28 @@ async def inbound():
     """Live inbound-call ops dashboard: idle until a caller is identified, then shows
     their record and live phase/category/resolution as agent_inbound.py reports it."""
     with open(os.path.join(HERE, "inbound_dashboard.html"), encoding="utf-8") as f:
-        return HTMLResponse(f.read())
+        return HTMLResponse(f.read(), headers=_NO_CACHE_HEADERS)
 
 
 @app.get("/token")
 async def token():
-    """Mint a token for a brand-new room so each call gets a fresh agent session."""
+    """Mint a token for a brand-new room so each call gets a fresh agent session.
+
+    agent_outbound.py and agent_inbound.py now register under distinct
+    agent_names (explicit dispatch), so the room must request the one matching
+    whichever worker /api/agent/start currently has running — otherwise no
+    agent joins.
+    """
     room = "web-call-" + secrets.token_hex(4)
     grant = api.VideoGrants(room_join=True, room=room, can_publish=True, can_subscribe=True)
+    dispatch_agent_name = "vetic_inbound" if agent_mode == "inbound" else "vetic_outbound"
+    room_config = RoomConfiguration(agents=[RoomAgentDispatch(agent_name=dispatch_agent_name)])
     at = (
         api.AccessToken(os.environ["LIVEKIT_API_KEY"], os.environ["LIVEKIT_API_SECRET"])
         .with_identity("web-caller")
         .with_name("Web Caller")
         .with_grants(grant)
+        .with_room_config(room_config)
     )
     return JSONResponse({"token": at.to_jwt(), "url": os.environ["LIVEKIT_URL"], "room": room})
 
@@ -176,6 +192,11 @@ async def start_agent(request: Request):
 
     try:
         env = os.environ.copy()
+        # Without this, the child's stdout/stderr are block-buffered (redirected to a
+        # file, not a tty), so most log lines sit in an in-process buffer and never
+        # reach agent_output.log until the process exits — making live debugging via
+        # this log effectively blind during an active call.
+        env["PYTHONUNBUFFERED"] = "1"
         os.makedirs(os.path.join(HERE, "logs"), exist_ok=True)
         log_file = open(os.path.join(HERE, "logs", "agent_output.log"), "w", encoding="utf-8")
 
@@ -185,7 +206,7 @@ async def start_agent(request: Request):
         elif mode == "inbound":
             cmd = [sys.executable, "agent_inbound.py", "dev"]
         else:
-            cmd = [sys.executable, "agent.py", "dev"]
+            cmd = [sys.executable, "agent_outbound.py", "dev"]
 
         agent_process = subprocess.Popen(
             cmd,
@@ -215,19 +236,47 @@ async def stop_agent():
 
 # --- Configuration Endpoints ---
 
+# Keys the browser UI is allowed to read and edit. Everything else in .env
+# (API keys, secrets, internal URLs) must never leave this process via
+# /api/config. The old code returned the entire .env verbatim and relied on
+# webcall.html's own JS to decide what to *render* — but that filtering never
+# touched the network response, so every raw secret was sent to any caller of
+# this endpoint (including over the ngrok tunnel). Keep this in sync with the
+# `allowedKeys` list in webcall.html's loadConfig().
+CONFIG_ALLOWED_KEYS = {
+    "TEST_CALL_IDENTIFIER",
+    "LLM_MODEL",
+    "SARVAM_STT_MODEL",
+    "SARVAM_STT_LANGUAGE",
+    "SARVAM_TTS_MODEL",
+    "SARVAM_TARGET_LANG",
+    "SARVAM_SPEAKER",
+    "SARVAM_SAMPLE_RATE",
+    "SARVAM_HIGH_VAD_SENSITIVITY",
+    "SARVAM_POSITIVE_SPEECH_THRESHOLD",
+    "SARVAM_START_VOLUME_THRESHOLD",
+    "SARVAM_MIN_SPEECH_FRAMES",
+    "SARVAM_FIRST_TURN_MIN_SPEECH_FRAMES",
+    "SARVAM_INTERRUPT_MIN_SPEECH_FRAMES",
+    "SARVAM_PRE_SPEECH_PAD_FRAMES",
+    "ENABLE_NOISE_CANCEL",
+}
+
 @app.get("/api/config")
 async def get_config():
     # Read directly from .env file to get current state on disk
     config = dotenv_values(ENV_PATH)
-    return JSONResponse(config)
+    return JSONResponse({k: v for k, v in config.items() if k in CONFIG_ALLOWED_KEYS})
 
 @app.post("/api/config")
 async def update_config(request: Request):
     data = await request.json()
     for key, value in data.items():
+        if key not in CONFIG_ALLOWED_KEYS:
+            continue
         if value is not None:
             set_key(ENV_PATH, key, str(value))
-    
+
     # Reload environment in the current process so new agent spawns get it
     load_dotenv(ENV_PATH, override=True)
     return JSONResponse({"status": "success", "message": "Configuration updated successfully"})
@@ -369,9 +418,9 @@ def _read_latency_stats(log_path: str, recent: int = 40, rolling: int = 20) -> d
 
 @app.get("/api/latency_live")
 async def get_latency_live(recent: int = 40, rolling: int = 20):
-    """Live view over the latency CSV the running OUTBOUND agent (agent.py) writes
-    to (LATENCY_CSV_PATH). Polled by /live and the outbound console every couple
-    seconds during a call."""
+    """Live view over the latency CSV the running OUTBOUND agent (agent_outbound.py)
+    writes to (LATENCY_CSV_PATH). Polled by /live and the outbound console every
+    couple seconds during a call."""
     log_path = os.environ.get("LATENCY_CSV_PATH") or os.path.join(
         HERE, "logs", "latency_logs_outbound.csv"
     )

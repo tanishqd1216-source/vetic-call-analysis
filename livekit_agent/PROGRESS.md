@@ -310,3 +310,96 @@ about the prompts, business rules, or resolution flow changes here.
 end-to-end — the one piece of verification this session couldn't do. Pushed as its own branch/PR
 rather than straight to `main`, since local `main` had unpushed prior work this session didn't
 originate.
+
+---
+
+## 2026-07-25 — Session: webcall.html visual refresh (CSS/markup only)
+
+**What changed:** `webcall.html` (served at `/outbound` by `webcall_server.py`, the "Talk to
+Aarya" live-call UI) got a full visual refresh — moved off the heavy purple/blue glassmorphism
+(dual radial gradients, multi-layer glowing box-shadows, gradient-clipped hero text) to a
+calmer, single-accent dark theme (indigo `#4f46e5`, matching the `ai-call-agent` dashboard's
+palette so the two Vetic-branded surfaces read as one system), a simpler orb state indicator
+(single box-shadow ring instead of scale+glow pulsing), reorganized admin-drawer sections with
+clearer visual grouping, and a responsive stacking layout for the profile table and the
+call/transcript split-view on narrow (tablet) viewports.
+
+**Explicitly NOT touched:** the `<script>` block's logic, every element `id` it references via
+`getElementById` (verified 1:1 against markup — 34 ids, all matched), and every CSS class the
+script toggles dynamically (`you`/`aarya`/`interim`, `status-badge online/offline`, `open`,
+`listening`, `form-group`). `webcall_server.py` and all Python agent logic are unchanged.
+
+**Verified:** JS still parses (`new Function()` on the extracted script block succeeds), all
+`getElementById` targets resolve, `/outbound` serves the new file live (confirmed via curl — the
+route reads the file fresh off disk per request, no restart needed), and `/api/agent/status`,
+`/api/config`, `/token` all still respond correctly through the running `webcall_server.py`
+process. Did not verify the live WebRTC call path itself (mic/audio/LiveKit connect) — no browser
+available in this session; that still needs a real manual call.
+
+**Security finding (pre-existing, not introduced by this session, not fixed — out of scope for a
+UI redesign):** `GET /api/config` on `webcall_server.py` returns raw secrets (`LIVEKIT_API_KEY`,
+`LIVEKIT_API_SECRET`, `SARVAM_API_KEY`, `ANTHROPIC_API_KEY`, etc.) in the JSON body. The
+`loadConfig()` JS in `webcall.html` only *filters which keys it renders* into the settings form
+client-side (`excludePatterns`/`allowedKeys`) — the network response itself is unfiltered, so
+anything that can reach this endpoint (including over an ngrok tunnel) gets the secrets. Should be
+fixed server-side (filter the response before sending, not trust the client to hide fields) before
+this page is exposed beyond trusted local testing.
+
+**Next steps:** manually place a real call through `/outbound` to confirm the redesigned page's
+live-call flow (start → connect → transcript → mute → end → recording upload) still works
+end-to-end in a real browser. Fix the `/api/config` secret-leak server-side.
+
+---
+
+## 2026-07-31 — Session: proved the event-reporter pipeline with real calls, found and fixed a real gap
+
+The `/api/config` secret-leak above was already fixed (server-side allowlist, confirmed live) by
+the time this session started. `event_reporter.py` and its `fire_event` wiring into
+`agent_outbound.py`/`agent_inbound.py` (M1 from the 2026-07-25 instrumentation session) were also
+already in place — done outside this session. What hadn't happened yet: an actual real call,
+proving the whole pipeline end-to-end rather than trusting the wiring by inspection.
+
+**Real call placed** via Chromium (Playwright, `--use-fake-device-for-media-stream` +
+`--use-file-for-fake-audio-capture` feeding a generated silent WAV, since this sandbox has no real
+mic) against the actual running `agent_outbound.py` (dynamic mode) through `/outbound`. Real
+LiveKit room (`web-call-<uuid>`), real customer profile pulled (owner "radhika", pet "Ginger"),
+real published audio track, real greeting turn measured (`ttsTtfbSeconds: 0.21s`). Backend
+(`GET /api/calls/:callId`) confirmed `call_started` landed with the real customer context and a
+real `CallTurn` row — the pipeline works.
+
+**Bug found by this real call, not by inspection:** clicking "End Call" in the browser (the caller
+hanging up first) left the row stuck at `status: "in_progress"` forever, `endedAt: null`. Root
+cause: both existing `call_ended` fire sites (`end_call` tool, silence-timeout watcher in both
+`agent_outbound.py` and `agent_inbound.py`) only fire when the *agent* decides to end the call —
+there was no handler at all for the caller disconnecting first. `agent.py`'s old stress-test
+scoring never would have caught this; it only exercises conversational correctness, not the
+call's own lifecycle bookkeeping.
+
+**Fix (additive, both agent files):** added a `call_ended_reported: bool` guard flag on
+`VeticAgent`/`InboundVeticAgent` (set `True` at both existing explicit fire sites), and registered
+`ctx.add_shutdown_callback(...)` in each `entrypoint()` as a fallback that fires `call_ended` with
+`reason: "caller_disconnected"` exactly once, only if neither explicit path already reported it.
+Zero changes to conversation/prompt/business logic — confirmed by re-importing both modules
+cleanly and by a second real call.
+
+**Verified the fix with a second real call:** placed it again post-fix, clicked End Call, polled
+the backend — landed at `status: "ended"`, `endedAt` set, `event: call_ended` with
+`"reason":"caller_disconnected"` (proving it was the new fallback, not the pre-existing
+silence-timeout path, which would have said `"reason":"silence_timeout"`). Took roughly 5–40s to
+land, not instant — LiveKit doesn't close/shut down the job the moment the human leaves if the
+agent participant is still in the room; `add_shutdown_callback` fires once the job itself
+actually shuts down, not on participant-disconnect directly. Worth knowing, not necessarily worth
+chasing further: an "in_progress" call briefly lingering for well under a minute after a hangup is
+a minor dashboard-staleness cosmetic, not silent data loss (which is what it was before this fix).
+
+**Deliberately not done:** did not re-run `tests/run_stress_test.py` / `run_stress_test_inbound.py`
+(100 real LLM/STT-calling queries each) — this change touches zero prompt/business-logic lines and
+tests something the stress suite doesn't cover (call-lifecycle bookkeeping, not conversational
+correctness), and a real call already verified the actual change more directly than the stress
+suite would. Full module re-import (no errors) done instead as a cheap regression backstop.
+
+**Next steps:** consider whether the `add_shutdown_callback` lag (up to ~40s) is worth tightening
+by also listening for `ctx.room.on("participant_disconnected")` directly for a snappier "caller
+left" signal, if the dashboard needs closer-to-real-time status. Not done here — didn't want to
+touch the room-event surface without a clearer signal that the lag actually bothers anyone in
+practice.

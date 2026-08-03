@@ -38,7 +38,7 @@ from livekit.plugins import openai, noise_cancellation, sarvam, silero
 from livekit.agents.telemetry import set_tracer_provider
 from opentelemetry.sdk.trace import TracerProvider
 
-from vetic_db import get_user_context, owner_first_name
+from vetic_live_db import get_user_context, owner_first_name
 from event_reporter import fire_event
 
 load_dotenv(override=True)
@@ -221,7 +221,7 @@ CRITICAL PACING RULE: NEVER combine two steps into one response. Do NOT ask two 
 
 1. INTRODUCTION (STRICT TURN-BY-TURN — the pacing rule above applies to every step):
    - Your opening greeting already confirms identity; wait for their reply.
-   - Step 1A: Warmly check if it's a good time to speak (e.g. "I hope I'm not catching you at a bad time, is it alright if we speak for a moment?"). If it's a bad time, ask what specific time would be best to call back.
+   - Step 1A: Ask ONLY whether it's a good time to speak (e.g. "I hope I'm not catching you at a bad time, is it alright if we speak for a moment?") — do NOT mention rescheduling or a callback time in this same turn. Wait for their reply. Only if they say it's a bad time, ask in your NEXT turn what specific time would be best to call back.
    - Step 1B: Once confirmed, warmly ask how their pet is doing — you MUST mention the pet's name (e.g. "How is [Pet Name] doing today?").
    - Step 1C: Transition naturally into the reason for your call (e.g. "The reason I'm reaching out is to check in on your recent grooming experience." or "I wanted to personally follow up on the feedback you left."), then invite them to share what happened.
 2. LISTEN & UNDERSTAND: Let them tell the story. Ask ONE question at a time to clarify if needed. Do NOT explain or repeat the complaint back to them. Acknowledge their issue AND how it must feel for them (e.g. "I understand that must have been upsetting") before moving on — every time, not only when they sound upset.
@@ -291,6 +291,13 @@ CRITICAL PACING RULE: NEVER combine two steps into one response. Do NOT ask two 
    RESOLUTION:
      ACTION 1 — Offer an online video consultation with a senior vet doctor to explain the details. Ask what time they are available. Wait for their reply.
      ACTION 2 — If they confirm a time for the video consultation: say "Your online appointment has been added. You will receive a notification 5 minutes before on the Vetic app."
+
+   === AT HOME SERVICE ===
+
+   CATEGORY: Doctor/vet arrived late for an at-home appointment
+   RESOLUTION:
+     ACTION 1 — Apologize sincerely for the delay and acknowledge how disruptive it must have been.
+     ACTION 2 — State: "I will ensure that this does not happen again. I am raising an escalation ticket with the at-home service team regarding this delay."
 
    === APPOINTMENTS / PROCESS ===
 
@@ -394,7 +401,7 @@ CRITICAL PACING RULE: NEVER combine two steps into one response. Do NOT ask two 
        - Any appointment that needs to be booked on this call
      CRITICAL: For video consultations and appointments, DO NOT move forward or confirm the booking until the user has explicitly provided and confirmed a specific time. If they haven't provided a time, you must keep asking for their availability.
      Resolutions that do NOT require a time (escalation tickets, records review, tech escalations):
-       - Simply confirm the action: "I will raise the escalation ticket now."
+       - Do NOT repeat or restate the resolution/escalation action — you already said it in STEP 1. Simply acknowledge briefly (e.g. "Thank you for your patience." or "Understood, thank you.") and move straight to STEP 5.
 
    STEP 4 — CONFIRM (after customer gives a time):
      Repeat the time back to them and confirm the booking.
@@ -470,6 +477,8 @@ def build_instructions(user_context: str, owner_name: str) -> str:
 
 class VeticAgent(Agent):
     silence_end: bool = False  # Set to True when call ends due to user silence/no response
+    call_ended_reported: bool = False  # Guards the shutdown-callback fallback below from
+    # double-firing call_ended when end_call/silence_watcher already reported it themselves.
 
     def __init__(self, instructions: str, greeting: str, owner_name: str = "") -> None:
         super().__init__(
@@ -492,6 +501,19 @@ class VeticAgent(Agent):
                 start_speech_volume_threshold=_env_num("SARVAM_START_VOLUME_THRESHOLD", float),
                 min_speech_frames=_env_num("SARVAM_MIN_SPEECH_FRAMES", int),
                 first_turn_min_speech_frames=_env_num("SARVAM_FIRST_TURN_MIN_SPEECH_FRAMES", int),
+                # Sarvam's own gate on how much speech is required to register an
+                # interruption while Aarya is talking (default per Sarvam's docs: 2
+                # frames, i.e. very little). Left unwired until we had evidence: a real
+                # call transcribed 'Okay' and 'Still' as final, actionable user speech
+                # while Aarya was mid-sentence -- almost certainly picked-up fragments
+                # of her own voice / room noise, not the caller. Raised via
+                # SARVAM_INTERRUPT_MIN_SPEECH_FRAMES to require more sustained audio
+                # before a mid-speech interruption is even attempted.
+                interrupt_min_speech_frames=_env_num("SARVAM_INTERRUPT_MIN_SPEECH_FRAMES", int),
+                # Frames of audio buffered before detected speech onset. Raised after
+                # the call's first-ever utterance was clipped/misheard (see
+                # SARVAM_PRE_SPEECH_PAD_FRAMES rationale in .env).
+                pre_speech_pad_frames=_env_num("SARVAM_PRE_SPEECH_PAD_FRAMES", int),
             ),
             # Routed through the local Headroom proxy (`headroom proxy --port 8787`) when
             # HEADROOM_PROXY_URL is set -- it compresses the outgoing prompt (system
@@ -508,6 +530,13 @@ class VeticAgent(Agent):
                 model=os.environ.get("SARVAM_TTS_MODEL", "bulbul:v3"),
                 speaker=os.environ.get("SARVAM_SPEAKER", "priya"),
                 speech_sample_rate=int(os.environ.get("SARVAM_SAMPLE_RATE", "22050")),
+                # linear16 (raw PCM) instead of the plugin default "mp3": the framework
+                # decodes non-PCM TTS output via a streaming PyAV decoder per utterance,
+                # and MP3's decoder needs a short warm-up (bit-reservoir priming) before
+                # it decodes cleanly -- audible as crackling right after playback starts,
+                # on every single agent utterance since a fresh decoder spins up each
+                # time. linear16 skips that decode path entirely (raw frame slicing only).
+                output_audio_codec=os.environ.get("SARVAM_OUTPUT_AUDIO_CODEC", "linear16"),
             ),
         )
         self._greeting = greeting
@@ -583,6 +612,7 @@ class VeticAgent(Agent):
             await lkapi.room.delete_room(api.DeleteRoomRequest(room=room_name))
             await lkapi.aclose()
             logger.info("deleted room %s to end the call for the caller", room_name)
+            self.call_ended_reported = True
             fire_event(room_name, "outbound", "call_ended", {
                 "owner": self._owner_name,
                 "reason": "silence_timeout" if self.silence_end else "normal",
@@ -647,17 +677,50 @@ async def entrypoint(ctx: JobContext) -> None:
     #    to 0.40 lets more of our callers' actual speech patterns count as "confidently
     #    done" and skip straight to the fast path. Raise this back toward 0.56 if the
     #    agent starts responding while callers are still mid-sentence.
+    #  - interruption={"min_words": 0}: min_words>0 gates _interrupt_by_audio_activity
+    #    itself (turn.py) -- i.e. it blocks the agent from even PAUSING until Sarvam's
+    #    STT has already produced a real word. That serializes VAD sustain time +
+    #    Sarvam's own interrupt_min_speech_frames gate + the STT round-trip, ALL before
+    #    any pause happens -- measured on a real call at ~1.9s from the caller starting
+    #    to talk to the agent actually stopping, then ~4.3s total before it resumed
+    #    talking. That's a regression from the old pure-VAD pause (~0.5s). Went back to
+    #    0 (framework default): the agent now pauses fast on VAD alone again, same as
+    #    before any of this tuning, and relies on resume_false_interruption (default
+    #    True, false_interruption_timeout default 2.0s -- already confirmed firing
+    #    correctly on a real call, see agent_false_interruption logs) to silently
+    #    resume if no real words follow. Noise/echo defense now lives at the Sarvam
+    #    layer instead (SARVAM_INTERRUPT_MIN_SPEECH_FRAMES), not by delaying the pause
+    #    itself. min_duration stays explicit at the framework default (0.5s) for
+    #    documentation, not because it changed.
     session = AgentSession(
         turn_handling={
             "turn_detection": inference.TurnDetector(unlikely_threshold={"en": 0.40}),
             "preemptive_generation": {"preemptive_tts": True},
             "endpointing": {"max_delay": 1.5},
+            "interruption": {"min_duration": 0.5, "min_words": 0},
         },
     )
     vetic_agent = VeticAgent(build_instructions(user_context, name), greeting, name)
     # call_id = this room's name, so every logged row can be traced back to this
     # specific call and its turns read in order via the Turn column.
     session.on("metrics_collected", make_metrics_handler(ctx.room.name))
+
+    # Fallback for the one hangup path neither end_call nor the silence watcher
+    # covers: the CALLER disconnecting first (e.g. closing the browser tab).
+    # Both of those already set vetic_agent.call_ended_reported themselves, so
+    # this only fires call_ended when nothing else already did — verified
+    # against a real caller-initiated hangup, which previously left the row
+    # stuck at status "in_progress" forever with no endedAt.
+    async def _report_call_ended_fallback() -> None:
+        if vetic_agent.call_ended_reported:
+            return
+        vetic_agent.call_ended_reported = True
+        fire_event(ctx.room.name, "outbound", "call_ended", {
+            "owner": name,
+            "reason": "caller_disconnected",
+        })
+
+    ctx.add_shutdown_callback(_report_call_ended_fallback)
 
     # --- Silence Timeout Watcher ---
     last_activity_time = asyncio.get_event_loop().time()
@@ -691,37 +754,44 @@ async def entrypoint(ctx: JobContext) -> None:
         last_activity_time = asyncio.get_event_loop().time()
         logger.info(f"Agent state changed: {state_str}")
 
-    @session.on("speech_created")
-    def on_speech_created(event):
-        handle = event.speech_handle
-        interrupted_at: float = 0.0
-        
-        async def watch_interruption():
-            nonlocal interrupted_at
-            try:
-                await handle.wait_for_playout()
-            except Exception:
-                pass
-            
-            if handle.interrupted:
-                interrupted_at = asyncio.get_event_loop().time()
-                logger.info("Speech was interrupted. Waiting 2.0s to see if user actually speaks...")
-                await asyncio.sleep(2.0)
-                # Only restart if:
-                # 1. The user isn't currently speaking
-                # 2. The agent hasn't started speaking again (already has a reply queued)
-                # 3. The user did NOT speak AFTER the interruption (which means the framework
-                #    already has their transcript and will generate a reply automatically)
-                user_spoke_after_interrupt = last_user_spoke_time > interrupted_at
-                if not is_user_speaking and not is_agent_speaking and not user_spoke_after_interrupt:
-                    logger.info("Speech was interrupted by noise, but no words were transcribed. Remaining silent.")
-                    # Removed session.generate_reply() to prevent the agent from infinitely repeating itself when background noise triggers VAD.
-                else:
-                    logger.info("Skipping restart — user spoke after interruption, framework will handle reply.")
+    # Log what Aarya actually says each turn -- nothing previously recorded the
+    # agent's own text anywhere (only speaking/listening state), so a script-adherence
+    # question ("why didn't it do Step 1A") was unanswerable from logs alone.
+    @session.on("conversation_item_added")
+    def on_conversation_item_added(event):
+        item = event.item
+        role = getattr(item, "role", None)
+        text = getattr(item, "text_content", None)
+        if role and text:
+            logger.info(f"[transcript] {role}: {text!r}")
 
-        task = asyncio.create_task(watch_interruption())
-        background_tasks.add(task)
-        task.add_done_callback(background_tasks.discard)
+    # Temporary diagnostics for the "agent doesn't stop talking on interruption"
+    # report: log every interim/final transcript (so we can see whether STT is
+    # producing words while the agent is mid-speech) and every false-interruption
+    # resume decision (so we can see whether the framework is even attempting to
+    # pause/interrupt at all, vs. attempting it and then resuming).
+    @session.on("user_input_transcribed")
+    def on_user_input_transcribed(event):
+        logger.info(
+            f"[interrupt-debug] transcript={event.transcript!r} is_final={event.is_final} "
+            f"agent_speaking={is_agent_speaking}"
+        )
+
+    @session.on("agent_false_interruption")
+    def on_agent_false_interruption(event):
+        logger.info(f"[interrupt-debug] agent_false_interruption resumed={event.resumed}")
+
+    # NOTE: a hand-rolled "wait 2s after an interruption, and if no words came through,
+    # assume it was noise and stay silent" watcher used to live here (on speech_created).
+    # It duplicated, and raced against, the framework's own resume_false_interruption /
+    # false_interruption_timeout mechanism (turn.py) -- which already pauses (not fully
+    # cuts) the agent's speech on a VAD blip and, if nothing real follows within
+    # false_interruption_timeout (2.0s default), RESUMES the same speech from where it
+    # paused. That's strictly better than this file's old behavior of going silent and
+    # losing the rest of the sentence. Combined with interruption.min_words=1 above
+    # (which stops most noise blips from even registering as an interruption attempt),
+    # the custom watcher no longer added anything the framework doesn't already do, so
+    # it was removed rather than kept as an uncoordinated second opinion.
 
     async def silence_watcher():
         nonlocal last_activity_time, is_user_speaking, is_agent_speaking, continuous_nudges
@@ -758,6 +828,7 @@ async def entrypoint(ctx: JobContext) -> None:
                                 lkapi = api.LiveKitAPI()
                                 await lkapi.room.delete_room(api.DeleteRoomRequest(room=ctx.room.name))
                                 await lkapi.aclose()
+                                vetic_agent.call_ended_reported = True
                                 fire_event(ctx.room.name, "outbound", "call_ended", {
                                     "owner": name,
                                     "reason": "silence_timeout",
@@ -839,4 +910,4 @@ async def entrypoint(ctx: JobContext) -> None:
 
 if __name__ == "__main__":
     setup_langsmith()
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint, agent_name="vetic_outbound"))

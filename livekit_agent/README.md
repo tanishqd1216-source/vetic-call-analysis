@@ -13,11 +13,11 @@ The agent utilizes **LiveKit** to handle transport and turn-taking, passing audi
 - **LLM (Logic)**: **`gpt-4o-mini` via OpenAI** (`livekit-plugins-openai`) powers the core decision-making and call flow logic based on a highly structured system prompt. Optionally routed through a local **Headroom proxy** (`HEADROOM_PROXY_URL`) that compresses the outgoing prompt before it hits OpenAI to cut token cost; falls back to calling OpenAI directly if unset. In practice OpenAI's automatic prompt caching already handles the bulk of the ~5000-token/turn system prompt for free (turn 2+ of a call sees ~97-99% cache hits), so this is mostly a no-op today.
 - **TTS (Text-to-Speech)**: **Sarvam** (`bulbul:v3` / `priya` voice). This maintains the required "Aarya" persona.
 
-There are two agent entrypoints sharing this stack: `agent.py` (outbound service-recovery — customer record is pre-loaded before the call) and `agent_inbound.py` (inbound support — the caller starts unidentified and is verified via a `lookup_customer` tool call or SIP caller ID before the same resolution flow runs).
+There are two agent entrypoints sharing this stack: `agent_outbound.py` (outbound service-recovery — customer record is pre-loaded before the call) and `agent_inbound.py` (inbound support — the caller starts unidentified and is verified via a `lookup_customer` tool call or SIP caller ID before the same resolution flow runs). Each registers with LiveKit under its own `agent_name` (`vetic_outbound` / `vetic_inbound`) for explicit dispatch.
 
 ## 2. Prompt Engineering & Call Flow
 
-The core intelligence of the agent lives in `agent.py`. To prevent the LLM from "monologuing" or hallucinating processes, the prompt acts as a strict state machine divided into four distinct phases:
+The core intelligence of the agent lives in `agent_outbound.py`. To prevent the LLM from "monologuing" or hallucinating processes, the prompt acts as a strict state machine divided into four distinct phases:
 
 ### Phase 1: Introduction
 The agent introduces itself as Aarya and authenticates the user by referencing their specific pet and clinic visit dynamically injected from the database.
@@ -79,7 +79,7 @@ copy .env.example .env
 
 ### Running the Agent
 ```bat
-python agent.py dev            :: outbound (service-recovery)
+python agent_outbound.py dev   :: outbound (service-recovery)
 python agent_inbound.py dev    :: inbound (support)
 ```
 This connects your agent to your LiveKit Cloud project.

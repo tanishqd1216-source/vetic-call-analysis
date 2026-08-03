@@ -5,94 +5,158 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Vetic — Talk to Aarya</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-color: #47546733;
-      --panel-bg: rgba(16, 25, 43, 0.65);
-      --text-color: #f8fafc;
+      --bg-color: #0b1120;
+      --panel-bg: #131b2e;
+      --text-color: #f1f5f9;
       --text-muted: #94a3b8;
       --primary: #4f46e5;
-      --primary-hover: #4338ca;
-      --primary-glow: rgba(79, 70, 229, 0.4);
+      --primary-hover: #6366f1;
+      --primary-glow: rgba(79, 70, 229, 0.22);
       --success: #10b981;
       --success-hover: #059669;
-      --success-glow: rgba(16, 185, 129, 0.4);
+      --success-glow: rgba(16, 185, 129, 0.2);
       --danger: #ef4444;
-      --danger-hover: #dc2828;
-      --border: rgba(255, 255, 255, 0.08);
-      --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+      --danger-hover: #dc2626;
+      --border: #253044;
+      --shadow: 0 4px 28px rgba(0, 0, 0, 0.35);
+      --series-1: #4b93ea;
+      --series-2: #24c98a;
+      --series-3: #f0834a;
+      --st-good: #10b981;
+      --st-warning: #f0ad2c;
+      --st-serious: #ec835a;
+      --st-critical: #ef4444;
     }
 
     body {
-      font-family: 'Inter', system-ui, sans-serif;
+      font-family: 'Geist', system-ui, sans-serif;
       margin: 0;
       padding: 0;
       background: var(--bg-color);
       color: var(--text-color);
       min-height: 100vh;
-      background-image:
-        radial-gradient(circle at 15% 50%, rgba(79, 70, 229, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
       display: flex;
       flex-direction: column;
       align-items: center;
     }
 
-    .hero-header {
-      margin-top: 60px;
-      text-align: center;
-      animation: fadeInDown 0.8s ease-out;
-    }
-
-    .hero-header h1 {
-      font-size: 42px;
-      font-weight: 800;
-      margin: 0 0 10px 0;
-      background: linear-gradient(135deg, #a78bfa, #60a5fa);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      letter-spacing: -1px;
-    }
-
-    .hero-header p {
-      color: var(--text-muted);
-      font-size: 18px;
-      margin: 0;
-      max-width: 500px;
-    }
-
-    .main-container {
+    .page {
       width: 100%;
-      max-width: 1400px;
-      margin: 40px auto;
-      padding: 0 20px;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
       box-sizing: border-box;
-      animation: zoomIn 0.6s ease-out forwards;
-      opacity: 0;
     }
 
-    .glass-panel {
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+      animation: fadeInDown 0.5s ease-out;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand .mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      flex: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      background: linear-gradient(155deg, var(--primary), var(--primary-hover));
+      box-shadow: var(--shadow);
+    }
+
+    .brand h1 {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0;
+      color: var(--text-color);
+      letter-spacing: -0.01em;
+    }
+
+    .brand .subtitle {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin: 2px 0 0;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      align-items: start;
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .col-main,
+    .col-side {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      min-width: 0;
+    }
+
+    .col-side {
+      position: sticky;
+      top: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .col-side {
+        position: static;
+      }
+    }
+
+    .card {
       background: var(--panel-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
       border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 40px;
-      box-shadow: var(--glass-shadow);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h2 {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin: 0 0 14px;
+    }
+
+    .hero-call {
       display: flex;
       flex-direction: column;
       align-items: center;
-      position: relative;
-      overflow: hidden;
     }
 
-    /* Dynamic pulsing orb for Aarya */
+    /* Voice state indicator for Aarya */
     .orb-container {
-      width: 150px;
-      height: 150px;
+      width: 120px;
+      height: 120px;
       position: relative;
-      margin: 20px 0 40px 0;
+      margin: 12px 0 32px 0;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -102,63 +166,40 @@
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), #a78bfa);
-      box-shadow: 0 0 40px var(--primary-glow);
-      transition: all 0.3s ease;
-      animation: idlePulse 3s infinite ease-in-out;
+      background: var(--primary);
+      box-shadow: 0 0 0 6px rgba(79, 70, 229, 0.14);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 48px;
-      font-weight: 800;
-      color: rgba(255, 255, 255, 0.8);
+      font-size: 36px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.92);
       user-select: none;
     }
 
     .orb.listening {
-      background: linear-gradient(135deg, var(--success), #34d399);
-      box-shadow: 0 0 60px var(--success-glow);
-      animation: activePulse 1.5s infinite ease-in-out;
+      background: var(--success);
+      box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.18);
+      animation: gentlePulse 1.6s ease-in-out infinite;
     }
 
-    @keyframes idlePulse {
-      0% {
-        transform: scale(0.95);
-        box-shadow: 0 0 30px var(--primary-glow);
+    @keyframes gentlePulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.18);
       }
 
       50% {
-        transform: scale(1.05);
-        box-shadow: 0 0 50px var(--primary-glow);
-      }
-
-      100% {
-        transform: scale(0.95);
-        box-shadow: 0 0 30px var(--primary-glow);
-      }
-    }
-
-    @keyframes activePulse {
-      0% {
-        transform: scale(1);
-        box-shadow: 0 0 40px var(--success-glow);
-      }
-
-      50% {
-        transform: scale(1.15);
-        box-shadow: 0 0 80px var(--success-glow);
-      }
-
-      100% {
-        transform: scale(1);
-        box-shadow: 0 0 40px var(--success-glow);
+        box-shadow: 0 0 0 12px rgba(16, 185, 129, 0.08);
       }
     }
 
     @keyframes fadeInDown {
       from {
         opacity: 0;
-        transform: translateY(-20px);
+        transform: translateY(-12px);
       }
 
       to {
@@ -167,21 +208,19 @@
       }
     }
 
-    @keyframes zoomIn {
+    @keyframes fadeIn {
       from {
         opacity: 0;
-        transform: scale(0.95);
       }
 
       to {
         opacity: 1;
-        transform: scale(1);
       }
     }
 
     #call-status {
       text-align: center;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 500;
       color: var(--text-muted);
       margin-bottom: 30px;
@@ -197,13 +236,13 @@
 
     button {
       font-family: inherit;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 600;
-      padding: 16px 24px;
-      border-radius: 12px;
+      padding: 14px 22px;
+      border-radius: 10px;
       border: none;
       cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: background-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -213,12 +252,6 @@
     button:disabled {
       opacity: 0.4;
       cursor: not-allowed;
-      transform: none !important;
-      box-shadow: none !important;
-    }
-
-    button:not(:disabled):active {
-      transform: scale(0.96);
     }
 
     .btn-primary {
@@ -229,32 +262,29 @@
 
     .btn-primary:not(:disabled):hover {
       background: var(--primary-hover);
-      box-shadow: 0 8px 20px var(--primary-glow);
     }
 
     .btn-success {
       background: var(--success);
       color: white;
       flex: 2;
-      font-size: 18px;
+      font-size: 16px;
     }
 
     .btn-success:not(:disabled):hover {
       background: var(--success-hover);
-      box-shadow: 0 8px 20px var(--success-glow);
     }
 
     .btn-danger {
-      background: rgba(239, 68, 68, 0.15);
+      background: rgba(239, 68, 68, 0.12);
       color: #fca5a5;
       flex: 1;
-      border: 1px solid rgba(239, 68, 68, 0.3);
+      border: 1px solid rgba(239, 68, 68, 0.25);
     }
 
     .btn-danger:not(:disabled):hover {
       background: var(--danger);
       color: white;
-      box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
     }
 
     .btn-outline {
@@ -265,7 +295,7 @@
     }
 
     .btn-outline:not(:disabled):hover {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.04);
       color: white;
     }
 
@@ -274,7 +304,7 @@
       position: fixed;
       bottom: 20px;
       right: 20px;
-      background: rgba(255, 255, 255, 0.05);
+      background: var(--panel-bg);
       border: 1px solid var(--border);
       color: var(--text-muted);
       border-radius: 50%;
@@ -285,30 +315,27 @@
       align-items: center;
       cursor: pointer;
       z-index: 100;
-      transition: all 0.3s;
+      transition: color 0.2s, border-color 0.2s;
     }
 
     .admin-toggle:hover {
-      background: rgba(255, 255, 255, 0.1);
       color: white;
-      transform: rotate(90deg);
+      border-color: var(--primary);
     }
 
     /* Admin Drawer */
     #admin-drawer {
       position: fixed;
       top: 0;
-      right: -400px;
-      width: 400px;
+      right: -380px;
+      width: 380px;
       height: 100vh;
-      background: rgba(15, 23, 42, 0.95);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
+      background: var(--panel-bg);
       border-left: 1px solid var(--border);
-      box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
-      transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: -8px 0 32px rgba(0, 0, 0, 0.4);
+      transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       z-index: 90;
-      padding: 30px;
+      padding: 24px;
       box-sizing: border-box;
       overflow-y: auto;
     }
@@ -317,18 +344,18 @@
       right: 0;
     }
 
-    /* Transcript (Hidden by default, can be toggled) */
+    /* Transcript */
     #transcript-container {
       width: 100%;
-      margin-top: 30px;
-      border-top: 1px solid var(--border);
-      padding-top: 20px;
-      display: none;
-      /* hidden for clean look */
+      margin-top: 0;
+      border-top: none;
+      padding-top: 0;
     }
 
     #transcript {
-      height: 200px;
+      height: 100%;
+      min-height: 400px;
+      max-height: 600px;
       overflow-y: auto;
       padding-right: 8px;
       scroll-behavior: smooth;
@@ -345,7 +372,7 @@
 
     #transcript div {
       margin: 8px 0;
-      line-height: 1.4;
+      line-height: 1.5;
       padding: 10px 14px;
       border-radius: 12px;
       max-width: 90%;
@@ -353,51 +380,70 @@
     }
 
     .you {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.04);
       color: #cbd5e1;
       margin-left: auto !important;
       border-bottom-right-radius: 4px !important;
     }
 
     .aarya {
-      background: rgba(79, 70, 229, 0.15);
-      color: #f8fafc;
+      background: rgba(79, 70, 229, 0.14);
+      color: var(--text-color);
       margin-right: auto !important;
       border-bottom-left-radius: 4px !important;
     }
 
     b {
       font-weight: 600;
-      color: white;
+      color: var(--text-muted);
       display: block;
       margin-bottom: 4px;
-      font-size: 11px;
+      font-size: 10px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      opacity: 0.6;
+      letter-spacing: 0.05em;
     }
 
     .interim {
-      opacity: 0.7;
+      opacity: 0.65;
       font-style: italic;
     }
 
-    /* Existing Admin Styles adapted for drawer */
+    /* Admin drawer sections */
     .admin-section {
-      margin-bottom: 30px;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .admin-section:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
     }
 
     .admin-title {
-      font-size: 16px;
-      font-weight: 600;
-      color: white;
-      margin: 0 0 16px 0;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin: 0 0 14px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .admin-title::before {
+      content: "";
+      display: inline-block;
+      width: 3px;
+      height: 13px;
+      border-radius: 2px;
+      background: var(--primary);
     }
 
     .status-badge {
-      padding: 6px 12px;
+      padding: 5px 10px;
       border-radius: 20px;
       font-size: 12px;
       font-weight: 600;
@@ -408,12 +454,12 @@
     }
 
     .status-badge.offline {
-      background: rgba(239, 68, 68, 0.2);
+      background: rgba(239, 68, 68, 0.12);
       color: #fca5a5;
     }
 
     .status-badge.online {
-      background: rgba(16, 185, 129, 0.2);
+      background: rgba(16, 185, 129, 0.12);
       color: #6ee7b7;
     }
 
@@ -429,18 +475,18 @@
 
     .online .status-dot {
       background: #10b981;
-      box-shadow: 0 0 8px #10b981;
+      box-shadow: 0 0 6px #10b981;
     }
 
     .form-group {
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
     .form-group label {
       display: block;
       font-size: 12px;
       font-weight: 600;
-      margin-bottom: 4px;
+      margin-bottom: 5px;
       color: var(--text-muted);
     }
 
@@ -448,9 +494,9 @@
     .form-group select {
       width: 100%;
       box-sizing: border-box;
-      padding: 8px 10px;
-      border-radius: 6px;
-      background: rgba(0, 0, 0, 0.3);
+      padding: 9px 11px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--border);
       color: var(--text-color);
       font-family: inherit;
@@ -464,11 +510,11 @@
     }
 
     .restart-notice {
-      background: rgba(245, 158, 11, 0.2);
+      background: rgba(245, 158, 11, 0.14);
       border: 1px solid rgba(245, 158, 11, 0.3);
       color: #fcd34d;
       padding: 10px;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 12px;
       margin-bottom: 12px;
       display: none;
@@ -482,71 +528,95 @@
       margin-top: 16px;
     }
 
-    /* Advanced Features CSS */
+    /* Advanced Features */
     .profile-card {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 16px;
+      padding: 20px;
       margin-bottom: 20px;
-      text-align: center;
+      text-align: left;
       width: 100%;
       box-sizing: border-box;
     }
 
-    .profile-card h3 {
-      margin: 0 0 12px 0;
-      font-size: 18px;
-      color: var(--primary);
-    }
-
-    .profile-full-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 12px;
-      text-align: center;
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    .profile-full-table th {
-      font-size: 11px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      padding: 12px 8px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      font-weight: 600;
-      background: rgba(255, 255, 255, 0.03);
-    }
-
-    .profile-full-table td {
-      padding: 14px 8px;
-      font-size: 14px;
-      color: var(--text-color);
-      font-weight: 500;
-      border-right: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .profile-full-table td:last-child {
-      border-right: none;
-    }
-
-    .split-view {
+    .profile-header {
       display: flex;
-      width: 100%;
-      gap: 20px;
-      margin-top: 20px;
-      align-items: stretch;
+      align-items: center;
+      gap: 10px;
     }
-    
-    .split-left, .split-right {
-      flex: 1;
-      width: 50%;
+
+    .profile-header h3 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary-hover);
+    }
+
+    .profile-badge {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      padding: 3px 10px;
+    }
+
+    .profile-badge:empty {
+      display: none;
+    }
+
+    .profile-name-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin: 4px 0 4px 0;
+    }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 24px;
+      row-gap: 18px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .profile-field {
       display: flex;
       flex-direction: column;
+      gap: 4px;
+      min-width: 0;
     }
 
+    .profile-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .profile-value {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-color);
+      word-break: break-word;
+    }
+
+    .profile-value:empty::before {
+      content: "—";
+      color: var(--text-muted);
+    }
+
+    /* Stack the profile grid into a single column on narrow/tablet viewports. */
+    @media (max-width: 640px) {
+      .profile-grid {
+        grid-template-columns: 1fr;
+      }
+    }
 
     .modal-overlay {
       position: fixed;
@@ -554,8 +624,8 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(6px);
       z-index: 200;
       display: none;
       align-items: center;
@@ -565,13 +635,13 @@
     .modal-content {
       background: var(--panel-bg);
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-radius: 14px;
       padding: 24px;
       width: 80%;
       max-width: 800px;
       max-height: 80vh;
       overflow-y: auto;
-      color: white;
+      color: var(--text-color);
     }
 
     .modal-header {
@@ -583,19 +653,20 @@
 
     .modal-header h2 {
       margin: 0;
-      font-size: 20px;
+      font-size: 18px;
+      font-weight: 600;
     }
 
     .modal-close {
       background: none;
       border: none;
-      color: white;
-      font-size: 24px;
+      color: var(--text-color);
+      font-size: 22px;
       cursor: pointer;
     }
 
     .data-pre {
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.3);
       padding: 16px;
       border-radius: 8px;
       font-family: monospace;
@@ -603,72 +674,453 @@
       white-space: pre-wrap;
       word-wrap: break-word;
     }
+
+    /* Live Latency widget — mirrors the embedded panel in inbound_dashboard.html,
+       pointed at the outbound agent's own /api/latency_live feed. */
+    details.lat-details {
+      width: 100%;
+      margin-top: 24px;
+    }
+
+    details.lat-details>summary {
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      padding: 10px 4px;
+      user-select: none;
+    }
+
+    details.lat-details>summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details.lat-details>summary::before {
+      content: "▸";
+      display: inline-block;
+      transition: transform 0.15s ease;
+      color: var(--text-muted);
+    }
+
+    details.lat-details[open]>summary::before {
+      transform: rotate(90deg);
+    }
+
+    .lat-body {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 4px;
+    }
+
+    .lat-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+    }
+
+    .lat-card h2 {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin: 0 0 14px;
+    }
+
+    #lat-idle-banner {
+      text-align: center;
+      padding: 30px 20px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .latest-grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    @media (max-width: 640px) {
+      .latest-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .latest-value {
+      font-size: 2.2rem;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+      color: var(--text-color);
+    }
+
+    .latest-value small {
+      font-size: 1rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-left: 4px;
+    }
+
+    .latest-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .chain-bar {
+      display: flex;
+      height: 32px;
+      border-radius: 8px;
+      overflow: hidden;
+      gap: 2px;
+      margin-top: 4px;
+    }
+
+    .chain-seg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .chain-legend,
+    .strip-legend {
+      display: flex;
+      gap: 14px;
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+    }
+
+    .chain-legend span.sw,
+    .strip-legend span.sw {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      margin-right: 5px;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .kpi {
+      background: rgba(0, 0, 0, 0.15);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+
+    .kpi .label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .kpi .value {
+      font-size: 1.2rem;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      color: var(--text-color);
+    }
+
+    .strip-wrap {
+      position: relative;
+      padding-top: 16px;
+    }
+
+    .strip {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 90px;
+      position: relative;
+    }
+
+    .strip .bar-col {
+      flex: 1;
+      min-width: 4px;
+      height: 100%;
+      display: flex;
+      flex-direction: column-reverse;
+      border-radius: 3px 3px 0 0;
+      overflow: hidden;
+      transition: height 0.25s ease;
+      cursor: pointer;
+    }
+
+    .strip .bar-col .seg {
+      width: 100%;
+    }
+
+    .target-ref {
+      position: absolute;
+      left: 0;
+      right: 0;
+      border-top: 1.5px dashed var(--st-critical);
+      pointer-events: none;
+    }
+
+    .target-ref-label {
+      position: absolute;
+      right: 0;
+      top: -15px;
+      font-size: 11px;
+      color: var(--st-critical);
+      font-weight: 700;
+    }
+
+    .target-banner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-left: 4px solid var(--st-good);
+      font-size: 13px;
+    }
+
+    .target-banner .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--st-good);
+      flex: none;
+    }
+
+    .target-banner.warn {
+      border-left-color: var(--st-warning);
+    }
+
+    .target-banner.warn .dot {
+      background: var(--st-warning);
+    }
+
+    .target-banner.crit {
+      border-left-color: var(--st-critical);
+    }
+
+    .target-banner.crit .dot {
+      background: var(--st-critical);
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 9px 3px 7px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+    }
+
+    .chip .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+
+    .lat-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .lat-table th {
+      text-align: left;
+      padding: 7px 10px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .lat-table td {
+      padding: 6px 10px;
+      border-bottom: 1px solid var(--border);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      color: var(--text-color);
+    }
   </style>
 </head>
 
 <body>
-  <div class="hero-header">
-    <h1>Vetic Pet Care</h1>
-    <p>Voice-enabled AI Support. Tap the button below to start.</p>
-  </div>
+  <div class="page">
+    <header class="topbar">
+      <div class="brand">
+        <span class="mark">🐾</span>
+        <div>
+          <h1>Vetic Pet Care</h1>
+          <p class="subtitle">Voice-enabled AI Support. Tap the button below to start.</p>
+        </div>
+      </div>
+    </header>
 
-  <div class="main-container">
-    <div class="glass-panel" id="call-panel">
-      <div class="split-view" style="margin-top: 0; align-items: stretch; gap: 30px;">
-        <div class="split-left" style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 20px;">
-          <!-- Voice Visualizer Orb -->
-          <div class="orb-container" style="margin: 0;">
+    <div class="layout">
+      <div class="col-main">
+        <div class="card hero-call" id="call-panel">
+          <div class="orb-container">
             <div class="orb" id="voice-orb">V</div>
           </div>
-          
-          <div id="call-status" style="margin-bottom: 0;">Agent is offline. Admin must start the agent.</div>
 
-          <div class="btn-group" style="width: 100%; max-width: 400px; margin: 0 auto;">
+          <div id="call-status">Agent is offline. Admin must start the agent.</div>
+
+          <div class="btn-group" style="max-width: 400px; margin: 0 auto;">
             <button id="start" class="btn-success">📞 Call Support</button>
             <button id="mute-btn" class="btn-outline" style="display: none;">🎤 Mute Mic</button>
             <button id="end" class="btn-danger" style="display: none;">🔴 End Call</button>
           </div>
+        </div>
 
-          <!-- Customer Profile -->
-          <div class="profile-card" id="profile-card" style="display: none; margin-bottom: 0; width: 100%;">
-            <h3 id="profile-name">Loading...</h3>
-            <div style="overflow-x: auto; width: 100%;">
-              <table class="profile-full-table">
-                <thead>
-                  <tr>
-                    <th>🎟️ Ticket ID</th>
-                    <th>📱 Mobile No.</th>
-                    <th>🐾 Pet Name</th>
-                    <th>🩺 App Type</th>
-                    <th>📅 Date</th>
-                    <th>🏥 Clinic Name</th>
-                    <th>🏙️ City</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td id="profile-ticket"></td>
-                    <td id="profile-mobile"></td>
-                    <td id="profile-pet"></td>
-                    <td id="profile-apptype"></td>
-                    <td id="profile-date"></td>
-                    <td id="profile-clinic"></td>
-                    <td id="profile-city"></td>
-                  </tr>
-                </tbody>
+        <!-- Customer Profile -->
+        <div class="profile-card" id="profile-card" style="display: none;">
+          <div class="profile-header">
+            <h3>🧾 User Details</h3>
+            <span class="profile-badge" id="profile-badge"></span>
+          </div>
+          <div class="profile-name-sub" id="profile-name">Loading...</div>
+          <div class="profile-grid">
+            <div class="profile-field">
+              <span class="profile-label">Appointment Type</span>
+              <span class="profile-value" id="profile-finalapptype"></span>
+            </div>
+            <div class="profile-field">
+              <span class="profile-label">Type</span>
+              <span class="profile-value" id="profile-type"></span>
+            </div>
+            <div class="profile-field">
+              <span class="profile-label">Ticket ID</span>
+              <span class="profile-value" id="profile-ticket"></span>
+            </div>
+            <div class="profile-field">
+              <span class="profile-label">Appointment Date</span>
+              <span class="profile-value" id="profile-date"></span>
+            </div>
+            <div class="profile-field">
+              <span class="profile-label">User ID</span>
+              <span class="profile-value" id="profile-userid"></span>
+            </div>
+            <div class="profile-field">
+              <span class="profile-label">Created</span>
+              <span class="profile-value" id="profile-created"></span>
+            </div>
+            <div class="profile-field">
+              <span class="profile-label">Mobile No.</span>
+              <span class="profile-value" id="profile-mobile"></span>
+            </div>
+            <div class="profile-field">
+              <span class="profile-label">Appt Type</span>
+              <span class="profile-value" id="profile-apptype"></span>
+            </div>
+            <div class="profile-field">
+              <span class="profile-label">Pet Name</span>
+              <span class="profile-value" id="profile-pet"></span>
+            </div>
+            <div class="profile-field">
+              <span class="profile-label">Clinic Name</span>
+              <span class="profile-value" id="profile-clinic"></span>
+            </div>
+            <div class="profile-field">
+              <span class="profile-label">City</span>
+              <span class="profile-value" id="profile-city"></span>
+            </div>
+          </div>
+
+          <!-- Live Latency (same widget as inbound_dashboard.html, reading the
+               outbound agent's own latency log via /api/latency_live) -->
+          <details class="lat-details">
+      <summary>⚡ Live Latency</summary>
+      <div class="lat-body">
+        <div id="lat-idle-banner" class="lat-card" style="display:none;"></div>
+
+        <div id="lat-live-content" style="display:none;">
+          <div class="lat-card target-banner" id="lat-target-banner">
+            <span class="dot"></span>
+            <span id="lat-target-banner-text">–</span>
+          </div>
+
+          <div class="lat-card">
+            <h2>Most recent turn</h2>
+            <div class="latest-grid">
+              <div>
+                <div class="latest-value" id="lat-latest-total">–<small>s</small></div>
+                <div class="latest-meta" id="lat-latest-meta">–</div>
+                <div class="latest-meta" id="lat-latest-tokens">Tokens: –</div>
+              </div>
+              <div>
+                <div class="chain-bar" id="lat-chain-bar"></div>
+                <div class="chain-legend" id="lat-chain-legend"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lat-card">
+            <h2>Rolling stats (last <span id="lat-rolling-n">20</span> turns)</h2>
+            <div class="kpi-grid">
+              <div class="kpi"><div class="label">Median</div><div class="value" id="lat-roll-p50">–</div></div>
+              <div class="kpi"><div class="label">P95</div><div class="value" id="lat-roll-p95">–</div></div>
+              <div class="kpi"><div class="label">Mean</div><div class="value" id="lat-roll-mean">–</div></div>
+            </div>
+          </div>
+
+          <div class="lat-card">
+            <h2>Recent turns (last <span id="lat-strip-n">40</span>) — latency budget vs. 800ms target</h2>
+            <div class="strip-wrap">
+              <div class="strip" id="lat-strip"></div>
+            </div>
+            <div class="strip-legend">
+              <span><span class="sw" style="background:var(--series-1)"></span>EOU wait</span>
+              <span><span class="sw" style="background:var(--series-3)"></span>LLM TTFT</span>
+              <span><span class="sw" style="background:var(--series-2)"></span>TTS TTFB</span>
+            </div>
+          </div>
+
+          <div class="lat-card">
+            <h2>Turn-by-turn</h2>
+            <div style="overflow-x:auto;">
+              <table class="lat-table">
+                <thead><tr><th>Time</th><th>EOU</th><th>LLM</th><th>TTS</th><th>Total</th><th>Health</th></tr></thead>
+                <tbody id="lat-table-body"></tbody>
               </table>
             </div>
           </div>
         </div>
+      </div>
+    </details>
+      </div>
+      </div>
 
-        <div class="split-right">
-          <div id="transcript-container" style="display: none; margin-top: 0; padding-top: 0; border-top: none; height: 100%;">
-            <div id="transcript" style="height: 100%; min-height: 400px; max-height: 600px; background: rgba(0, 0, 0, 0.2); padding: 16px; border-radius: 12px; border: 1px solid var(--border);"></div>
+      <div class="col-side">
+        <div class="card" style="flex: 1;">
+          <h2>Transcript</h2>
+          <div id="transcript-container" style="display: none;">
+            <div id="transcript" style="min-height: 400px; max-height: 600px; overflow-y: auto; background: rgba(255, 255, 255, 0.02); padding: 16px; border-radius: 12px; border: 1px solid var(--border);"></div>
             <small id="recinfo"></small>
           </div>
         </div>
       </div>
-    </div>
   </div>
 
   <!-- Admin Toggle Button -->
@@ -683,7 +1135,7 @@
         <span id="agent-status-text">Stopped</span>
       </div>
       <div style="display: flex; gap: 8px;">
-        <select id="agent-mode" style="padding: 10px; border-radius: 6px; background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: white;">
+        <select id="agent-mode" style="padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--text-color);">
           <option value="dynamic">Dynamic Agent</option>
           <option value="scripted">Scripted Agent</option>
         </select>
@@ -891,6 +1343,8 @@
           "SARVAM_START_VOLUME_THRESHOLD",
           "SARVAM_MIN_SPEECH_FRAMES",
           "SARVAM_FIRST_TURN_MIN_SPEECH_FRAMES",
+          "SARVAM_INTERRUPT_MIN_SPEECH_FRAMES",
+          "SARVAM_PRE_SPEECH_PAD_FRAMES",
           "ENABLE_NOISE_CANCEL"
         ];
 
@@ -1012,21 +1466,37 @@
           const raw = data.raw_data;
           const name = raw["full_name"] || id;
           const pet = raw["pet_name"] || "";
-          const issue = raw["final_app_type"] || raw["appt_type"] || raw["type"] || "";
+          const type = raw["type"] || "";
+          const finalAppType = raw["final_app_type"] || "";
+          const apptType = raw["appt_type"] || "";
           const date = raw["appointment_date"] || "";
           const clinic = raw["final_clinic_name"] || "";
           const city = raw["city"] || "";
           const ticket = raw["ticket_id"] || "";
           const mobile = raw["mobile_no."] || "";
+          const userId = raw["user_ids"] || "";
+          const created = raw["created_time"] || "";
 
           document.getElementById("profile-name").textContent = "👤 Caller: " + name;
+          document.getElementById("profile-badge").textContent = type;
           document.getElementById("profile-ticket").textContent = ticket;
+          document.getElementById("profile-userid").textContent = userId;
           document.getElementById("profile-mobile").textContent = mobile;
           document.getElementById("profile-pet").textContent = pet;
-          document.getElementById("profile-apptype").textContent = issue;
+          document.getElementById("profile-type").textContent = type;
+          document.getElementById("profile-finalapptype").textContent = finalAppType;
+          document.getElementById("profile-apptype").textContent = apptType;
           document.getElementById("profile-date").textContent = date;
           document.getElementById("profile-clinic").textContent = clinic;
           document.getElementById("profile-city").textContent = city;
+          document.getElementById("profile-created").textContent = created;
+
+          console.log("[user_info] caller details:");
+          console.table({
+            identifier: id, name, ticket, userId, mobile, pet, type,
+            final_app_type: finalAppType, appt_type: apptType,
+            appointment_date: date, clinic, city, created,
+          });
 
         } else if (data.context_text) {
           document.getElementById("profile-card").style.display = "block";
@@ -1041,11 +1511,24 @@
             if (l.includes("- City:")) city = l.split(":")[1].trim();
           });
           document.getElementById("profile-name").textContent = "👤 Caller: " + name;
+          document.getElementById("profile-badge").textContent = "";
+          document.getElementById("profile-ticket").textContent = "";
+          document.getElementById("profile-userid").textContent = "";
+          document.getElementById("profile-mobile").textContent = "";
           document.getElementById("profile-pet").textContent = pet;
-          document.getElementById("profile-apptype").textContent = issue;
+          document.getElementById("profile-type").textContent = "";
+          document.getElementById("profile-finalapptype").textContent = issue;
+          document.getElementById("profile-apptype").textContent = "";
           document.getElementById("profile-date").textContent = date;
           document.getElementById("profile-clinic").textContent = clinic;
           document.getElementById("profile-city").textContent = city;
+          document.getElementById("profile-created").textContent = "";
+
+          console.log("[user_info] caller details:");
+          console.table({
+            identifier: id, name, pet, appointment_type: issue,
+            appointment_date: date, clinic, city,
+          });
 
         } else {
           document.getElementById("profile-card").style.display = "none";
@@ -1113,7 +1596,7 @@
       const mode = document.getElementById("agent-mode") ? document.getElementById("agent-mode").value : "dynamic";
       agentStatusText.textContent = "Starting...";
       try {
-        const res = await fetch("/api/agent/start", { 
+        const res = await fetch("/api/agent/start", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ mode: mode })
@@ -1144,7 +1627,7 @@
       }
     };
 
-    // This page is the OUTBOUND console — make sure the outbound worker (agent.py,
+    // This page is the OUTBOUND console — make sure the outbound worker (agent_outbound.py,
     // "dynamic" mode, or the admin's "scripted" choice) is the one running, launching
     // it automatically if nothing is up, or switching over if the inbound worker was
     // left running from the /inbound page (only one agent worker runs at a time).
@@ -1180,7 +1663,7 @@
       const d = document.createElement("div");
       d.className = role === "You" ? "you" : "aarya";
       d.innerHTML = "<b>" + role + "</b> " + text;
-      tEl.appendChild(d); d.scrollIntoView();
+      tEl.appendChild(d); tEl.scrollTop = tEl.scrollHeight;
     }
     function nowStamp() {
       const d = new Date(), p = (n) => String(n).padStart(2, "0");
@@ -1244,7 +1727,7 @@
         room.on(LK.RoomEvent.TranscriptionReceived, (segments, participant) => {
           tContainer.style.display = "block";
           const who = participant && participant.identity === "web-caller" ? "You" : "Aarya";
-          
+
           segments.forEach((s) => {
             if (s.final) {
               if (interimDivs[s.id]) {
@@ -1263,7 +1746,7 @@
                 interimDivs[s.id] = d;
               }
               interimDivs[s.id].innerHTML = "<b>" + who + "</b> " + s.text + " <i>...</i>";
-              interimDivs[s.id].scrollIntoView();
+              tEl.scrollTop = tEl.scrollHeight;
             }
           });
         });
@@ -1295,7 +1778,7 @@
         // own echo cancellation / noise suppression / gain control here is a free, zero-
         // latency first line of defense against background noise — it runs before audio
         // even leaves the caller's machine, on top of (not instead of) the server-side
-        // BVC (Background Voice Cancellation) the agent applies in agent.py.
+        // BVC (Background Voice Cancellation) the agent applies in agent_outbound.py.
         const micOpts = {
           ...(selectedMicId ? { deviceId: selectedMicId } : {}),
           echoCancellation: true,
@@ -1363,6 +1846,147 @@
     };
 
     endBtn.onclick = async () => { stopRecording(); if (room) await room.disconnect(); };
+
+    // ── Live latency (reads agent_outbound.py's own latency_logs_outbound.csv via
+    // /api/latency_live — same widget/visual language as inbound_dashboard.html,
+    // kept on its own endpoint so outbound and inbound call metrics never mix) ──
+    const LAT_TIER_COLOR = {
+      instant: 'var(--st-good)', acceptable: 'var(--st-warning)',
+      sluggish: 'var(--st-serious)', broken: 'var(--st-critical)',
+    };
+    const LAT_TIER_LABEL = { instant: 'Good', acceptable: 'Fair', sluggish: 'Slow', broken: 'Critical' };
+    const LAT_TARGET_S = 0.8; // hard round-trip latency budget for this pipeline
+
+    function latFmtS(v) { return (Math.round(v * 100) / 100).toFixed(2); }
+    function latFmtTime(t) {
+      const parts = (t || '').split(' ');
+      return parts[1] || t || '–';
+    }
+
+    async function pollLatency() {
+      let data;
+      try {
+        const res = await fetch('/api/latency_live?recent=40&rolling=20', { cache: 'no-store' });
+        data = await res.json();
+      } catch (e) {
+        return;
+      }
+
+      const idleBanner = document.getElementById('lat-idle-banner');
+      const liveContent = document.getElementById('lat-live-content');
+
+      if (data.error || !data.latest) {
+        idleBanner.style.display = 'block';
+        idleBanner.textContent = data.error ? data.error : 'No turns logged yet — start a call to see live latency here.';
+        liveContent.style.display = 'none';
+        return;
+      }
+      idleBanner.style.display = 'none';
+      liveContent.style.display = 'block';
+
+      const latest = data.latest;
+      document.getElementById('lat-latest-total').innerHTML = `${latFmtS(latest.total)}<small>s</small>`;
+      document.getElementById('lat-latest-meta').textContent =
+        `${latFmtTime(latest.t)} · ${latest.id} · ${LAT_TIER_LABEL[latest.bucket] || latest.bucket}`;
+      document.getElementById('lat-latest-tokens').textContent =
+        `Tokens: ${(latest.in_tok ?? 0).toLocaleString()} in · ${(latest.out_tok ?? 0).toLocaleString()} out`;
+
+      const chainBar = document.getElementById('lat-chain-bar');
+      const chainLegend = document.getElementById('lat-chain-legend');
+      chainBar.innerHTML = '';
+      chainLegend.innerHTML = '';
+      const parts = [
+        { label: 'EOU wait', color: 'var(--series-1)', v: latest.eou },
+        { label: 'LLM TTFT', color: 'var(--series-3)', v: latest.llm },
+        { label: 'TTS TTFB', color: 'var(--series-2)', v: latest.tts },
+      ];
+      const sum = parts.reduce((s, p) => s + p.v, 0) || 1;
+      parts.forEach(p => {
+        const pct = p.v / sum * 100;
+        const seg = document.createElement('div');
+        seg.className = 'chain-seg';
+        seg.style.flex = Math.max(pct, 0.001);
+        seg.style.background = p.color;
+        seg.textContent = pct >= 12 ? latFmtS(p.v) + 's' : '';
+        chainBar.appendChild(seg);
+        const leg = document.createElement('span');
+        leg.innerHTML = `<span class="sw" style="background:${p.color}"></span>${p.label} ${latFmtS(p.v)}s`;
+        chainLegend.appendChild(leg);
+      });
+
+      if (data.rolling) {
+        document.getElementById('lat-rolling-n').textContent = data.rolling.count;
+        document.getElementById('lat-roll-p50').textContent = latFmtS(data.rolling.p50) + 's';
+        document.getElementById('lat-roll-p95').textContent = latFmtS(data.rolling.p95) + 's';
+        document.getElementById('lat-roll-mean').textContent = latFmtS(data.rolling.mean) + 's';
+      }
+
+      const recentForBanner = data.recent || [];
+      if (recentForBanner.length) {
+        const overCount = recentForBanner.filter(r => r.total > LAT_TARGET_S).length;
+        const pct = Math.round((overCount / recentForBanner.length) * 100);
+        const banner = document.getElementById('lat-target-banner');
+        banner.classList.remove('warn', 'crit');
+        if (pct > 50) banner.classList.add('crit');
+        else if (pct > 20) banner.classList.add('warn');
+        document.getElementById('lat-target-banner-text').innerHTML =
+          `<b>${overCount}/${recentForBanner.length} of the last ${recentForBanner.length} turns</b> exceeded the 800ms round-trip target (${pct}%)`;
+      }
+
+      const strip = document.getElementById('lat-strip');
+      strip.innerHTML = '';
+      const recent = data.recent || [];
+      document.getElementById('lat-strip-n').textContent = recent.length;
+      const maxV = Math.max(...recent.map(r => r.total), LAT_TARGET_S * 1.15, 1);
+      recent.forEach(r => {
+        const col = document.createElement('div');
+        col.className = 'bar-col';
+        col.style.height = Math.max((r.total / maxV) * 100, 3) + '%';
+        col.title = `${latFmtTime(r.t)} — EOU ${latFmtS(r.eou)}s · LLM ${latFmtS(r.llm)}s · TTS ${latFmtS(r.tts)}s · total ${latFmtS(r.total)}s (${LAT_TIER_LABEL[r.bucket]})`;
+        const segs = [
+          { v: r.eou, color: 'var(--series-1)' },
+          { v: r.llm, color: 'var(--series-3)' },
+          { v: r.tts, color: 'var(--series-2)' },
+        ];
+        const segSum = segs.reduce((s, p) => s + p.v, 0) || 1;
+        segs.forEach(p => {
+          const seg = document.createElement('div');
+          seg.className = 'seg';
+          seg.style.height = (p.v / segSum * 100) + '%';
+          seg.style.background = p.color;
+          col.appendChild(seg);
+        });
+        strip.appendChild(col);
+      });
+
+      const targetPct = Math.min((LAT_TARGET_S / maxV) * 100, 100);
+      let targetRef = strip.querySelector('.target-ref');
+      if (!targetRef) {
+        targetRef = document.createElement('div');
+        targetRef.className = 'target-ref';
+        const label = document.createElement('span');
+        label.className = 'target-ref-label';
+        label.textContent = '800ms';
+        targetRef.appendChild(label);
+        strip.appendChild(targetRef);
+      }
+      targetRef.style.bottom = targetPct + '%';
+
+      const tbody = document.getElementById('lat-table-body');
+      tbody.innerHTML = recent.slice().reverse().slice(0, 15).map(r => `
+        <tr>
+          <td>${latFmtTime(r.t)}</td>
+          <td>${latFmtS(r.eou)}s</td>
+          <td>${latFmtS(r.llm)}s</td>
+          <td>${latFmtS(r.tts)}s</td>
+          <td><b>${latFmtS(r.total)}s</b></td>
+          <td><span class="chip"><span class="dot" style="background:${LAT_TIER_COLOR[r.bucket]}"></span>${LAT_TIER_LABEL[r.bucket]}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    pollLatency();
+    setInterval(pollLatency, 1500);
   </script>
 </body>
 
