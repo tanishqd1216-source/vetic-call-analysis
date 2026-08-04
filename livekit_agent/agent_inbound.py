@@ -44,9 +44,18 @@ from livekit.agents import (
 from livekit.agents import inference
 from livekit.agents.voice import Agent, AgentSession
 from livekit.agents.llm import ChatMessage
-from livekit.plugins import openai, noise_cancellation, sarvam, silero
+from livekit.plugins import openai, sarvam, silero
 from livekit.agents.telemetry import set_tracer_provider
 from opentelemetry.sdk.trace import TracerProvider
+
+try:
+    from livekit.plugins import noise_cancellation
+except Exception as e:
+    # On some Windows dev machines the plugin's native DLL is blocked by an
+    # Application Control policy (WinError 4551) at import time. Degrade to no
+    # noise cancellation locally rather than crashing the whole agent process.
+    noise_cancellation = None
+    logging.getLogger(__name__).warning(f"noise_cancellation plugin unavailable, running without BVC: {e}")
 
 from vetic_live_db import get_user_context, owner_first_name
 from event_reporter import fire_event
@@ -935,14 +944,16 @@ async def entrypoint(ctx: JobContext) -> None:
 
     from livekit.agents.voice.room_io import RoomOptions, AudioInputOptions
 
+    room_options_kwargs = {}
+    if noise_cancellation is not None:
+        room_options_kwargs["audio_input"] = AudioInputOptions(
+            noise_cancellation=noise_cancellation.BVC()
+        )
+
     await session.start(
         agent=vetic_agent,
         room=ctx.room,
-        room_options=RoomOptions(
-            audio_input=AudioInputOptions(
-                noise_cancellation=noise_cancellation.BVC()
-            )
-        )
+        room_options=RoomOptions(**room_options_kwargs)
     )
 
     try:
