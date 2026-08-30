@@ -5,23 +5,23 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Vetic — Talk to Aarya</title>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-color: #0b1120;
-      --panel-bg: #131b2e;
-      --text-color: #f1f5f9;
+      --bg-color: #47546733;
+      --panel-bg: rgba(16, 25, 43, 0.65);
+      --text-color: #f8fafc;
       --text-muted: #94a3b8;
-      --primary: #4f46e5;
-      --primary-hover: #6366f1;
-      --primary-glow: rgba(79, 70, 229, 0.22);
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-glow: rgba(37, 99, 235, 0.4);
       --success: #10b981;
       --success-hover: #059669;
-      --success-glow: rgba(16, 185, 129, 0.2);
+      --success-glow: rgba(16, 185, 129, 0.4);
       --danger: #ef4444;
-      --danger-hover: #dc2626;
-      --border: #253044;
-      --shadow: 0 4px 28px rgba(0, 0, 0, 0.35);
+      --danger-hover: #dc2828;
+      --border: rgba(255, 255, 255, 0.08);
+      --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
       --series-1: #4b93ea;
       --series-2: #24c98a;
       --series-3: #f0834a;
@@ -32,131 +32,74 @@
     }
 
     body {
-      font-family: 'Geist', system-ui, sans-serif;
+      font-family: 'Inter', system-ui, sans-serif;
       margin: 0;
       padding: 0;
       background: var(--bg-color);
       color: var(--text-color);
       min-height: 100vh;
+      background-image:
+        radial-gradient(circle at 15% 50%, rgba(37, 99, 235, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
       display: flex;
       flex-direction: column;
       align-items: center;
     }
 
-    .page {
-      width: 100%;
-      max-width: 1300px;
-      margin: 0 auto;
-      padding: 32px 20px 60px;
-      box-sizing: border-box;
+    .hero-header {
+      margin-top: 60px;
+      text-align: center;
+      animation: fadeInDown 0.8s ease-out;
     }
 
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-bottom: 24px;
-      animation: fadeInDown 0.5s ease-out;
+    .hero-header h1 {
+      font-size: 42px;
+      font-weight: 800;
+      margin: 0 0 10px 0;
+      background: linear-gradient(135deg, #60a5fa, #2563eb);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -1px;
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .brand .mark {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      flex: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      background: linear-gradient(155deg, var(--primary), var(--primary-hover));
-      box-shadow: var(--shadow);
-    }
-
-    .brand h1 {
-      font-size: 20px;
-      font-weight: 700;
+    .hero-header p {
+      color: var(--text-muted);
+      font-size: 18px;
       margin: 0;
-      color: var(--text-color);
-      letter-spacing: -0.01em;
+      max-width: 500px;
     }
 
-    .brand .subtitle {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-muted);
-      margin: 2px 0 0;
+    .main-container {
+      width: 100%;
+      max-width: 1400px;
+      margin: 40px auto;
+      padding: 0 20px;
+      box-sizing: border-box;
+      animation: zoomIn 0.6s ease-out forwards;
+      opacity: 0;
     }
 
-    .layout {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      align-items: start;
-      animation: fadeIn 0.4s ease-out forwards;
-    }
-
-    @media (max-width: 900px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .col-main,
-    .col-side {
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      min-width: 0;
-    }
-
-    .col-side {
-      position: sticky;
-      top: 20px;
-    }
-
-    @media (max-width: 900px) {
-      .col-side {
-        position: static;
-      }
-    }
-
-    .card {
+    .glass-panel {
       background: var(--panel-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 28px;
-      box-shadow: var(--shadow);
-    }
-
-    .card h2 {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--text-muted);
-      font-weight: 700;
-      margin: 0 0 14px;
-    }
-
-    .hero-call {
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: var(--glass-shadow);
       display: flex;
       flex-direction: column;
       align-items: center;
+      position: relative;
+      overflow: hidden;
     }
 
-    /* Voice state indicator for Aarya */
+    /* Dynamic pulsing orb for Aarya */
     .orb-container {
-      width: 120px;
-      height: 120px;
+      width: 150px;
+      height: 150px;
       position: relative;
-      margin: 12px 0 32px 0;
+      margin: 20px 0 40px 0;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -166,40 +109,63 @@
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      background: var(--primary);
-      box-shadow: 0 0 0 6px rgba(79, 70, 229, 0.14);
-      transition: background 0.3s ease, box-shadow 0.3s ease;
+      background: linear-gradient(135deg, var(--primary), #60a5fa);
+      box-shadow: 0 0 40px var(--primary-glow);
+      transition: all 0.3s ease;
+      animation: idlePulse 3s infinite ease-in-out;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 36px;
-      font-weight: 700;
-      color: rgba(255, 255, 255, 0.92);
+      font-size: 48px;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.8);
       user-select: none;
     }
 
     .orb.listening {
-      background: var(--success);
-      box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.18);
-      animation: gentlePulse 1.6s ease-in-out infinite;
+      background: linear-gradient(135deg, var(--success), #34d399);
+      box-shadow: 0 0 60px var(--success-glow);
+      animation: activePulse 1.5s infinite ease-in-out;
     }
 
-    @keyframes gentlePulse {
-
-      0%,
-      100% {
-        box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.18);
+    @keyframes idlePulse {
+      0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 30px var(--primary-glow);
       }
 
       50% {
-        box-shadow: 0 0 0 12px rgba(16, 185, 129, 0.08);
+        transform: scale(1.05);
+        box-shadow: 0 0 50px var(--primary-glow);
+      }
+
+      100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 30px var(--primary-glow);
+      }
+    }
+
+    @keyframes activePulse {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 0 40px var(--success-glow);
+      }
+
+      50% {
+        transform: scale(1.15);
+        box-shadow: 0 0 80px var(--success-glow);
+      }
+
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 40px var(--success-glow);
       }
     }
 
     @keyframes fadeInDown {
       from {
         opacity: 0;
-        transform: translateY(-12px);
+        transform: translateY(-20px);
       }
 
       to {
@@ -208,19 +174,21 @@
       }
     }
 
-    @keyframes fadeIn {
+    @keyframes zoomIn {
       from {
         opacity: 0;
+        transform: scale(0.95);
       }
 
       to {
         opacity: 1;
+        transform: scale(1);
       }
     }
 
     #call-status {
       text-align: center;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 500;
       color: var(--text-muted);
       margin-bottom: 30px;
@@ -236,13 +204,13 @@
 
     button {
       font-family: inherit;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 600;
-      padding: 14px 22px;
-      border-radius: 10px;
+      padding: 16px 24px;
+      border-radius: 12px;
       border: none;
       cursor: pointer;
-      transition: background-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -252,6 +220,12 @@
     button:disabled {
       opacity: 0.4;
       cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    button:not(:disabled):active {
+      transform: scale(0.96);
     }
 
     .btn-primary {
@@ -262,29 +236,32 @@
 
     .btn-primary:not(:disabled):hover {
       background: var(--primary-hover);
+      box-shadow: 0 8px 20px var(--primary-glow);
     }
 
     .btn-success {
       background: var(--success);
       color: white;
       flex: 2;
-      font-size: 16px;
+      font-size: 18px;
     }
 
     .btn-success:not(:disabled):hover {
       background: var(--success-hover);
+      box-shadow: 0 8px 20px var(--success-glow);
     }
 
     .btn-danger {
-      background: rgba(239, 68, 68, 0.12);
+      background: rgba(239, 68, 68, 0.15);
       color: #fca5a5;
       flex: 1;
-      border: 1px solid rgba(239, 68, 68, 0.25);
+      border: 1px solid rgba(239, 68, 68, 0.3);
     }
 
     .btn-danger:not(:disabled):hover {
       background: var(--danger);
       color: white;
+      box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
     }
 
     .btn-outline {
@@ -295,7 +272,7 @@
     }
 
     .btn-outline:not(:disabled):hover {
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.05);
       color: white;
     }
 
@@ -304,7 +281,7 @@
       position: fixed;
       bottom: 20px;
       right: 20px;
-      background: var(--panel-bg);
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--border);
       color: var(--text-muted);
       border-radius: 50%;
@@ -315,27 +292,30 @@
       align-items: center;
       cursor: pointer;
       z-index: 100;
-      transition: color 0.2s, border-color 0.2s;
+      transition: all 0.3s;
     }
 
     .admin-toggle:hover {
+      background: rgba(255, 255, 255, 0.1);
       color: white;
-      border-color: var(--primary);
+      transform: rotate(90deg);
     }
 
     /* Admin Drawer */
     #admin-drawer {
       position: fixed;
       top: 0;
-      right: -380px;
-      width: 380px;
+      right: -400px;
+      width: 400px;
       height: 100vh;
-      background: var(--panel-bg);
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       border-left: 1px solid var(--border);
-      box-shadow: -8px 0 32px rgba(0, 0, 0, 0.4);
-      transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
+      transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       z-index: 90;
-      padding: 24px;
+      padding: 30px;
       box-sizing: border-box;
       overflow-y: auto;
     }
@@ -344,18 +324,18 @@
       right: 0;
     }
 
-    /* Transcript */
+    /* Transcript (Hidden by default, can be toggled) */
     #transcript-container {
       width: 100%;
-      margin-top: 0;
-      border-top: none;
-      padding-top: 0;
+      margin-top: 30px;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      display: none;
+      /* hidden for clean look */
     }
 
     #transcript {
-      height: 100%;
-      min-height: 400px;
-      max-height: 600px;
+      height: 200px;
       overflow-y: auto;
       padding-right: 8px;
       scroll-behavior: smooth;
@@ -372,7 +352,7 @@
 
     #transcript div {
       margin: 8px 0;
-      line-height: 1.5;
+      line-height: 1.4;
       padding: 10px 14px;
       border-radius: 12px;
       max-width: 90%;
@@ -380,70 +360,51 @@
     }
 
     .you {
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.05);
       color: #cbd5e1;
       margin-left: auto !important;
       border-bottom-right-radius: 4px !important;
     }
 
     .aarya {
-      background: rgba(79, 70, 229, 0.14);
-      color: var(--text-color);
+      background: rgba(37, 99, 235, 0.15);
+      color: #f8fafc;
       margin-right: auto !important;
       border-bottom-left-radius: 4px !important;
     }
 
     b {
       font-weight: 600;
-      color: var(--text-muted);
+      color: white;
       display: block;
       margin-bottom: 4px;
-      font-size: 10px;
+      font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.5px;
+      opacity: 0.6;
     }
 
     .interim {
-      opacity: 0.65;
+      opacity: 0.7;
       font-style: italic;
     }
 
-    /* Admin drawer sections */
+    /* Existing Admin Styles adapted for drawer */
     .admin-section {
-      margin-bottom: 24px;
-      padding-bottom: 24px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .admin-section:last-child {
-      margin-bottom: 0;
-      padding-bottom: 0;
-      border-bottom: none;
+      margin-bottom: 30px;
     }
 
     .admin-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin: 0 0 14px 0;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .admin-title::before {
-      content: "";
-      display: inline-block;
-      width: 3px;
-      height: 13px;
-      border-radius: 2px;
-      background: var(--primary);
+      font-size: 16px;
+      font-weight: 600;
+      color: white;
+      margin: 0 0 16px 0;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
     }
 
     .status-badge {
-      padding: 5px 10px;
+      padding: 6px 12px;
       border-radius: 20px;
       font-size: 12px;
       font-weight: 600;
@@ -454,12 +415,12 @@
     }
 
     .status-badge.offline {
-      background: rgba(239, 68, 68, 0.12);
+      background: rgba(239, 68, 68, 0.2);
       color: #fca5a5;
     }
 
     .status-badge.online {
-      background: rgba(16, 185, 129, 0.12);
+      background: rgba(16, 185, 129, 0.2);
       color: #6ee7b7;
     }
 
@@ -475,18 +436,18 @@
 
     .online .status-dot {
       background: #10b981;
-      box-shadow: 0 0 6px #10b981;
+      box-shadow: 0 0 8px #10b981;
     }
 
     .form-group {
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .form-group label {
       display: block;
       font-size: 12px;
       font-weight: 600;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
       color: var(--text-muted);
     }
 
@@ -494,9 +455,9 @@
     .form-group select {
       width: 100%;
       box-sizing: border-box;
-      padding: 9px 11px;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.03);
+      padding: 8px 10px;
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.3);
       border: 1px solid var(--border);
       color: var(--text-color);
       font-family: inherit;
@@ -510,11 +471,11 @@
     }
 
     .restart-notice {
-      background: rgba(245, 158, 11, 0.14);
+      background: rgba(245, 158, 11, 0.2);
       border: 1px solid rgba(245, 158, 11, 0.3);
       color: #fcd34d;
       padding: 10px;
-      border-radius: 8px;
+      border-radius: 6px;
       font-size: 12px;
       margin-bottom: 12px;
       display: none;
@@ -528,95 +489,71 @@
       margin-top: 16px;
     }
 
-    /* Advanced Features */
+    /* Advanced Features CSS */
     .profile-card {
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 20px;
+      padding: 16px;
       margin-bottom: 20px;
-      text-align: left;
+      text-align: center;
       width: 100%;
       box-sizing: border-box;
     }
 
-    .profile-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    .profile-card h3 {
+      margin: 0 0 12px 0;
+      font-size: 18px;
+      color: var(--primary);
     }
 
-    .profile-header h3 {
-      margin: 0;
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--primary-hover);
+    .profile-full-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      overflow: hidden;
     }
 
-    .profile-badge {
+    .profile-full-table th {
       font-size: 11px;
-      font-weight: 700;
+      color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: var(--text-muted);
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 999px;
-      padding: 3px 10px;
+      padding: 12px 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.03);
     }
 
-    .profile-badge:empty {
-      display: none;
+    .profile-full-table td {
+      padding: 14px 8px;
+      font-size: 14px;
+      color: var(--text-color);
+      font-weight: 500;
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    .profile-name-sub {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin: 4px 0 4px 0;
+    .profile-full-table td:last-child {
+      border-right: none;
     }
 
-    .profile-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      column-gap: 24px;
-      row-gap: 18px;
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
+    .split-view {
+      display: flex;
+      width: 100%;
+      gap: 20px;
+      margin-top: 20px;
+      align-items: stretch;
     }
-
-    .profile-field {
+    
+    .split-left, .split-right {
+      flex: 1;
+      width: 50%;
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      min-width: 0;
     }
 
-    .profile-label {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-muted);
-    }
-
-    .profile-value {
-      font-size: 15px;
-      font-weight: 500;
-      color: var(--text-color);
-      word-break: break-word;
-    }
-
-    .profile-value:empty::before {
-      content: "—";
-      color: var(--text-muted);
-    }
-
-    /* Stack the profile grid into a single column on narrow/tablet viewports. */
-    @media (max-width: 640px) {
-      .profile-grid {
-        grid-template-columns: 1fr;
-      }
-    }
 
     .modal-overlay {
       position: fixed;
@@ -624,8 +561,8 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(6px);
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
       z-index: 200;
       display: none;
       align-items: center;
@@ -635,13 +572,13 @@
     .modal-content {
       background: var(--panel-bg);
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: 16px;
       padding: 24px;
       width: 80%;
       max-width: 800px;
       max-height: 80vh;
       overflow-y: auto;
-      color: var(--text-color);
+      color: white;
     }
 
     .modal-header {
@@ -653,20 +590,19 @@
 
     .modal-header h2 {
       margin: 0;
-      font-size: 18px;
-      font-weight: 600;
+      font-size: 20px;
     }
 
     .modal-close {
       background: none;
       border: none;
-      color: var(--text-color);
-      font-size: 22px;
+      color: white;
+      font-size: 24px;
       cursor: pointer;
     }
 
     .data-pre {
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.4);
       padding: 16px;
       border-radius: 8px;
       font-family: monospace;
@@ -718,9 +654,9 @@
     }
 
     .lat-card {
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 14px;
       padding: 18px 20px;
     }
 
@@ -758,7 +694,7 @@
       font-weight: 800;
       font-variant-numeric: tabular-nums;
       line-height: 1;
-      color: var(--text-color);
+      color: white;
     }
 
     .latest-value small {
@@ -822,7 +758,7 @@
     }
 
     .kpi {
-      background: rgba(0, 0, 0, 0.15);
+      background: rgba(0, 0, 0, 0.2);
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 12px 14px;
@@ -841,7 +777,7 @@
       font-size: 1.2rem;
       font-weight: 800;
       font-variant-numeric: tabular-nums;
-      color: var(--text-color);
+      color: white;
     }
 
     .strip-wrap {
@@ -930,7 +866,7 @@
       font-weight: 600;
       padding: 3px 9px 3px 7px;
       border-radius: 20px;
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--border);
     }
 
@@ -967,90 +903,72 @@
 </head>
 
 <body>
-  <div class="page">
-    <header class="topbar">
-      <div class="brand">
-        <span class="mark">🐾</span>
-        <div>
-          <h1>Vetic Pet Care</h1>
-          <p class="subtitle">Voice-enabled AI Support. Tap the button below to start.</p>
-        </div>
-      </div>
-    </header>
+  <div class="hero-header">
+    <h1>Vetic Pet Care</h1>
+    <p>Voice-enabled AI Support. Tap the button below to start.</p>
+  </div>
 
-    <div class="layout">
-      <div class="col-main">
-        <div class="card hero-call" id="call-panel">
-          <div class="orb-container">
+  <div class="main-container">
+    <div class="glass-panel" id="call-panel">
+      <div class="split-view" style="margin-top: 0; align-items: stretch; gap: 30px;">
+        <div class="split-left" style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 20px;">
+          <!-- Voice Visualizer Orb -->
+          <div class="orb-container" style="margin: 0;">
             <div class="orb" id="voice-orb">V</div>
           </div>
+          
+          <div id="call-status" style="margin-bottom: 0;">Agent is offline. Admin must start the agent.</div>
 
-          <div id="call-status">Agent is offline. Admin must start the agent.</div>
-
-          <div class="btn-group" style="max-width: 400px; margin: 0 auto;">
+          <div class="btn-group" style="width: 100%; max-width: 400px; margin: 0 auto;">
             <button id="start" class="btn-success">📞 Call Support</button>
             <button id="mute-btn" class="btn-outline" style="display: none;">🎤 Mute Mic</button>
             <button id="end" class="btn-danger" style="display: none;">🔴 End Call</button>
           </div>
+
+          <!-- Customer Profile -->
+          <div class="profile-card" id="profile-card" style="display: none; margin-bottom: 0; width: 100%;">
+            <h3 id="profile-name">Loading...</h3>
+            <div style="overflow-x: auto; width: 100%;">
+              <table class="profile-full-table">
+                <thead>
+                  <tr>
+                    <th>🎟️ Ticket ID</th>
+                    <th>📱 Mobile No.</th>
+                    <th>🐾 Pet Name</th>
+                    <th>🩺 App Type</th>
+                    <th>📅 Date</th>
+                    <th>🏥 Clinic Name</th>
+                    <th>🏙️ City</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td id="profile-ticket"></td>
+                    <td id="profile-mobile"></td>
+                    <td id="profile-pet"></td>
+                    <td id="profile-apptype"></td>
+                    <td id="profile-date"></td>
+                    <td id="profile-clinic"></td>
+                    <td id="profile-city"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
 
-        <!-- Customer Profile -->
-        <div class="profile-card" id="profile-card" style="display: none;">
-          <div class="profile-header">
-            <h3>🧾 User Details</h3>
-            <span class="profile-badge" id="profile-badge"></span>
+        <div class="split-right">
+          <div id="transcript-container" style="display: none; margin-top: 0; padding-top: 0; border-top: none; height: 100%;">
+            <div id="transcript" style="height: 100%; min-height: 400px; max-height: 600px; background: rgba(0, 0, 0, 0.2); padding: 16px; border-radius: 12px; border: 1px solid var(--border);"></div>
+            <small id="recinfo"></small>
           </div>
-          <div class="profile-name-sub" id="profile-name">Loading...</div>
-          <div class="profile-grid">
-            <div class="profile-field">
-              <span class="profile-label">Appointment Type</span>
-              <span class="profile-value" id="profile-finalapptype"></span>
-            </div>
-            <div class="profile-field">
-              <span class="profile-label">Type</span>
-              <span class="profile-value" id="profile-type"></span>
-            </div>
-            <div class="profile-field">
-              <span class="profile-label">Ticket ID</span>
-              <span class="profile-value" id="profile-ticket"></span>
-            </div>
-            <div class="profile-field">
-              <span class="profile-label">Appointment Date</span>
-              <span class="profile-value" id="profile-date"></span>
-            </div>
-            <div class="profile-field">
-              <span class="profile-label">User ID</span>
-              <span class="profile-value" id="profile-userid"></span>
-            </div>
-            <div class="profile-field">
-              <span class="profile-label">Created</span>
-              <span class="profile-value" id="profile-created"></span>
-            </div>
-            <div class="profile-field">
-              <span class="profile-label">Mobile No.</span>
-              <span class="profile-value" id="profile-mobile"></span>
-            </div>
-            <div class="profile-field">
-              <span class="profile-label">Appt Type</span>
-              <span class="profile-value" id="profile-apptype"></span>
-            </div>
-            <div class="profile-field">
-              <span class="profile-label">Pet Name</span>
-              <span class="profile-value" id="profile-pet"></span>
-            </div>
-            <div class="profile-field">
-              <span class="profile-label">Clinic Name</span>
-              <span class="profile-value" id="profile-clinic"></span>
-            </div>
-            <div class="profile-field">
-              <span class="profile-label">City</span>
-              <span class="profile-value" id="profile-city"></span>
-            </div>
-          </div>
+        </div>
+      </div>
+    </div>
 
-          <!-- Live Latency (same widget as inbound_dashboard.html, reading the
-               outbound agent's own latency log via /api/latency_live) -->
-          <details class="lat-details">
+    <!-- Live Latency (same widget as inbound_dashboard.html, reading the
+         outbound agent's own latency log via /api/latency_live) -->
+    <details class="lat-details">
       <summary>⚡ Live Latency</summary>
       <div class="lat-body">
         <div id="lat-idle-banner" class="lat-card" style="display:none;"></div>
@@ -1109,18 +1027,6 @@
         </div>
       </div>
     </details>
-      </div>
-      </div>
-
-      <div class="col-side">
-        <div class="card" style="flex: 1;">
-          <h2>Transcript</h2>
-          <div id="transcript-container" style="display: none;">
-            <div id="transcript" style="min-height: 400px; max-height: 600px; overflow-y: auto; background: rgba(255, 255, 255, 0.02); padding: 16px; border-radius: 12px; border: 1px solid var(--border);"></div>
-            <small id="recinfo"></small>
-          </div>
-        </div>
-      </div>
   </div>
 
   <!-- Admin Toggle Button -->
@@ -1135,7 +1041,7 @@
         <span id="agent-status-text">Stopped</span>
       </div>
       <div style="display: flex; gap: 8px;">
-        <select id="agent-mode" style="padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--text-color);">
+        <select id="agent-mode" style="padding: 10px; border-radius: 6px; background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: white;">
           <option value="dynamic">Dynamic Agent</option>
           <option value="scripted">Scripted Agent</option>
         </select>
@@ -1343,8 +1249,6 @@
           "SARVAM_START_VOLUME_THRESHOLD",
           "SARVAM_MIN_SPEECH_FRAMES",
           "SARVAM_FIRST_TURN_MIN_SPEECH_FRAMES",
-          "SARVAM_INTERRUPT_MIN_SPEECH_FRAMES",
-          "SARVAM_PRE_SPEECH_PAD_FRAMES",
           "ENABLE_NOISE_CANCEL"
         ];
 
@@ -1466,37 +1370,21 @@
           const raw = data.raw_data;
           const name = raw["full_name"] || id;
           const pet = raw["pet_name"] || "";
-          const type = raw["type"] || "";
-          const finalAppType = raw["final_app_type"] || "";
-          const apptType = raw["appt_type"] || "";
+          const issue = raw["final_app_type"] || raw["appt_type"] || raw["type"] || "";
           const date = raw["appointment_date"] || "";
           const clinic = raw["final_clinic_name"] || "";
           const city = raw["city"] || "";
           const ticket = raw["ticket_id"] || "";
           const mobile = raw["mobile_no."] || "";
-          const userId = raw["user_ids"] || "";
-          const created = raw["created_time"] || "";
 
           document.getElementById("profile-name").textContent = "👤 Caller: " + name;
-          document.getElementById("profile-badge").textContent = type;
           document.getElementById("profile-ticket").textContent = ticket;
-          document.getElementById("profile-userid").textContent = userId;
           document.getElementById("profile-mobile").textContent = mobile;
           document.getElementById("profile-pet").textContent = pet;
-          document.getElementById("profile-type").textContent = type;
-          document.getElementById("profile-finalapptype").textContent = finalAppType;
-          document.getElementById("profile-apptype").textContent = apptType;
+          document.getElementById("profile-apptype").textContent = issue;
           document.getElementById("profile-date").textContent = date;
           document.getElementById("profile-clinic").textContent = clinic;
           document.getElementById("profile-city").textContent = city;
-          document.getElementById("profile-created").textContent = created;
-
-          console.log("[user_info] caller details:");
-          console.table({
-            identifier: id, name, ticket, userId, mobile, pet, type,
-            final_app_type: finalAppType, appt_type: apptType,
-            appointment_date: date, clinic, city, created,
-          });
 
         } else if (data.context_text) {
           document.getElementById("profile-card").style.display = "block";
@@ -1511,24 +1399,11 @@
             if (l.includes("- City:")) city = l.split(":")[1].trim();
           });
           document.getElementById("profile-name").textContent = "👤 Caller: " + name;
-          document.getElementById("profile-badge").textContent = "";
-          document.getElementById("profile-ticket").textContent = "";
-          document.getElementById("profile-userid").textContent = "";
-          document.getElementById("profile-mobile").textContent = "";
           document.getElementById("profile-pet").textContent = pet;
-          document.getElementById("profile-type").textContent = "";
-          document.getElementById("profile-finalapptype").textContent = issue;
-          document.getElementById("profile-apptype").textContent = "";
+          document.getElementById("profile-apptype").textContent = issue;
           document.getElementById("profile-date").textContent = date;
           document.getElementById("profile-clinic").textContent = clinic;
           document.getElementById("profile-city").textContent = city;
-          document.getElementById("profile-created").textContent = "";
-
-          console.log("[user_info] caller details:");
-          console.table({
-            identifier: id, name, pet, appointment_type: issue,
-            appointment_date: date, clinic, city,
-          });
 
         } else {
           document.getElementById("profile-card").style.display = "none";
@@ -1596,7 +1471,7 @@
       const mode = document.getElementById("agent-mode") ? document.getElementById("agent-mode").value : "dynamic";
       agentStatusText.textContent = "Starting...";
       try {
-        const res = await fetch("/api/agent/start", {
+        const res = await fetch("/api/agent/start", { 
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ mode: mode })
@@ -1627,7 +1502,7 @@
       }
     };
 
-    // This page is the OUTBOUND console — make sure the outbound worker (agent_outbound.py,
+    // This page is the OUTBOUND console — make sure the outbound worker (agent.py,
     // "dynamic" mode, or the admin's "scripted" choice) is the one running, launching
     // it automatically if nothing is up, or switching over if the inbound worker was
     // left running from the /inbound page (only one agent worker runs at a time).
@@ -1663,7 +1538,7 @@
       const d = document.createElement("div");
       d.className = role === "You" ? "you" : "aarya";
       d.innerHTML = "<b>" + role + "</b> " + text;
-      tEl.appendChild(d); tEl.scrollTop = tEl.scrollHeight;
+      tEl.appendChild(d); d.scrollIntoView();
     }
     function nowStamp() {
       const d = new Date(), p = (n) => String(n).padStart(2, "0");
@@ -1727,7 +1602,7 @@
         room.on(LK.RoomEvent.TranscriptionReceived, (segments, participant) => {
           tContainer.style.display = "block";
           const who = participant && participant.identity === "web-caller" ? "You" : "Aarya";
-
+          
           segments.forEach((s) => {
             if (s.final) {
               if (interimDivs[s.id]) {
@@ -1746,7 +1621,7 @@
                 interimDivs[s.id] = d;
               }
               interimDivs[s.id].innerHTML = "<b>" + who + "</b> " + s.text + " <i>...</i>";
-              tEl.scrollTop = tEl.scrollHeight;
+              interimDivs[s.id].scrollIntoView();
             }
           });
         });
@@ -1778,7 +1653,7 @@
         // own echo cancellation / noise suppression / gain control here is a free, zero-
         // latency first line of defense against background noise — it runs before audio
         // even leaves the caller's machine, on top of (not instead of) the server-side
-        // BVC (Background Voice Cancellation) the agent applies in agent_outbound.py.
+        // BVC (Background Voice Cancellation) the agent applies in agent.py.
         const micOpts = {
           ...(selectedMicId ? { deviceId: selectedMicId } : {}),
           echoCancellation: true,
@@ -1847,7 +1722,7 @@
 
     endBtn.onclick = async () => { stopRecording(); if (room) await room.disconnect(); };
 
-    // ── Live latency (reads agent_outbound.py's own latency_logs_outbound.csv via
+    // ── Live latency (reads agent.py's own latency_logs_outbound.csv via
     // /api/latency_live — same widget/visual language as inbound_dashboard.html,
     // kept on its own endpoint so outbound and inbound call metrics never mix) ──
     const LAT_TIER_COLOR = {
