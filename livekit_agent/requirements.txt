@@ -1,13 +1,22 @@
-# LiveKit Vetic voice agent — Sarvam STT + TTS, Claude LLM.
-livekit-agents[anthropic]~=1.2
+# LiveKit Vetic voice agent — Sarvam STT + TTS, gpt-4o-mini LLM (via livekit-plugins-openai).
+livekit-agents[openai]~=1.2
 livekit-plugins-sarvam~=1.2
+livekit-plugins-noise-cancellation>=0.3.0  # >=0.3.0 required — 0.2.6's NC() panics on session teardown
 
 # customer DB
 pandas>=2.0
 openpyxl>=3.1
 python-dotenv>=1.0
+pymongo>=4.6  # live customer lookup (vetic_live_db.py), falls back to vetic_db.py's static file if unset
 
 # web-call front-end (token + page server)
 fastapi>=0.110
 uvicorn>=0.27
 imageio-ffmpeg>=0.4   # bundles an ffmpeg binary for post-call webm->mp3 conversion
+
+# call-event reporting to the ai-call-agent dashboard backend (event_reporter.py)
+httpx>=0.27
+
+# Vector DB
+chromadb
+sentence-transformers

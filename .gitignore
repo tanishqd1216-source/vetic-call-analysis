@@ -1,20 +1,34 @@
-venv/
-.venv/
+# Secrets — never commit
 .env
 .env.*
+*.env
+**/conversation_history.json
+**/load_csv.py
+**/make_call.py
+**/download_recordings.py
+
+# Python caches & virtual environments
 __pycache__/
 *.pyc
+*.pyo
+venv/
+**/venv/
+.venv/
+**/.venv/
+archive/stale_venv/
+
+# Windows artifacts
+desktop.ini
+Thumbs.db
+*.lnk
+
+# Customer data & recordings — never commit (PII)
+**/Call Analysis*.csv
+**/audio/
+**/recordings/
+
+# Large binaries & logs
+**/cloudflared.exe
+**/cloudflared.log
 *.log
-
-# backup / scratch artifacts — keep out of the repo
-Backup_twilio-test Backup/
-tunnel_url.txt
-latency_logs.old.csv
-latency_logs.prev.csv
-
-# Runtime data file that captured a live API key + DB URL — keep out
-conversation_history.json
-
-# make_call.py and its compiled bytecode hold a hardcoded Twilio token — keep out
-twilio-test/make_call.py
-
+livekit_agent/logs/

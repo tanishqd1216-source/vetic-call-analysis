@@ -1,0 +1,19 @@
+# Web server / API
+fastapi
+uvicorn
+python-multipart      # required by FastAPI to parse Twilio's form-encoded webhooks
+
+# Telephony + LLM + TTS
+twilio
+anthropic
+httpx                 # async client for Sarvam TTS (also Anthropic's transport)
+requests              # used for downloading call recordings
+
+# Customer database
+pandas
+openpyxl              # required by pandas to read the .xlsx ticket database
+psycopg2-binary
+
+# Config
+python-dotenv
+langsmith

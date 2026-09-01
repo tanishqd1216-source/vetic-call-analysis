@@ -1,0 +1,127 @@
+{
+  "scenario": "grooming",
+  "stage": "introduction",
+  "description": "RAG knowledge base for the introduction stage of an outbound grooming-appointment call. Each instance is retrieved by embedding the caller's SpeechResult and matching against `triggers`, then injected into the system prompt as a few-shot example. Responses follow BASE_RULES: English only, <=3 sentences, no fillers, no markdown. Control tags ([NEXT_STAGE], [END_CALL]) are string-matched in server.py and must be preserved verbatim.",
+  "instances": [
+    {
+      "id": "groom-intro-01",
+      "intent": "answer_purpose_unknown",
+      "control_tag": null,
+      "triggers": [
+        "Hello?",
+        "Yes, who is this?",
+        "Hi, speaking.",
+        "Hello, who's calling?"
+      ],
+      "response": "Good morning, this is Aarya from Vetic Pet Care. I'm calling about a grooming session for your pet, is now a good time for a quick call?"
+    },
+    {
+      "id": "groom-intro-02",
+      "intent": "identify_vetic_or_privacy",
+      "control_tag": null,
+      "triggers": [
+        "What is Vetic?",
+        "How do you have my number?",
+        "Do I know you?",
+        "Where did you get my contact?"
+      ],
+      "response": "Vetic is your pet's healthcare and grooming partner, and you're in our records from a previous visit or sign-up. I'm only calling about your pet's grooming, nothing else. Shall I go ahead?"
+    },
+    {
+      "id": "groom-intro-03",
+      "intent": "caller_busy_reschedule",
+      "control_tag": "[END_CALL]",
+      "triggers": [
+        "I'm in a meeting",
+        "Call me later",
+        "Not a good time",
+        "I'm busy right now"
+      ],
+      "response": "Of course, I'll keep this short for later. Would this evening around six work for a two-minute call? Thank you, have a lovely day! [END_CALL]"
+    },
+    {
+      "id": "groom-intro-04",
+      "intent": "confirm_interest_grooming",
+      "control_tag": "[NEXT_STAGE]",
+      "triggers": [
+        "Yes, tell me",
+        "Sure, what about grooming?",
+        "Go ahead",
+        "Okay I'm listening"
+      ],
+      "response": "Wonderful! Your pet is due for a grooming session, and I'd love to get one booked for you. May I quickly check, are you an existing Vetic customer, or is this your first time with us? [NEXT_STAGE]"
+    },
+    {
+      "id": "groom-intro-05",
+      "intent": "request_book_slot",
+      "control_tag": "[NEXT_STAGE]",
+      "triggers": [
+        "I want to book grooming",
+        "Can you book a bath and haircut?",
+        "Set up an appointment",
+        "I'd like to schedule a grooming"
+      ],
+      "response": "Absolutely, I'd be happy to set that up for your pet. First, are you an existing customer with us, or should I create a new profile? [NEXT_STAGE]"
+    },
+    {
+      "id": "groom-intro-06",
+      "intent": "ask_what_included",
+      "control_tag": "[NEXT_STAGE]",
+      "triggers": [
+        "What's in the grooming?",
+        "Do you do nails too?",
+        "What does a session cover?",
+        "What all is included?"
+      ],
+      "response": "Our standard grooming covers a bath, haircut, nail trimming, and ear cleaning, all done by trained groomers. Would you like me to book a session for your pet? [NEXT_STAGE]"
+    },
+    {
+      "id": "groom-intro-07",
+      "intent": "ask_price",
+      "control_tag": "[NEXT_STAGE]",
+      "triggers": [
+        "How much does it cost?",
+        "What are the charges?",
+        "Price for grooming?",
+        "What's the fee?"
+      ],
+      "response": "Grooming starts based on your pet's breed and coat, and I can share the exact price once I pull up the details. To do that, may I confirm whether you're an existing customer? [NEXT_STAGE]"
+    },
+    {
+      "id": "groom-intro-08",
+      "intent": "pet_special_needs",
+      "control_tag": "[NEXT_STAGE]",
+      "triggers": [
+        "My dog is very nervous",
+        "He's quite old now",
+        "She has a skin allergy",
+        "He gets aggressive with strangers"
+      ],
+      "response": "Thank you for letting me know, that really helps our groomers prepare gently for your pet. We handle anxious and senior pets with extra care, and can note any skin concerns. Shall I take down a few details to book the right session? [NEXT_STAGE]"
+    },
+    {
+      "id": "groom-intro-09",
+      "intent": "existing_booking_reminder",
+      "control_tag": "[NEXT_STAGE]",
+      "triggers": [
+        "I already have an appointment",
+        "Isn't it tomorrow?",
+        "We're already booked",
+        "I scheduled it last week"
+      ],
+      "response": "Yes, that's exactly why I'm calling, to confirm your pet's grooming appointment. Does the scheduled time still work for you, or would you like to adjust it? [NEXT_STAGE]"
+    },
+    {
+      "id": "groom-intro-10",
+      "intent": "medical_concern_route_to_vet",
+      "control_tag": "[NEXT_STAGE]",
+      "triggers": [
+        "He's been vomiting",
+        "She's limping",
+        "He's not eating well",
+        "My pet seems sick"
+      ],
+      "response": "I'm sorry to hear that, your pet's health comes first before any grooming. This sounds like something our vet should look at, may I take a few details so we can arrange a consultation? [NEXT_STAGE]"
+    }
+  ]
+}

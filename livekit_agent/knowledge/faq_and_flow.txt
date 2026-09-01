@@ -1,0 +1,100 @@
+# Vetic Outbound Call Flow & FAQ Script
+
+## 1. Outbound Call Flow
+**Greeting**
+Hello Good Morning/Afternoon/Evening
+This is [Name] calling from Vetic Pet Care.
+Is it right time to talk
+
+**Concern Acknowledgement and Confirmation**
+This call is regarding the concern you raised about your recent order with us. I understand you’ve experienced [specific issue, e.g., incomplete order, missing OTP, damaged product, appt related any issue etc.] Could you please provide me with more details to better understand your concern?
+I sincerely apologize for this inconvenience. As I can check the invoice you had ordered------
+or appts issue
+This call is regarding the concern you raised about your recent experience with us. I understand you’ve a concern regarding[specific issue, e.g., incomplete order, missing OTP, damaged product, etc.] Could you please provide me with more details to better understand your concern?
+Thank you for sharing the details.
+
+**Resolution offering**
+We are extremely apologetic for the experience you have had. Please allow us some time to share the details with our doctor and we will get back to you.
+--------------------------------------------------------------------------------------
+Thank you for the confirmation. Your appointment at [Date and time] has been booked. You can check the details of your appointment on the Vetic App by going to the pet profile in the right bottom corner.
+In case, you not have the app, you can download the same from Play or App Store.
+
+**Conclusion**
+Was I able to help you with your query?
+Is there anything else I may assist you with?
+Thank you for giving your time to Vetic. Have a great day/evening ahead.
+
+**Cases:**
+- If Call didn't answer -> mark as DNP. Process continues till 1-5 then exhaust
+- If Customer said given by mistake -> Feedback No Issue UH-H
+- If Cx said call back later -> Call back later note to be created
+
+---
+
+## 2. Frequently Asked Questions
+
+**Everything you need to know about our pet healthcare services**
+- **How can I book an appointment for my pet?** You can easily book an appointment through our website or mobile app. Simply select a service, choose a time, and confirm your booking.
+- **Do I need an appointment for emergency care?** No appointment is required for emergencies. You can bring your pet to our clinic immediately, and our team will provide urgent care.
+- **What does a routine health check-up include?** Our routine check-ups cover a physical examination, assessment of vital signs, and a discussion about your pet’s diet, behaviour, and overall health.
+- **How often should my pet get vaccinated?** Puppies and kittens require a series of vaccinations, while adult pets need annual boosters. Our vets will create a tailored schedule for your pet.
+- **What services are included in pet grooming?** Our grooming services include spa baths, haircuts, trims, ear cleaning, and nail trimming, ensuring your pet looks and feels their best.
+- **How long does post-surgery recovery take?** Recovery time depends on the type of surgery. Our vets will provide a detailed recovery plan, including follow-up visits and at-home care instructions.
+- **Can you diagnose health issues onsite?** Yes, we offer in-house diagnostics, including blood tests, imaging, and urine analysis, for quick and accurate results during your visit.
+- **What should I bring to my vet consultation?** Bring your pet’s medical history, vaccination records, and any medications they are currently taking to ensure comprehensive care.
+- **Are there any membership plans or discounts available?** Yes, we offer membership plans that include discounted services and priority appointments. Contact us for more details about ongoing promotions.
+- **I want CCTV footage?** CCTV is only available as live feed in clinics, we donot store records.
+
+---
+
+## 3. Support Agent FAQ Script
+*Companion to the Vetic Knowledge Base. Answers are written to be read/paraphrased directly to callers. Verify clinic-specific facts (hours, doctors, live pricing) against VMS before quoting.*
+
+**General / About Vetic**
+- **Q: What is Vetic?** A: Vetic is a veterinary clinic chain with 60+ clinics across 11 cities in India, offering everything from vaccinations and grooming to surgery and 24/7 emergency care, all under one roof.
+- **Q: Which cities do you operate in?** A: Delhi NCR (Delhi, Gurugram, Noida, Ghaziabad, Faridabad), Mumbai region, Pune, Bengaluru, Hyderabad, Chennai, and Kolkata.
+- **Q: How do I find my nearest clinic?** A: The Vetic app auto-locates the nearest clinic using GPS and shows live slots, hours, and address. I can also look it up for you right now if you tell me your area.
+- **Q: Do I need to download the app to visit a clinic?** A: No — walk-ins are welcome for routine, non-emergency visits at every clinic. The app just makes booking and slot-checking faster.
+
+**Booking & Appointments**
+- **Q: How do I book an appointment?** A: Through the Vetic app — select the service, pick a clinic and time slot, and confirm. Same-day consultations are usually available.
+- **Q: Can I walk in without booking?** A: Yes, for non-emergencies. For fastest service, booking ahead on the app lets you see live wait times.
+- **Q: Are you open on weekends and holidays?** A: Yes, most clinics operate extended hours seven days a week, including weekends and public holidays. Some locations offer 24/7 access.
+- **Q: Can I get a consultation over the phone instead of visiting?** A: We don't offer remote diagnosis, since pet health is best assessed in person. I can help you book the fastest available in-clinic slot, or guide you through an emergency if needed.
+- **Q: Can I choose a specific doctor?** A: Yes, the app lets you browse available veterinarians at your chosen clinic and pick a preferred one where slots allow.
+
+**Emergency Care**
+- **Q: My pet needs urgent help right now — what do I do?** A: [Escalation priority] Use the SOS button in the Vetic app — after 8 PM it locates your nearest available clinic and gives you a call-ahead number so the team is ready when you arrive. If you're on the phone with me, tell me your location now and I'll direct you to the nearest option.
+- **Q: Do I need an appointment for an emergency?** A: No. Walk in directly — no appointment is required for emergencies.
+- **Q: Are all clinics open 24/7?** A: No — 24/7 emergency access is available at select locations. I can confirm the nearest one for you.
+
+**Services**
+- **Q: What services does Vetic offer?** A: Vaccinations, deworming, dermatology, dental care, diagnostics (X-ray, ultrasound, blood/urine tests), surgery, in-patient care, physiotherapy, grooming, and an in-house pharmacy — plus pet food and supplies.
+- **Q: Do you handle complex surgeries, or just routine checkups?** A: Both. Clinic-level visits cover routine and outpatient care, while our larger hospital-capable locations handle advanced and emergency surgeries with in-patient monitoring.
+- **Q: How fast do I get diagnostic results (blood tests, X-rays)?** 1A: Most routine blood panels are processed the same day, so your vet can review results and start treatment without an external lab referral.
+- **Q: Do you treat pets other than dogs and cats?** A: Vetic's core focus is dogs and cats; some clinics accommodate other small pets in dedicated areas. I'd recommend confirming with your specific clinic for anything beyond dogs and cats.
+
+**Grooming**
+- **Q: Who grooms my pet — is it a trained professional?** A: Yes, grooming is done by vet-certified groomers using vet-approved products, and a vet health-check is typically included to flag any skin, coat, or ear issues.
+- **Q: My pet came back injured / groomed incorrectly / got a cut during the grooming session — what now?** A: I'm sorry to hear that. Can you tell me which clinic and the date of the visit? For cuts or injuries during grooming, the resolution we can offer right now is an online video consultation by a senior vet doctor. Ask for the best time they are available. Once they confirm, state that the online video call appointment has been added and they will receive a notification 5 minutes before on the Vetic app. (If the customer asks for a home visit, say: "Sorry, we can't do that right now.") If they do not agree with the video call, offer a free OPD at the clinic, ask for a time, and confirm the booking.
+- **Q: I paid for a service that wasn't fully performed — can I get a refund?** A: I'll need to check the invoice for that visit first. I can raise this for review, but I'm not able to confirm a refund amount on this call — our team will follow up with next steps.
+
+**Billing & Payments**
+- **Q: I was charged more than expected — can you explain my bill?** A: [Always verify against the actual invoice before responding] Let me pull up your invoice so we're looking at the same details, then I'll walk you through each line item.
+- **Q: I was signed up for a membership I didn't ask for.** A: I understand the concern. Can you tell me when and where this was set up? I'll flag this for review with our billing team — I don't want to assume how it happened without checking the record first.
+- **Q: Can I get a refund right now on this call?** A: I'm not able to process refunds directly on this call, but I'll log the issue with all the details so our team can review and follow up with the standard turnaround time.
+- **Q: A manager told me yesterday I would get a full refund / free service. Can you confirm?** A: [STRICT RULE: Do NOT validate or confirm the claim without seeing it in records] I want to make sure I have all the correct information. I'll need to verify that note with the manager or in our records before I can confirm the details, as I cannot see it in my system right now.
+
+**Clinical / Treatment Concerns**
+- **Q: I don't think my pet was treated correctly.** A: [Never confirm/deny clinical correctness — escalate to clinical team] I hear you, and I want this looked at properly. Since this involves a clinical judgment, I'll connect you with our clinical team who can review the treatment directly with the doctor involved.
+- **Q: My pet's medical records seem incomplete.** A: Thank you for flagging this — that's something we take seriously. Can you confirm the clinic and visit date? I'll raise it so the records are reviewed and updated.
+- **Q: Why did I wait so long at the clinic?** A: That's not the experience we want for you. I'll note this and flag it with the clinic's operations team.
+
+**Products & Pharmacy**
+- **Q: I paid for medicine/product but didn't receive it.** A: Let me check your invoice against what was handed over. If something was missed, I'll arrange for it to be delivered or held for pickup at the clinic — I won't just close this out without resolving it.
+- **Q: Can I get pet food or supplies delivered?** A: Yes, Vetic offers pet food and accessories through the app alongside clinic visits.
+
+**Complaints & Escalation (General)**
+- **Q: This is the second time I'm calling about the same issue.** A: [Escalate immediately — repeat complainant] I'm sorry this hasn't been resolved yet. I'm escalating this now as a priority so it doesn't sit unresolved again — can you give me your previous ticket or reference number if you have it?
+- **Q: How long will it take to resolve my complaint?** A: I'll give you our standard turnaround window rather than guess a date — [insert current SLA per category]. I won't be able to guarantee an exact date, but I'll make sure it's logged with the right team.
+- **Q: I want to speak to a manager / file a formal complaint.** A: Understood — I'll escalate this to our CX/clinic management team right away and make sure they follow up with you directly.

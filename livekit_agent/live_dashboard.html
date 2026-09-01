@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vetic Agent — Live Latency</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page:        #f9f9f7;
+    --surface:     #fcfcfb;
+    --ink:         #0b0b0b;
+    --ink-2:       #52514e;
+    --muted:       #898781;
+    --grid:        #e1e0d9;
+    --border:      rgba(11,11,11,0.10);
+    --series-1:    #2a78d6;
+    --st-good:     #0ca30c;
+    --st-warning:  #fab219;
+    --st-serious:  #ec835a;
+    --st-critical: #d03b3b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7;
+      --muted: #898781; --grid: #2c2c2a; --border: rgba(255,255,255,0.10);
+      --series-1: #3987e5;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .page { max-width: 980px; margin: 0 auto; padding: 24px 20px 50px; }
+
+  header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; gap: 12px; flex-wrap: wrap; }
+  header h1 { font-size: 1.25rem; margin: 0; }
+  .status { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--ink-2); }
+  .dot-live { width: 9px; height: 9px; border-radius: 50%; background: var(--st-good); box-shadow: 0 0 0 0 rgba(12,163,12,0.5); animation: pulse 1.6s infinite; }
+  .dot-idle { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); }
+  @keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(12,163,12,0.45); }
+    70%  { box-shadow: 0 0 0 7px rgba(12,163,12,0); }
+    100% { box-shadow: 0 0 0 0 rgba(12,163,12,0); }
+  }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; margin-bottom: 16px; }
+  .card h2 { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; margin: 0 0 12px; }
+
+  .latest-grid { display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: center; }
+  .latest-value { font-size: 2.4rem; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; }
+  .latest-value small { font-size: 1rem; color: var(--ink-2); font-weight: 500; margin-left: 4px; }
+  .latest-meta { font-size: 0.78rem; color: var(--muted); margin-top: 6px; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 600; padding: 3px 9px 3px 7px; border-radius: 20px; background: var(--page); border: 1px solid var(--border); }
+  .chip .dot { width: 7px; height: 7px; border-radius: 50%; }
+
+  .chain-bar { display: flex; height: 32px; border-radius: 7px; overflow: hidden; gap: 2px; margin-top: 4px; }
+  .chain-seg { display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.68rem; font-weight: 700; font-variant-numeric: tabular-nums; text-shadow: 0 1px 1px rgba(0,0,0,0.25); white-space: nowrap; overflow: hidden; }
+  .chain-legend { display: flex; gap: 14px; margin-top: 8px; font-size: 0.72rem; color: var(--ink-2); flex-wrap: wrap; }
+  .chain-legend span.sw { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 5px; }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .kpi .label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
+  .kpi .value { font-size: 1.3rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+  .strip-wrap { position: relative; padding-top: 16px; }
+  .strip { display: flex; align-items: flex-end; gap: 3px; height: 90px; position: relative; }
+  .strip .bar-col { flex: 1; min-width: 4px; height: 100%; display: flex; flex-direction: column-reverse; border-radius: 3px 3px 0 0; overflow: hidden; transition: height .25s ease; cursor: pointer; }
+  .strip .bar-col .seg { width: 100%; }
+  .target-ref { position: absolute; left: 0; right: 0; border-top: 1.5px dashed var(--st-critical); pointer-events: none; }
+  .target-ref-label { position: absolute; right: 0; top: -15px; font-size: 0.64rem; color: var(--st-critical); font-weight: 700; }
+  .strip-legend { display: flex; gap: 14px; margin-top: 10px; font-size: 0.72rem; color: var(--ink-2); flex-wrap: wrap; }
+  .strip-legend span.sw { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 5px; }
+
+  .target-banner { display: flex; align-items: center; gap: 10px; border-left: 4px solid var(--st-good); font-size: 0.85rem; }
+  .target-banner .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--st-good); flex: none; }
+  .target-banner.warn { border-left-color: var(--st-warning); }
+  .target-banner.warn .dot { background: var(--st-warning); }
+  .target-banner.crit { border-left-color: var(--st-critical); }
+  .target-banner.crit .dot { background: var(--st-critical); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+  th { text-align: left; padding: 7px 10px; font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); border-bottom: 1px solid var(--border); }
+  td { padding: 6px 10px; border-bottom: 1px solid var(--border); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  .idle-banner { text-align: center; padding: 30px; color: var(--muted); font-size: 0.9rem; }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <h1>Vetic Agent — Live Latency</h1>
+    <div class="status" id="status"><span class="dot-idle"></span><span id="status-text">connecting…</span></div>
+  </header>
+
+  <div id="idle-banner" class="card idle-banner" style="display:none;"></div>
+
+  <div id="live-content" style="display:none;">
+    <div class="card target-banner" id="target-banner">
+      <span class="dot"></span>
+      <span id="target-banner-text">–</span>
+    </div>
+
+    <div class="card">
+      <h2>Most recent turn</h2>
+      <div class="latest-grid">
+        <div>
+          <div class="latest-value" id="latest-total">–<small>s</small></div>
+          <div class="latest-meta" id="latest-meta">–</div>
+          <div class="latest-meta" id="latest-tokens">Tokens: –</div>
+        </div>
+        <div>
+          <div class="chain-bar" id="chain-bar"></div>
+          <div class="chain-legend" id="chain-legend"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Rolling stats (last <span id="rolling-n">20</span> turns)</h2>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="label">Median</div><div class="value" id="roll-p50">–</div></div>
+        <div class="kpi"><div class="label">P95</div><div class="value" id="roll-p95">–</div></div>
+        <div class="kpi"><div class="label">Mean</div><div class="value" id="roll-mean">–</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Recent turns (last <span id="strip-n">40</span>) — latency budget vs. 800ms target</h2>
+      <div class="strip-wrap">
+        <div class="strip" id="strip"></div>
+      </div>
+      <div class="strip-legend">
+        <span><span class="sw" style="background:var(--series-1)"></span>EOU wait</span>
+        <span><span class="sw" style="background:#eb6834"></span>LLM TTFT</span>
+        <span><span class="sw" style="background:#1baf7a"></span>TTS TTFB</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Turn-by-turn</h2>
+      <table>
+        <thead><tr><th>Time</th><th>EOU</th><th>LLM</th><th>TTS</th><th>Total</th><th>Health</th></tr></thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+const TIER_COLOR = {
+  instant: 'var(--st-good)', acceptable: 'var(--st-warning)',
+  sluggish: 'var(--st-serious)', broken: 'var(--st-critical)',
+};
+const TIER_LABEL = { instant: 'Good', acceptable: 'Fair', sluggish: 'Slow', broken: 'Critical' };
+const TARGET_S = 0.8; // hard round-trip latency budget for this pipeline
+
+function fmtS(v) { return (Math.round(v * 100) / 100).toFixed(2); }
+function fmtTime(t) {
+  // Timestamp is "YYYY-MM-DD HH:MM:SS" local server time — show HH:MM:SS only.
+  const parts = (t || '').split(' ');
+  return parts[1] || t || '–';
+}
+
+let lastSeenId = null;
+
+async function poll() {
+  let data;
+  try {
+    const res = await fetch('/api/latency_live?recent=40&rolling=20', { cache: 'no-store' });
+    data = await res.json();
+  } catch (e) {
+    document.getElementById('status-text').textContent = 'server unreachable';
+    document.getElementById('status').querySelector('span:first-child').className = 'dot-idle';
+    return;
+  }
+
+  if (data.error) {
+    document.getElementById('idle-banner').style.display = 'block';
+    document.getElementById('idle-banner').textContent = data.error;
+    document.getElementById('live-content').style.display = 'none';
+    return;
+  }
+
+  const idle = data.seconds_since_last_turn === null || data.seconds_since_last_turn > 30;
+  const statusDot = document.getElementById('status').querySelector('span:first-child');
+  const statusText = document.getElementById('status-text');
+  if (idle) {
+    statusDot.className = 'dot-idle';
+    statusText.textContent = data.rows_total
+      ? `idle — last turn ${data.seconds_since_last_turn ?? '?'}s ago`
+      : 'idle — no turns logged yet';
+  } else {
+    statusDot.className = 'dot-live';
+    statusText.textContent = `live — last turn ${data.seconds_since_last_turn}s ago (${data.rows_total} total)`;
+  }
+
+  if (!data.latest) {
+    document.getElementById('idle-banner').style.display = 'block';
+    document.getElementById('idle-banner').textContent = 'No turns logged yet — start a call to see live data here.';
+    document.getElementById('live-content').style.display = 'none';
+    return;
+  }
+  document.getElementById('idle-banner').style.display = 'none';
+  document.getElementById('live-content').style.display = 'block';
+
+  // ---- latest turn card ----
+  const latest = data.latest;
+  document.getElementById('latest-total').innerHTML = `${fmtS(latest.total)}<small>s</small>`;
+  document.getElementById('latest-meta').textContent =
+    `${fmtTime(latest.t)} · ${latest.id} · ${TIER_LABEL[latest.bucket] || latest.bucket}`;
+  document.getElementById('latest-tokens').textContent =
+    `Tokens: ${(latest.in_tok ?? 0).toLocaleString()} in · ${(latest.out_tok ?? 0).toLocaleString()} out`;
+
+  const chainBar = document.getElementById('chain-bar');
+  const chainLegend = document.getElementById('chain-legend');
+  chainBar.innerHTML = '';
+  chainLegend.innerHTML = '';
+  const parts = [
+    { label: 'EOU wait', color: 'var(--series-1)', v: latest.eou },
+    { label: 'LLM TTFT', color: '#eb6834', v: latest.llm },
+    { label: 'TTS TTFB', color: '#1baf7a', v: latest.tts },
+  ];
+  const sum = parts.reduce((s, p) => s + p.v, 0) || 1;
+  parts.forEach(p => {
+    const pct = p.v / sum * 100;
+    const seg = document.createElement('div');
+    seg.className = 'chain-seg';
+    seg.style.flex = Math.max(pct, 0.001);
+    seg.style.background = p.color;
+    seg.textContent = pct >= 12 ? fmtS(p.v) + 's' : '';
+    chainBar.appendChild(seg);
+    const leg = document.createElement('span');
+    leg.innerHTML = `<span class="sw" style="background:${p.color}"></span>${p.label} ${fmtS(p.v)}s`;
+    chainLegend.appendChild(leg);
+  });
+
+  // ---- rolling stats ----
+  if (data.rolling) {
+    document.getElementById('rolling-n').textContent = data.rolling.count;
+    document.getElementById('roll-p50').textContent = fmtS(data.rolling.p50) + 's';
+    document.getElementById('roll-p95').textContent = fmtS(data.rolling.p95) + 's';
+    document.getElementById('roll-mean').textContent = fmtS(data.rolling.mean) + 's';
+  }
+
+  // ---- target banner ----
+  const recentForBanner = data.recent || [];
+  if (recentForBanner.length) {
+    const overCount = recentForBanner.filter(r => r.total > TARGET_S).length;
+    const pct = Math.round((overCount / recentForBanner.length) * 100);
+    const banner = document.getElementById('target-banner');
+    banner.classList.remove('warn', 'crit');
+    if (pct > 50) banner.classList.add('crit');
+    else if (pct > 20) banner.classList.add('warn');
+    document.getElementById('target-banner-text').innerHTML =
+      `<b>${overCount}/${recentForBanner.length} of the last ${recentForBanner.length} turns</b> exceeded the 800ms round-trip target (${pct}%)`;
+  }
+
+  // ---- strip chart: stacked EOU/LLM/TTS per turn, vs. 800ms target ----
+  const strip = document.getElementById('strip');
+  strip.innerHTML = '';
+  const recent = data.recent || [];
+  document.getElementById('strip-n').textContent = recent.length;
+  const maxV = Math.max(...recent.map(r => r.total), TARGET_S * 1.15, 1);
+  recent.forEach(r => {
+    const col = document.createElement('div');
+    col.className = 'bar-col';
+    col.style.height = Math.max((r.total / maxV) * 100, 3) + '%';
+    col.title = `${fmtTime(r.t)} — EOU ${fmtS(r.eou)}s · LLM ${fmtS(r.llm)}s · TTS ${fmtS(r.tts)}s · total ${fmtS(r.total)}s (${TIER_LABEL[r.bucket]})`;
+    const segs = [
+      { v: r.eou, color: 'var(--series-1)' },
+      { v: r.llm, color: '#eb6834' },
+      { v: r.tts, color: '#1baf7a' },
+    ];
+    const segSum = segs.reduce((s, p) => s + p.v, 0) || 1;
+    segs.forEach(p => {
+      const seg = document.createElement('div');
+      seg.className = 'seg';
+      seg.style.height = (p.v / segSum * 100) + '%';
+      seg.style.background = p.color;
+      col.appendChild(seg);
+    });
+    strip.appendChild(col);
+  });
+
+  const targetPct = Math.min((TARGET_S / maxV) * 100, 100);
+  let targetRef = strip.querySelector('.target-ref');
+  if (!targetRef) {
+    targetRef = document.createElement('div');
+    targetRef.className = 'target-ref';
+    const label = document.createElement('span');
+    label.className = 'target-ref-label';
+    label.textContent = '800ms';
+    targetRef.appendChild(label);
+    strip.appendChild(targetRef);
+  }
+  targetRef.style.bottom = targetPct + '%';
+
+  // ---- table (newest first) ----
+  const tbody = document.getElementById('table-body');
+  tbody.innerHTML = recent.slice().reverse().slice(0, 15).map(r => `
+    <tr>
+      <td>${fmtTime(r.t)}</td>
+      <td>${fmtS(r.eou)}s</td>
+      <td>${fmtS(r.llm)}s</td>
+      <td>${fmtS(r.tts)}s</td>
+      <td><b>${fmtS(r.total)}s</b></td>
+      <td><span class="chip"><span class="dot" style="background:${TIER_COLOR[r.bucket]}"></span>${TIER_LABEL[r.bucket]}</span></td>
+    </tr>
+  `).join('');
+}
+
+poll();
+setInterval(poll, 1500);
+</script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"name": "claude_WO_API",
+			"path": ".."
+		},
+		{
+			"name": "sample data",
+			"path": "../../../Desktop/sample data"
+		},
+		{
+			"name": "audio",
+			"path": "../../audio"
+		},
+		{
+			"name": "recordings",
+			"path": "../../recordings"
+		}
+	],
+	"settings": {
+		"git.ignoreLimitWarning": true
+	}
+}

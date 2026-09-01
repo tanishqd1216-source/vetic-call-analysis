@@ -1,0 +1,21 @@
+2026-07-08 18:32:37.053 IST [26604] LOG:  starting PostgreSQL 18.4 on x86_64-windows, compiled by msvc-19.44.35227, 64-bit
+2026-07-08 18:32:37.059 IST [26604] LOG:  listening on IPv6 address "::1", port 5433
+2026-07-08 18:32:37.059 IST [26604] LOG:  listening on IPv4 address "127.0.0.1", port 5433
+2026-07-08 18:32:37.125 IST [24108] LOG:  database system was shut down at 2026-07-08 18:32:25 IST
+2026-07-08 18:32:37.132 IST [26604] LOG:  database system is ready to accept connections
+2026-07-08 18:48:54.286 IST [19928] LOG:  starting PostgreSQL 18.4 on x86_64-windows, compiled by msvc-19.44.35227, 64-bit
+2026-07-08 18:48:54.293 IST [19928] LOG:  listening on IPv6 address "::1", port 5433
+2026-07-08 18:48:54.294 IST [19928] LOG:  listening on IPv4 address "127.0.0.1", port 5433
+2026-07-08 18:48:54.366 IST [20080] LOG:  database system was interrupted; last known up at 2026-07-08 18:32:37 IST
+2026-07-08 18:48:59.917 IST [20080] LOG:  could not open file "./logfile": sharing violation
+2026-07-08 18:48:59.917 IST [20080] DETAIL:  Continuing to retry for 30 seconds.
+2026-07-08 18:48:59.917 IST [20080] HINT:  You might have antivirus, backup, or similar software interfering with the database system.
+2026-07-08 18:49:07.547 IST [1488] FATAL:  the database system is starting up
+2026-07-08 18:49:17.149 IST [17892] FATAL:  the database system is starting up
+2026-07-08 18:49:26.765 IST [20080] LOG:  syncing data directory (fsync), elapsed time: 32.39 s, current path: ./pg_commit_ts
+2026-07-08 18:49:26.792 IST [20080] LOG:  database system was not properly shut down; automatic recovery in progress
+2026-07-08 18:49:26.795 IST [20080] LOG:  invalid record length at 0/17F1330: expected at least 24, got 0
+2026-07-08 18:49:26.795 IST [20080] LOG:  redo is not required
+2026-07-08 18:49:26.798 IST [12812] LOG:  checkpoint starting: end-of-recovery immediate wait
+2026-07-08 18:49:26.809 IST [12812] LOG:  checkpoint complete: wrote 0 buffers (0.0%), wrote 3 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.002 s, total=0.012 s; sync files=2, longest=0.002 s, average=0.001 s; distance=0 kB, estimate=0 kB; lsn=0/17F1330, redo lsn=0/17F1330
+2026-07-08 18:49:26.813 IST [19928] LOG:  database system is ready to accept connections
