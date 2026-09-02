@@ -1,0 +1,17 @@
+[
+  {
+    "sample": 1,
+    "verdict": "PASS",
+    "reason": "The agent explicitly escalated the discount issue to the Finance team and the call-quality problem to the Tech team, matching the expected routing."
+  },
+  {
+    "sample": 2,
+    "verdict": "PASS",
+    "reason": "The resolution explicitly escalates the discount-code issue to the Finance team and the call-quality/dropped-call issue to the Tech team, matching the expected routing."
+  },
+  {
+    "sample": 3,
+    "verdict": "PASS",
+    "reason": "The agent explicitly routes the discount issue to Finance and the call-quality problem to the Tech team, providing correct, specific escalations instead of a generic one."
+  }
+]

@@ -1,0 +1,1002 @@
+[
+  {
+    "idx": 1,
+    "category": "Grooming Related Issue",
+    "subcategory": "Uneven Haircut",
+    "caller_line": "The groomer gave my dog a really uneven haircut, one side is way shorter than the other.",
+    "legacy_department": "Clinic",
+    "current_expected_team": "Clinic",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 2,
+    "category": "Grooming Related Issue",
+    "subcategory": "Injury during service",
+    "caller_line": "My cat got hurt during the grooming session yesterday, there's a small cut on her paw.",
+    "legacy_department": "Clinic",
+    "current_expected_team": "Clinic",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 3,
+    "category": "Grooming Related Issue",
+    "subcategory": "Incomplete Service",
+    "caller_line": "They didn't finish the full grooming package I paid for, only did a bath.",
+    "legacy_department": "Clinic",
+    "current_expected_team": "Clinic",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 4,
+    "category": "Grooming Related Issue",
+    "subcategory": "Allergy post service",
+    "caller_line": "My dog broke out in a rash after his grooming appointment, is that normal?",
+    "legacy_department": "Clinic",
+    "current_expected_team": "Clinic",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 5,
+    "category": "Grooming Related Issue",
+    "subcategory": "Unsatisfactory Service",
+    "caller_line": "Honestly the whole grooming experience was just bad, I'm not happy with any of it.",
+    "legacy_department": "Clinic",
+    "current_expected_team": "Clinic",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 6,
+    "category": "Grooming Related Issue",
+    "subcategory": "Parent instructions not followed",
+    "caller_line": "The groomer didn't follow the instructions I gave, I asked for a trim not a full shave.",
+    "legacy_department": "Clinic",
+    "current_expected_team": "Clinic",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 7,
+    "category": "Grooming Related Issue",
+    "subcategory": "Pet handling (grooming)",
+    "caller_line": "The staff handled my pet really roughly during the grooming, he was scared the whole time.",
+    "legacy_department": "Clinic",
+    "current_expected_team": "Clinic",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 8,
+    "category": "Grooming Related Issue",
+    "subcategory": "Service inclusions: Hygiene/Medicated Bath",
+    "caller_line": "I was told my pet gets a medicated bath included but that wasn't done.",
+    "legacy_department": "Clinic",
+    "current_expected_team": "Clinic",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 9,
+    "category": "Grooming Related Issue",
+    "subcategory": "Service Stopped (Anxious Pet)",
+    "caller_line": "My pet got too anxious mid-session so they stopped the grooming halfway.",
+    "legacy_department": "Clinic",
+    "current_expected_team": "Clinic (grooming team's own reschedule action — no team name required)",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 10,
+    "category": "Post Grooming Not given",
+    "subcategory": "Doctor was busy, Pet Parent didn't want to wait",
+    "caller_line": "The vet said my pet needed grooming after the checkup but nobody actually did the post-grooming.",
+    "legacy_department": "Clinic",
+    "current_expected_team": "Clinic (grooming team's own scheduling action — no team name required)",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 11,
+    "category": "Partial Service given Grooming",
+    "subcategory": "Correct appointment but Clinic suggested for partial service",
+    "caller_line": "I had a valid appointment but the clinic only gave partial grooming service, not what I booked.",
+    "legacy_department": "Clinic",
+    "current_expected_team": "Clinic",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 12,
+    "category": "OPD consultation Issue",
+    "subcategory": "Inapt Treatment",
+    "caller_line": "The doctor's treatment for my dog's ear infection doesn't seem right, he's worse now.",
+    "legacy_department": "Medex",
+    "current_expected_team": "Medex",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 13,
+    "category": "OPD consultation Issue",
+    "subcategory": "Communication lapse",
+    "caller_line": "The vet barely explained anything during the consult, I still don't understand what's wrong.",
+    "legacy_department": "Medex",
+    "current_expected_team": "Clinic team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 14,
+    "category": "OPD consultation Issue",
+    "subcategory": "Critical Pet",
+    "caller_line": "My pet is in really critical condition right now and I need urgent help.",
+    "legacy_department": "Medex",
+    "current_expected_team": "Medex",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 15,
+    "category": "OPD consultation Issue",
+    "subcategory": "Incorrect EMR/Prescription",
+    "caller_line": "The prescription they gave me has the wrong dosage written on it.",
+    "legacy_department": "Medex",
+    "current_expected_team": "Medex",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 16,
+    "category": "OPD consultation Issue",
+    "subcategory": "Pet Handling (in OPD)",
+    "caller_line": "Nobody handled my puppy properly during the OPD visit, he was struggling and no one helped.",
+    "legacy_department": "Medex",
+    "current_expected_team": "Medex",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 17,
+    "category": "OPD consultation Issue",
+    "subcategory": "EMR not filled by Dr.",
+    "caller_line": "The doctor never filled in the medical record after my pet's visit.",
+    "legacy_department": "Medex",
+    "current_expected_team": "Clinic team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (originally passed; re-checked for regression risk against today's prompt edits)"
+  },
+  {
+    "idx": 18,
+    "category": "OPD consultation Issue",
+    "subcategory": "EMR/Service/treatment/vaccination/Dressing Clarification",
+    "caller_line": "I want to know exactly what treatment and vaccination was given, the notes aren't clear.",
+    "legacy_department": "Medex",
+    "current_expected_team": "Medex",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 19,
+    "category": "Appointment_Process",
+    "subcategory": "Too Many Calls/messages",
+    "caller_line": "I keep getting calls from your sales team, like five times a day, please stop.",
+    "legacy_department": "Sales",
+    "current_expected_team": "Sales",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 20,
+    "category": "Appointment_Process",
+    "subcategory": "No Response from Vetic team",
+    "caller_line": "Nobody has gotten back to me after I requested an appointment two days ago.",
+    "legacy_department": "Sales",
+    "current_expected_team": "Sales",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 21,
+    "category": "Appointment_Process",
+    "subcategory": "Incorrect/Missing appointment",
+    "caller_line": "The appointment got booked wrong, wrong date and time altogether.",
+    "legacy_department": "Sales",
+    "current_expected_team": "Appointment-correction action (no team name required)",
+    "verdict": "PASS",
+    "verification": "live-verified this session (originally passed; re-checked for regression risk against today's prompt edits)"
+  },
+  {
+    "idx": 22,
+    "category": "Appointment_Process",
+    "subcategory": "Incorrect price/information provided",
+    "caller_line": "I was quoted one price on the call but charged something completely different.",
+    "legacy_department": "Sales",
+    "current_expected_team": "Operations team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 23,
+    "category": "Appointment_Process",
+    "subcategory": "Staff Behaviour",
+    "caller_line": "The person on the phone was quite rude while booking my appointment.",
+    "legacy_department": "Sales",
+    "current_expected_team": "Operations team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 24,
+    "category": "Appointment_Process",
+    "subcategory": "Others",
+    "caller_line": "I have a general question about how the appointment process works.",
+    "legacy_department": "Clinic",
+    "current_expected_team": "Clinic",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 25,
+    "category": "Appointment_Process",
+    "subcategory": "Prices too high",
+    "caller_line": "The consultation prices seem way too high compared to before.",
+    "legacy_department": "Ops",
+    "current_expected_team": "Operations team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 26,
+    "category": "In-Clinic issue",
+    "subcategory": "High Waiting Time",
+    "caller_line": "The waiting time at the clinic today was almost two hours, that's unacceptable.",
+    "legacy_department": "Clinic",
+    "current_expected_team": "Clinic Operations team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (originally passed; re-checked for regression risk against today's prompt edits)"
+  },
+  {
+    "idx": 27,
+    "category": "In-Clinic issue",
+    "subcategory": "Staff Behaviour",
+    "caller_line": "One of the receptionists at the clinic was really impolite to me today.",
+    "legacy_department": "Clinic",
+    "current_expected_team": "Clinic Operations team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (originally passed; re-checked for regression risk against today's prompt edits)"
+  },
+  {
+    "idx": 28,
+    "category": "In-Clinic issue",
+    "subcategory": "Provider not available",
+    "caller_line": "I got to the clinic and the doctor I booked wasn't even available.",
+    "legacy_department": "Clinic",
+    "current_expected_team": "Clinic",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 29,
+    "category": "In-Clinic issue",
+    "subcategory": "Complete information not provided prior to service",
+    "caller_line": "The clinic didn't tell me all the details about the procedure before starting it.",
+    "legacy_department": "Clinic",
+    "current_expected_team": "Clinic Operations team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (originally passed; re-checked for regression risk against today's prompt edits)"
+  },
+  {
+    "idx": 30,
+    "category": "In-Clinic issue",
+    "subcategory": "Pet handling",
+    "caller_line": "My pet was handled very carelessly by the staff inside the clinic.",
+    "legacy_department": "Clinic",
+    "current_expected_team": "Clinic Operations team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (originally passed; re-checked for regression risk against today's prompt edits)"
+  },
+  {
+    "idx": 31,
+    "category": "In-Clinic issue",
+    "subcategory": "Unhygienic Clinic",
+    "caller_line": "The clinic floor and rooms honestly looked pretty unhygienic today.",
+    "legacy_department": "Clinic",
+    "current_expected_team": "Clinic",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 32,
+    "category": "In-Clinic issue",
+    "subcategory": "Overselling packages/food/others",
+    "caller_line": "They kept trying to upsell me extra food and packages I never asked for.",
+    "legacy_department": "Clinic",
+    "current_expected_team": "Clinic",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 33,
+    "category": "In-Clinic issue",
+    "subcategory": "Bill Not explained",
+    "caller_line": "I got billed but nobody explained what each charge on the bill actually was.",
+    "legacy_department": "Clinic",
+    "current_expected_team": "Finance team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 34,
+    "category": "Tech/VetBuddy",
+    "subcategory": "App Related",
+    "caller_line": "The app keeps crashing every time I try to open my pet's profile.",
+    "legacy_department": "Tech",
+    "current_expected_team": "Tech",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 35,
+    "category": "Tech/VetBuddy",
+    "subcategory": "EMR updates not received",
+    "caller_line": "The EMR updates from my last vet visit still haven't shown up in the app.",
+    "legacy_department": "Tech",
+    "current_expected_team": "Tech team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 36,
+    "category": "Tech/VetBuddy",
+    "subcategory": "Others",
+    "caller_line": "I'm having some other technical issue with VetBuddy I can't quite explain.",
+    "legacy_department": "Tech",
+    "current_expected_team": "Tech",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 37,
+    "category": "Membership Query",
+    "subcategory": "Utilisation related",
+    "caller_line": "I want to check how much of my membership benefits I've already used.",
+    "legacy_department": "Tech",
+    "current_expected_team": "Tech",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 38,
+    "category": "Home_Delivery",
+    "subcategory": "Marked Delivered but not Delivered",
+    "caller_line": "The delivery app says my order was delivered but I never got the package.",
+    "legacy_department": "Home Delivery",
+    "current_expected_team": "Home Delivery",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 39,
+    "category": "Home_Delivery",
+    "subcategory": "Rider Behaviour Issue",
+    "caller_line": "The delivery guy was rude and impatient when he dropped off my order.",
+    "legacy_department": "Home Delivery",
+    "current_expected_team": "Home Delivery",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 40,
+    "category": "Home_Delivery",
+    "subcategory": "Wrong Product Delivered",
+    "caller_line": "I ordered dog food but they sent me an entirely different product.",
+    "legacy_department": "Home Delivery",
+    "current_expected_team": "Home Delivery",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 41,
+    "category": "Home_Delivery",
+    "subcategory": "Inventory Mismatch/Wrong Product",
+    "caller_line": "There's a mismatch, the app shows a different quantity than what I actually received.",
+    "legacy_department": "Home Delivery",
+    "current_expected_team": "Home Delivery",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 42,
+    "category": "Home_Delivery",
+    "subcategory": "Address mismatch",
+    "caller_line": "The rider went to the wrong address, not the one I put in the app.",
+    "legacy_department": "Home Delivery",
+    "current_expected_team": "Home Delivery",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 43,
+    "category": "Home_Delivery",
+    "subcategory": "Quality Issue/Damaged/Broken seal Product",
+    "caller_line": "The seal on the medicine box I received was already broken.",
+    "legacy_department": "Home Delivery",
+    "current_expected_team": "Home Delivery",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 44,
+    "category": "Home_Delivery",
+    "subcategory": "Extra Charge by Rider",
+    "caller_line": "The delivery rider asked me to pay extra cash on top of the order amount.",
+    "legacy_department": "Home Delivery",
+    "current_expected_team": "Home Delivery",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 45,
+    "category": "Home_Delivery",
+    "subcategory": "OTP issue",
+    "caller_line": "The OTP for my delivery never came through on my phone.",
+    "legacy_department": "Home Delivery",
+    "current_expected_team": "Home Delivery",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 46,
+    "category": "Home_Delivery",
+    "subcategory": "Partial Order Query for Sub orders",
+    "caller_line": "I only received part of the sub-order, the rest is just missing with no explanation.",
+    "legacy_department": "Home Delivery",
+    "current_expected_team": "Home Delivery",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 47,
+    "category": "Home_Delivery",
+    "subcategory": "Less Quantity Delivered",
+    "caller_line": "The quantity I received was less than what I actually ordered.",
+    "legacy_department": "Home Delivery",
+    "current_expected_team": "Home Delivery",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 48,
+    "category": "Home_Delivery",
+    "subcategory": "Delivery process not smooth (Too many calls/lack of intimation)",
+    "caller_line": "There were way too many calls and no clear updates through this whole delivery process.",
+    "legacy_department": "Home Delivery",
+    "current_expected_team": "Home Delivery",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 49,
+    "category": "Home_Delivery",
+    "subcategory": "Free Gift Issue Clinic Issue",
+    "caller_line": "I was supposed to get a free gift with my order and it never arrived.",
+    "legacy_department": "Home Delivery",
+    "current_expected_team": "Home Delivery",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 50,
+    "category": "Home_Delivery",
+    "subcategory": "Delay Delivery - Outside TAT (RFP Delay)",
+    "caller_line": "My delivery is way outside the promised time window now.",
+    "legacy_department": "Home Delivery",
+    "current_expected_team": "Home Delivery",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 51,
+    "category": "Home_Delivery",
+    "subcategory": "Packaging Issue",
+    "caller_line": "The packaging on my order arrived completely torn and damaged.",
+    "legacy_department": "Home Delivery",
+    "current_expected_team": "Home Delivery",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 52,
+    "category": "Home_Delivery",
+    "subcategory": "Expired Product Delivered",
+    "caller_line": "The product I received has already expired, the date on it has passed.",
+    "legacy_department": "Home Delivery",
+    "current_expected_team": "Home Delivery",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 53,
+    "category": "Invoice Related Query",
+    "subcategory": "Incorrect Billing",
+    "caller_line": "The invoice you sent me has an incorrect amount billed.",
+    "legacy_department": "Clinic",
+    "current_expected_team": "Finance team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 54,
+    "category": "Invoice Related Query",
+    "subcategory": "Invoice Clarification required",
+    "caller_line": "I need someone to clarify a few line items on my invoice, I don't follow it.",
+    "legacy_department": "Tech",
+    "current_expected_team": "Finance team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 55,
+    "category": "Invoice Related Query",
+    "subcategory": "Product billed not handed over",
+    "caller_line": "I was billed for a product that was never actually handed over to me.",
+    "legacy_department": "Clinic",
+    "current_expected_team": "Finance team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 56,
+    "category": "Invoice Related Query",
+    "subcategory": "Membership Discount not applied",
+    "caller_line": "My membership discount wasn't applied even though it should have been.",
+    "legacy_department": "Tech",
+    "current_expected_team": "Tech",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 57,
+    "category": "MedEx/Food/Acc_Category",
+    "subcategory": "Prices too high",
+    "caller_line": "The dog food I want to buy seems overpriced right now, why the increase?",
+    "legacy_department": "Ops",
+    "current_expected_team": "Clinic team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 58,
+    "category": "MedEx/Food/Acc_Category",
+    "subcategory": "Quality Issue",
+    "caller_line": "The accessory I received doesn't feel like the quality I paid for.",
+    "legacy_department": "Longtail",
+    "current_expected_team": "Clinic team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 59,
+    "category": "MedEx/Food/Acc_Category",
+    "subcategory": "Product not available",
+    "caller_line": "The item I want to order shows as not available at all.",
+    "legacy_department": "Longtail",
+    "current_expected_team": "Clinic team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 60,
+    "category": "Tele Consultation",
+    "subcategory": "Tele Missed by PP",
+    "caller_line": "I had a tele consultation booked and the vet never joined the call.",
+    "legacy_department": "Tele",
+    "current_expected_team": "Clinic team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 61,
+    "category": "Tele Consultation",
+    "subcategory": "Tele Missed by Clinic",
+    "caller_line": "My scheduled video consultation was missed from the clinic's side.",
+    "legacy_department": "Tele",
+    "current_expected_team": "Clinic team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 62,
+    "category": "Lab Related query",
+    "subcategory": "lab report delay outside TAT - external",
+    "caller_line": "My lab report is way past the promised turnaround time from an outside lab.",
+    "legacy_department": "Ops",
+    "current_expected_team": "Clinic team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 63,
+    "category": "Lab Related query",
+    "subcategory": "Incorrect report - External Lab",
+    "caller_line": "I think there's an error in the report the external lab sent back.",
+    "legacy_department": "Ops",
+    "current_expected_team": "Clinic team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 64,
+    "category": "Lab Related query",
+    "subcategory": "USG / X Ray interpretation",
+    "caller_line": "I need help understanding the X-ray results from my pet's scan.",
+    "legacy_department": "Medex",
+    "current_expected_team": "Clinic team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 65,
+    "category": "Lab Related query",
+    "subcategory": "Resampling required - Accepted",
+    "caller_line": "The lab told me they need to resample, and I've agreed to it, what's next?",
+    "legacy_department": "Ops",
+    "current_expected_team": "Clinic team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 66,
+    "category": "Lab Related query",
+    "subcategory": "Resampling required - Denied",
+    "caller_line": "The lab is asking to resample but I don't want to, I'm declining that.",
+    "legacy_department": "Ops",
+    "current_expected_team": "Clinic team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 67,
+    "category": "Lab Related query",
+    "subcategory": "lab report delay outside TAT - internal",
+    "caller_line": "My internal lab report is delayed even beyond the usual turnaround time.",
+    "legacy_department": "Ops",
+    "current_expected_team": "Clinic team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (originally passed; re-checked for regression risk against today's prompt edits)"
+  },
+  {
+    "idx": 68,
+    "category": "Medicine fulfillment issue",
+    "subcategory": "Issue at inventory end",
+    "caller_line": "My medicine order is stuck, seems like it's an inventory problem on your end.",
+    "legacy_department": "Longtail",
+    "current_expected_team": "Home Delivery team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 69,
+    "category": "Medicine fulfillment issue",
+    "subcategory": "Issue at clinic end",
+    "caller_line": "The clinic seems to be the reason my medicine fulfillment is stuck.",
+    "legacy_department": "Longtail",
+    "current_expected_team": "Home Delivery team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 70,
+    "category": "Medicine fulfillment issue",
+    "subcategory": "Issue at HD end",
+    "caller_line": "My medicine order was supposed to come via home delivery but it's stuck there.",
+    "legacy_department": "Longtail",
+    "current_expected_team": "Longtail",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 71,
+    "category": "Food fulfillment issue",
+    "subcategory": "Issue at inventory end",
+    "caller_line": "The pet food order I placed hasn't moved, sounds like an inventory issue.",
+    "legacy_department": "Longtail",
+    "current_expected_team": "Home Delivery team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 72,
+    "category": "Food fulfillment issue",
+    "subcategory": "Issue at clinic end",
+    "caller_line": "The food order fulfillment seems delayed because of something on the clinic's side.",
+    "legacy_department": "Longtail",
+    "current_expected_team": "Home Delivery team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 73,
+    "category": "Membership Query",
+    "subcategory": "Membership Refund",
+    "caller_line": "I want a refund on my membership, I don't want to continue it anymore.",
+    "legacy_department": "Clinic",
+    "current_expected_team": "Clinic",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 74,
+    "category": "Membership Query",
+    "subcategory": "Membership wrong selling",
+    "caller_line": "I feel like I was sold this membership under false promises, that's not okay.",
+    "legacy_department": "Clinic",
+    "current_expected_team": "Clinic and Billing team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 75,
+    "category": "Membership Query",
+    "subcategory": "Membership invoice related",
+    "caller_line": "The membership invoice I got doesn't add up correctly.",
+    "legacy_department": "Tech",
+    "current_expected_team": "Clinic and Billing team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 76,
+    "category": "Membership Query",
+    "subcategory": "Wrong Utilization _Tech Issue",
+    "caller_line": "Something's wrong, the app shows my membership utilisation incorrectly.",
+    "legacy_department": "Tech",
+    "current_expected_team": "Tech",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 77,
+    "category": "Membership Query",
+    "subcategory": "Incorrect information shared - Membership",
+    "caller_line": "I was given wrong information about what my membership actually covers.",
+    "legacy_department": "Clinic",
+    "current_expected_team": "Clinic team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 78,
+    "category": "App Related Query",
+    "subcategory": "Offer/Discount not applied",
+    "caller_line": "I had a discount code that just didn't apply on my order at all.",
+    "legacy_department": "Tech",
+    "current_expected_team": "Finance team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 79,
+    "category": "App Related Query",
+    "subcategory": "Membership not visible",
+    "caller_line": "I can't see my active membership anywhere in the app.",
+    "legacy_department": "Tech",
+    "current_expected_team": "Tech team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (originally passed; re-checked for regression risk against today's prompt edits)"
+  },
+  {
+    "idx": 80,
+    "category": "App Related Query",
+    "subcategory": "Invoice not visible",
+    "caller_line": "My latest invoice isn't showing up in the app at all.",
+    "legacy_department": "Tech",
+    "current_expected_team": "Tech team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (originally passed; re-checked for regression risk against today's prompt edits)"
+  },
+  {
+    "idx": 81,
+    "category": "App Related Query",
+    "subcategory": "EMR not visible",
+    "caller_line": "I can't find the medical record for my pet's last visit in the app.",
+    "legacy_department": "Tech",
+    "current_expected_team": "Tech team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 82,
+    "category": "App Related Query",
+    "subcategory": "Missing/Incorrect appointment",
+    "caller_line": "The appointment showing in the app is either missing or just wrong.",
+    "legacy_department": "Tech",
+    "current_expected_team": "Tech team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 83,
+    "category": "App Related Query",
+    "subcategory": "Login/OTP Issue",
+    "caller_line": "I'm not getting the OTP to log into the app, tried several times now.",
+    "legacy_department": "Tech",
+    "current_expected_team": "Tech",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 84,
+    "category": "App Related Query",
+    "subcategory": "Notification Reminder",
+    "caller_line": "The app keeps sending me the same notification reminder over and over.",
+    "legacy_department": "Tech",
+    "current_expected_team": "Tech",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 85,
+    "category": "Refund Related Query",
+    "subcategory": "Refund against advance",
+    "caller_line": "I paid an advance for a service and now I need that refunded.",
+    "legacy_department": "Finance",
+    "current_expected_team": "Service fulfillment (no cash refund — reschedule/re-perform the service)",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 86,
+    "category": "Refund Related Query",
+    "subcategory": "Refund - Pet Deceased",
+    "caller_line": "My pet passed away recently and I need a refund processed for that reason.",
+    "legacy_department": "Finance",
+    "current_expected_team": "Finance",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 87,
+    "category": "Refund Related Query",
+    "subcategory": "Service / Product Refund",
+    "caller_line": "I'd like a refund on a service I paid for but never actually received.",
+    "legacy_department": "Finance",
+    "current_expected_team": "Service fulfillment (no cash refund — reschedule/re-perform the service)",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 88,
+    "category": "Payment Related issue",
+    "subcategory": "Payment done multiple times",
+    "caller_line": "I think I got charged twice for the same payment, can you check?",
+    "legacy_department": "Finance",
+    "current_expected_team": "Finance",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 89,
+    "category": "Payment Related issue",
+    "subcategory": "Client paid not reflecting",
+    "caller_line": "I paid already but the app still isn't reflecting that payment.",
+    "legacy_department": "Finance",
+    "current_expected_team": "Finance",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 90,
+    "category": "Home_Delivery",
+    "subcategory": "COD Payment Issue",
+    "caller_line": "There was some issue with the cash-on-delivery payment for my order.",
+    "legacy_department": "Home Delivery",
+    "current_expected_team": "Home Delivery",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 91,
+    "category": "E-Pharmacy",
+    "subcategory": "Medicine Return",
+    "caller_line": "I want to return a medicine I ordered from the pharmacy, wrong item entirely.",
+    "legacy_department": "E-Pharmacy",
+    "current_expected_team": "Home Delivery team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 92,
+    "category": "E-Pharmacy",
+    "subcategory": "Expired / Damage /Wrong Medicine Received",
+    "caller_line": "The medicine I got through e-pharmacy arrived damaged and honestly looks wrong too.",
+    "legacy_department": "E-Pharmacy",
+    "current_expected_team": "Home Delivery team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 93,
+    "category": "E-Pharmacy",
+    "subcategory": "Marked Delivered not delivered",
+    "caller_line": "App shows my pharmacy order as delivered but nothing showed up at my door.",
+    "legacy_department": "E-Pharmacy",
+    "current_expected_team": "Home Delivery team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (originally passed; re-checked for regression risk against today's prompt edits)"
+  },
+  {
+    "idx": 94,
+    "category": "E-Pharmacy",
+    "subcategory": "Delay Delivery",
+    "caller_line": "My e-pharmacy order is delayed well beyond what was promised.",
+    "legacy_department": "E-Pharmacy",
+    "current_expected_team": "Home Delivery team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 95,
+    "category": "E-Pharmacy",
+    "subcategory": "Less Qty Received",
+    "caller_line": "I received fewer tablets than what I actually ordered from the pharmacy.",
+    "legacy_department": "E-Pharmacy",
+    "current_expected_team": "Home Delivery team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 96,
+    "category": "Home_Delivery / Payment Related issue",
+    "subcategory": "Marked Delivered but not Delivered / Payment done multiple times",
+    "caller_line": "*[Multi-intent]* \"Two things — my delivery never arrived AND I was double charged for it, can you sort both?",
+    "legacy_department": "Home Delivery / Finance",
+    "current_expected_team": "Home Delivery team + Finance team (multi-intent)",
+    "verdict": "PASS",
+    "verification": "live-verified this session (originally passed; re-checked for regression risk against today's prompt edits)"
+  },
+  {
+    "idx": 97,
+    "category": "Home_Delivery",
+    "subcategory": "Others",
+    "caller_line": "*[Ambiguous/vague]* \"Something's just off with my order, I don't know what exactly, can someone check?",
+    "legacy_department": "Home Delivery",
+    "current_expected_team": "Home Delivery team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  },
+  {
+    "idx": 98,
+    "category": "In-Clinic issue",
+    "subcategory": "Staff Behaviour",
+    "caller_line": "*[Angry escalation]* \"This is the third time I'm calling about the same rude staff member, I want a manager NOW.",
+    "legacy_department": "Clinic",
+    "current_expected_team": "Clinic Operations team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (originally passed; re-checked for regression risk against today's prompt edits)"
+  },
+  {
+    "idx": 99,
+    "category": "Out of scope",
+    "subcategory": "N/A — general inquiry, not in taxonomy",
+    "caller_line": "*[Out-of-scope]* \"Hey, unrelated question, but do you know a good all-around vet clinic near Gurugram for a second opinion?",
+    "legacy_department": "N/A",
+    "current_expected_team": "N/A",
+    "verdict": "PASS",
+    "verification": "legacy grading carried over (2026-08-12 capture, graded 2026-08-26) — NOT independently re-tested against today's prompt edits"
+  },
+  {
+    "idx": 100,
+    "category": "Unclear/Dropped call",
+    "subcategory": "N/A — needs callback/clarification flow",
+    "caller_line": "*[Silence/unclear speech]* \"...hello? Can you— sorry, bad network, I was saying something about my— [call drops]",
+    "legacy_department": "N/A",
+    "current_expected_team": "Tech team",
+    "verdict": "PASS",
+    "verification": "live-verified this session (was originally FAIL; fixed via routing reassignment / prompt disambiguation)"
+  }
+]

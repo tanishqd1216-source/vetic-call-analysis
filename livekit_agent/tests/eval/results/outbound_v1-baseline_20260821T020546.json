@@ -1,0 +1,23 @@
+{
+  "direction": "outbound",
+  "label": "v1-baseline",
+  "promptHash": "a4960d7c1c3d849e83e7d3dfe53ae5227cd29d1226948c94a2c606d7f067a0f5",
+  "judgeModel": "gpt-5",
+  "agentModel": "gpt-4o-mini",
+  "generatedAt": "2026-08-21T02:05:46.738116",
+  "results": [
+    {
+      "case_id": "outbound-custom-twice-declined-resolution",
+      "direction": "outbound",
+      "case_type": "taxonomy",
+      "verdict": "PASS",
+      "violated_rules": [],
+      "judge_reasoning": "[{\"rule\": \"NO_REPETITION\", \"result\": \"PASS\", \"reason\": \"After the second pushback, the agent pivoted to a firm terminal response (already escalated, no further updates) without introducing new or repeated offers.\"}]",
+      "transcript": "AARYA: Hello. This is Aarya calling from Vetic Pet Care. Is it a good time to talk?\nUSER: Sure, go ahead.\nAARYA: How is Testbud doing today?\nUSER: He's fine.\nAARYA: The reason I'm reaching out is to check in on your recent grooming experience. Could you please share what happened?\nUSER: The groomer didn't follow my instructions at all \u2014 I asked for a trim, not a full shave.\nAARYA: I understand that must have been frustrating. Thank you for sharing that.\nUSER: No, a re-groom isn't good enough, I want something more than that.\nAARYA: I apologize for the bad experience. I will ensure that this does not happen again. I am raising an escalation ticket with the grooming team regarding this issue.\nUSER: No, still not good enough.\nAARYA: I understand your concern, but I cannot fulfill that specific request. The matter has already been escalated, and I have no further updates to share on this call.",
+      "turn_count": 6,
+      "input_tokens": 55195,
+      "output_tokens": 134,
+      "latency_ms": 26288
+    }
+  ]
+}

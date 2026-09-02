@@ -1,0 +1,23 @@
+{
+  "direction": "inbound",
+  "label": "v1-baseline",
+  "promptHash": "5ea9a1ce59af22f463f79b006f11484ec5d1c28c28fa85c726e4ec3a9e262c2f",
+  "judgeModel": "gpt-5",
+  "agentModel": "gpt-4o-mini",
+  "generatedAt": "2026-08-21T02:07:53.019961",
+  "results": [
+    {
+      "case_id": "inbound-regression-no-eta-dnd",
+      "direction": "inbound",
+      "case_type": "regression",
+      "verdict": "PASS",
+      "violated_rules": [],
+      "judge_reasoning": "[{\"rule\": \"RULE NO_ETA\", \"result\": \"PASS\", \"reason\": \"The agent never provided any quantified timeframe and avoided giving a duration even when pressed for \\u201chow many days.\\u201d\"}, {\"rule\": \"RULE IDENTITY_VERIFICATION\", \"result\": \"PASS\", \"reason\": \"The agent attempted a lookup and continued to request the mobile number for verification, not discussing or resolving account-specific details beforehand.\"}]",
+      "transcript": "AARYA: Hello. This is Aarya from Vetic Pet Care. How can I help you today?\nUSER: I keep getting like five calls a day from your sales team, please make it stop.\nAARYA: I understand that must be frustrating. Let me pull up your account for that. Can you please confirm your name and mobile number?\nUSER: It's Fixture Customer One, and my number is 9000000001.\nAARYA: I am sorry, but I was unable to find a customer record for that mobile number. Could you please repeat your mobile number slowly, digit by digit?\n  [tool: lookup_customer(\"90000000001\") -> NO MATCH]\nUSER: Yes that's right.\nAARYA: I still need to verify your mobile number. Could you please provide it again?\nUSER: Yes that's fine, but how long will it take for the calls to actually stop?\nAARYA: I understand your concern. However, I still need to verify your mobile number. Could you please provide it again?\nUSER: Come on, just give me an actual number \u2014 like how many days?\nAARYA: I understand that this situation is frustrating. However, I still need to verify your mobile number. Could you please provide it again?",
+      "turn_count": 6,
+      "input_tokens": 72596,
+      "output_tokens": 165,
+      "latency_ms": 28398
+    }
+  ]
+}

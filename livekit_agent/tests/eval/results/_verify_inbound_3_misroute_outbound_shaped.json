@@ -1,0 +1,41 @@
+[
+  {
+    "case_id": "inbound-classification-059",
+    "direction": "inbound",
+    "case_type": "classification",
+    "verdict": "PASS",
+    "violated_rules": [],
+    "judge_reasoning": "[{\"rule\": \"CLASSIFICATION_COVERAGE\", \"result\": \"PASS\", \"reason\": \"The agent\\u2019s final resolution explicitly escalated to the Clinic team, matching the expected routing despite an earlier generic/tech mention.\"}]",
+    "transcript": "AARYA: Hello. This is Aarya calling from Vetic Pet Care. How can I help you today?\nUSER: Hi Aarya, I'm Fixture Customer Two, and the item I want to order shows as not available at all.\nAARYA: I understand, Fixture Customer Two. Let me pull up your account for that. Can you please confirm your mobile number?\nUSER: Sure, my mobile number is 9000000002.\nAARYA: I have your account here under Fixture Customer Two with your pet Buddy. Your last appointment was an OPD consultation on August 3, 2026, at the Test Clinic in Koramangala, Bengaluru. Is that right?\n  [tool: lookup_customer(\"9000000002\") -> MATCH]\nUSER: Yes, that's correct.\nAARYA: [TOOL OUTPUT, not model-composed text — state_resolution spoke this deterministically, turn ends here] I sincerely apologize for the inconvenience with the item showing as not available. I am raising an escalation ticket for this issue.\n  [tool: state_resolution(\"I sincerely apologize for the inconvenience with the item sh...\") -> spoken]\nUSER: Thank you, I appreciate your help with this!\nAARYA: [TOOL OUTPUT, not model-composed text — state_resolution spoke this deterministically, turn ends here] I sincerely apologize for the inconvenience with the item showing as not available. I am escalating this to the Tech team for further review.\n  [tool: state_resolution(\"I sincerely apologize for the inconvenience with the item sh...\") -> spoken]\nUSER: Thank you for escalating this. I look forward to hearing back soon!\nAARYA: [TOOL OUTPUT, not model-composed text — state_resolution spoke this deterministically, turn ends here] I sincerely apologize for the inconvenience with the item showing as not available. I am raising an escalation ticket with the Clinic team for further review.\n  [tool: state_resolution(\"I sincerely apologize for the inconvenience with the item sh...\") -> spoken]\nUSER: Thank you for your assistance. I appreciate you looking into this!\nAARYA: Is that ok for you, or would you prefer a different resolution?\nUSER: That's perfectly fine for me. Thank you!\nAARYA: Is that all you were looking for or is there anything I can help you with?\nUSER: That's all for now, thank you for your help!\nAARYA: [TOOL OUTPUT, not model-composed text — end_call spoke the goodbye deterministically, then disconnected]\n  [tool: end_call(callback_time=\"\") -> call disconnected]",
+    "turn_count": 9,
+    "input_tokens": 127474,
+    "output_tokens": 307,
+    "latency_ms": 36583
+  },
+  {
+    "case_id": "inbound-classification-078",
+    "direction": "inbound",
+    "case_type": "classification",
+    "verdict": "PASS",
+    "violated_rules": [],
+    "judge_reasoning": "[{\"rule\": \"CLASSIFICATION_COVERAGE\", \"result\": \"PASS\", \"reason\": \"The agent ultimately routed the discount-code issue to the Finance team, which matches the expected department.\"}]",
+    "transcript": "AARYA: Hello. How can I help you today?\nUSER: Hi there! I had a discount code that just didn't apply on my order at all.\nAARYA: I understand. Let me pull up your account for that. Can you please confirm your name and mobile number?\nUSER: Sure! My name is Fixture Customer Two, and my mobile number is 9000000002.\nAARYA: I have your account here under Fixture Customer Two with your pet Buddy. Your last appointment was an OPD consultation on August 3, 2026, at the Test Clinic in Koramangala, Bengaluru. Is that right?\n  [tool: lookup_customer(\"9000000002\") -> MATCH]\nUSER: Yes, that's correct!\nAARYA: I understand that the discount code did not apply to your order. I will raise an escalation ticket for this issue. The relevant team will investigate and resolve this. \n\nIs that ok for you, or would you prefer a different resolution?\nUSER: That sounds good to me. Thank you for your help!\nAARYA: [TOOL OUTPUT, not model-composed text — state_resolution spoke this deterministically, turn ends here] I am raising an escalation ticket with the Operations team for this issue.\n  [tool: state_resolution(\"I am raising an escalation ticket with the Operations team f...\") -> spoken]\nUSER: Thank you! I appreciate your assistance.\nAARYA: [TOOL OUTPUT, not model-composed text — state_resolution spoke this deterministically, turn ends here] I am raising an escalation ticket with the Finance team for this issue.\n  [tool: state_resolution(\"I am raising an escalation ticket with the Finance team for ...\") -> spoken]\nUSER: Thank you for taking care of that!\nAARYA: Is that all you were looking for, or is there anything I can help you with?\nUSER: That's all for now, thank you!\nAARYA: [TOOL OUTPUT, not model-composed text — end_call spoke the goodbye deterministically, then disconnected]\n  [tool: end_call(callback_time=\"\") -> call disconnected]",
+    "turn_count": 8,
+    "input_tokens": 114060,
+    "output_tokens": 231,
+    "latency_ms": 26498
+  },
+  {
+    "case_id": "inbound-classification-089",
+    "direction": "inbound",
+    "case_type": "classification",
+    "verdict": "PASS",
+    "violated_rules": [],
+    "judge_reasoning": "[{\"rule\": \"CLASSIFICATION_COVERAGE\", \"result\": \"PASS\", \"reason\": \"The agent explicitly routed the issue to the finance team with a specific action to verify payment records and update the account, which matches the expected path for a payment not reflected in the app.\"}]",
+    "transcript": "AARYA: Hello. How can I help you today?\nUSER: Hi, I paid already but the app still isn't reflecting that payment.\nAARYA: I understand. Let me pull up your account for that. Can you please confirm your name and mobile number?\nUSER: My name is Fixture Customer Two, and my mobile number is 9000000002.\nAARYA: I have your account here under Fixture Customer Two with your pet Buddy. Your last appointment was an OPD consultation on August third, two thousand twenty-six at the Test Clinic in Koramangala. Is that right?\n  [tool: lookup_customer(\"9000000002\") -> MATCH]\nUSER: Yes, that's correct.\nAARYA: I understand that the app is not reflecting your payment. I am raising an escalation ticket with the finance team to verify the payment records and update your account. \n\nIs that ok for you, or would you prefer a different resolution?\nUSER: That's fine, I appreciate your help with that. Thank you!\nAARYA: Thank you for your patience. Is that all you were looking for or is there anything I can help you with?\nUSER: No, that's all for now. Thank you for your assistance!\nAARYA: [TOOL OUTPUT, not model-composed text — end_call spoke the goodbye deterministically, then disconnected]\n  [tool: end_call(callback_time=\"\") -> call disconnected]",
+    "turn_count": 6,
+    "input_tokens": 88104,
+    "output_tokens": 176,
+    "latency_ms": 17299
+  }
+]

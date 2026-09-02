@@ -1,0 +1,25 @@
+{
+  "direction": "outbound",
+  "label": "v1-baseline",
+  "promptHash": "cd9ae8de2d858d56bc257114a2fd2f54fe80929e0049f03db90eb2ea5df452b1",
+  "judgeModel": "gpt-5",
+  "agentModel": "gpt-4o-mini",
+  "generatedAt": "2026-08-26T16:36:00.911457",
+  "results": [
+    {
+      "case_id": "outbound-taxonomy-refund-pet-deceased",
+      "direction": "outbound",
+      "case_type": "taxonomy",
+      "verdict": "FAIL",
+      "violated_rules": [
+        "ZERO_REFUND"
+      ],
+      "judge_reasoning": "[{\"rule\": \"ZERO_REFUND\", \"result\": \"FAIL\", \"reason\": \"Caller reported a pet death, but the agent, despite condolences, refused a monetary refund and only offered escalation without promising a real refund.\"}, {\"rule\": \"STRICT_5_STEP\", \"result\": \"PASS\", \"reason\": \"No appointment was booked and the agent used the required wrap-up line before ending the call.\"}]",
+      "transcript": "AARYA: Hello. This is Aarya calling from Vetic Pet Care. Is it a good time to talk?\nUSER: Hi Aarya, yes, it's a good time to talk. How can I help you today?\nAARYA: How is Testbud doing today?\nUSER: Actually, I\u2019m sorry to say that Testbud passed away recently. It's been a tough time for me.\nAARYA: I understand that must be very difficult for you. I sincerely express my condolences for your loss. The reason I am reaching out is to check in on your recent grooming experience. Could you please share what happened?\nUSER: Thank you for your kind words, Aarya. I need to process a refund due to Testbud's passing.\nAARYA: I'm very sorry for your loss. I want to inform you that as per Vetic's policy, we do not provide monetary refunds. However, I can raise an escalation ticket for this issue. The relevant team will investigate and resolve this.\nUSER: I appreciate your understanding, Aarya. If you can raise that escalation ticket for me, I would be grateful. Thank you.\nAARYA: As per Vetic's policy, we do not provide monetary refunds. However, I can raise an escalation ticket for this issue. Is that ok for you, or would you prefer a different resolution?\nUSER: That sounds okay, Aarya. I appreciate you helping me with the escalation ticket. Thank you for your support during this difficult time.\nAARYA: I acknowledge that I cannot fulfill your specific request for a monetary refund. As per Vetic's policy, we do not provide monetary refunds. However, I have already raised an escalation ticket for this issue. I have no further updates to share on this call. Is that all you were looking for or is there anything I can help you with?\nUSER: Thank you for raising the escalation ticket, Aarya. I think that covers everything for now. I appreciate your help.\nAARYA: I will escalate this to the senior manager, and he will call you back soon. As per Vetic's policy, we do not provide monetary refunds. However, I have raised an escalation ticket for this issue. Thank you for your understanding.\nUSER: Thank you, Aarya. I appreciate your assistance and look forward to hearing back from the senior manager.\nAARYA: I will escalate this to the senior manager, and he will call you back soon. As per Vetic's policy, we do not provide monetary refunds. However, I have raised an escalation ticket for this issue. Thank you for your understanding.\nUSER: Thank you for your help, Aarya. I appreciate you taking the time to escalate this issue. I'll be waiting for the senior manager's call.\nAARYA: I will escalate this to the senior manager, and he will call you back soon. As per Vetic's policy, we do not provide monetary refunds. However, I have raised an escalation ticket for this issue. Thank you for your understanding.\nUSER: Thank you, Aarya. I appreciate you handling this for me. I\u2019ll wait for the senior manager to reach out.\nAARYA: I will escalate this to the senior manager, and he will call you back soon. As per Vetic's policy, we do not provide monetary refunds. However, I have raised an escalation ticket for this issue. Thank you for your understanding.\nUSER: Thank you for your assistance, Aarya. I appreciate you escalating this, and I\u2019ll wait for the senior manager's call.\nAARYA: I acknowledge that I cannot fulfill your specific request for a monetary refund. As per Vetic's policy, we do not provide monetary refunds. However, I have raised an escalation ticket for this issue. I have no further updates to share on this call. Is that all you were looking for or is there anything I can help you with?",
+      "turn_count": 11,
+      "input_tokens": 107722,
+      "output_tokens": 502,
+      "latency_ms": 27278
+    }
+  ]
+}

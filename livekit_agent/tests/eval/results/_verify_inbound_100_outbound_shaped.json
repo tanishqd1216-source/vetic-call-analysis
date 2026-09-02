@@ -1,0 +1,41 @@
+[
+  {
+    "case_id": "inbound-classification-100",
+    "direction": "inbound",
+    "case_type": "classification",
+    "verdict": "PASS",
+    "violated_rules": [],
+    "judge_reasoning": "[{\"rule\": \"CLASSIFICATION_COVERAGE\", \"result\": \"PASS\", \"reason\": \"Agent explicitly escalated the discount issue to the Finance team and the call-quality problem to the Tech team, matching the expected routing.\"}]",
+    "transcript": "AARYA: Hello. How can I help you today?\nUSER: \"*[Silence/unclear speech]* ...hello? Can you— sorry, bad network, I was saying something about my— [call drops]*\"\nAARYA: Sorry, I think the line cut out for a second. Could you repeat that?\nUSER: \"I wanted to ask about a discount code that did not apply to my last order.\"\nAARYA: I understand. Let me pull up your account for that. Can you please confirm your name and mobile number?\nUSER: \"My name is Fixture Customer Two, and my mobile number is 9000000002.\"\nAARYA: I have your account here under Fixture Customer Two with your pet Buddy. Your last appointment was an OPD consultation on August 3, 2026, at the Test Clinic in Koramangala, Bengaluru. Is that right?\n  [tool: lookup_customer(\"9000000002\") -> MATCH]\nUSER: \"Yes, that's correct.\"\nAARYA: [TOOL OUTPUT, not model-composed text — state_resolution spoke this deterministically, turn ends here] I am raising an escalation ticket for this issue. The relevant team will investigate and resolve this.\n  [tool: state_resolution(\"I am raising an escalation ticket for this issue. The releva...\") -> spoken]\nUSER: \"Thank you, I appreciate your help with this.\"\nAARYA: [TOOL OUTPUT, not model-composed text — state_resolution spoke this deterministically, turn ends here] I am raising an escalation ticket for the discount code issue with the Finance team. I am also escalating the call quality issue to the Tech team for review.\n  [tool: state_resolution(\"I am raising an escalation ticket for the discount code issu...\") -> spoken]\nUSER: \"Thank you for taking care of that. I appreciate it!\"\nAARYA: Is that ok for you, or would you prefer a different resolution?\nUSER: \"That's fine with me, thank you!\"\nAARYA: Is that all you were looking for or is there anything I can help you with?\nUSER: \"That's all for now, thank you!\"\nAARYA: [TOOL OUTPUT, not model-composed text — end_call spoke the goodbye deterministically, then disconnected]\n  [tool: end_call(callback_time=\"\") -> call disconnected]",
+    "turn_count": 9,
+    "input_tokens": 127193,
+    "output_tokens": 280,
+    "latency_ms": 21564
+  },
+  {
+    "case_id": "inbound-classification-100",
+    "direction": "inbound",
+    "case_type": "classification",
+    "verdict": "PASS",
+    "violated_rules": [],
+    "judge_reasoning": "[{\"rule\": \"CLASSIFICATION_COVERAGE\", \"result\": \"PASS\", \"reason\": \"The resolution explicitly escalated the discount issue to the Finance team and the call-quality problem to the Tech team, matching the expected routing.\"}]",
+    "transcript": "AARYA: Hello. This is Aarya from Vetic Pet Care. How can I help you today?\nUSER: \"*[Silence/unclear speech]* ...hello? Can you— sorry, bad network, I was saying something about my— [call drops]*\"\nAARYA: Sorry, I think the line cut out for a second. Could you repeat that?\nUSER: \"I wanted to ask about a discount code that did not apply to my last order.\"\nAARYA: I understand. Let me pull up your account for that. Can you please confirm your name and mobile number?\nUSER: \"My name is Fixture Customer Two, and my mobile number is 9000000002.\"\nAARYA: I have your account here under Fixture Customer Two with your pet Buddy. Your last appointment was an OPD consultation on August 3, 2026, at the Test Clinic in Koramangala, Bengaluru. Is that right?\n  [tool: lookup_customer(\"9000000002\") -> MATCH]\nUSER: \"Yes, that's correct.\"\nAARYA: I understand you have a concern about a discount code that did not apply to your last order. I will escalate this to the relevant team for review. Please hold on for a moment. \n\nI am raising an escalation ticket for this issue. The relevant team will investigate and resolve this.\nUSER: \"Thank you, I appreciate your help.\"\nAARYA: [TOOL OUTPUT, not model-composed text — state_resolution spoke this deterministically, turn ends here] I am raising an escalation ticket for the discount code issue with the Finance team. I am also escalating the call quality issue to the Tech team.\n  [tool: state_resolution(\"I am raising an escalation ticket for the discount code issu...\") -> spoken]\nUSER: \"That sounds good. Thank you for taking care of this!\"\nAARYA: Is that ok for you, or would you prefer a different resolution?\nUSER: \"That's perfectly fine. Thank you!\"\nAARYA: Is that all you were looking for or is there anything I can help you with?\nUSER: \"That's all I needed, thank you!\"\nAARYA: [TOOL OUTPUT, not model-composed text — end_call spoke the goodbye deterministically, then disconnected]\n  [tool: end_call(callback_time=\"\") -> call disconnected]",
+    "turn_count": 9,
+    "input_tokens": 127131,
+    "output_tokens": 270,
+    "latency_ms": 21479
+  },
+  {
+    "case_id": "inbound-classification-100",
+    "direction": "inbound",
+    "case_type": "classification",
+    "verdict": "PASS",
+    "violated_rules": [],
+    "judge_reasoning": "[{\"rule\": \"CLASSIFICATION_COVERAGE\", \"result\": \"PASS\", \"reason\": \"The agent\\u2019s resolution explicitly escalates the discount issue to the Finance team and the call-quality issue to the Tech team, matching the expected routing.\"}]",
+    "transcript": "AARYA: Hello. This is Aarya from Vetic Pet Care. How can I help you today?\nUSER: \"*[Silence/unclear speech]* ...hello? Can you— sorry, bad network, I was saying something about my— [call drops]*\"\nAARYA: Sorry, I think the line cut out for a second. Could you repeat that?\nUSER: \"I wanted to ask about a discount code that did not apply to my last order.\"\nAARYA: I understand. Let me pull up your account for that. Can you please confirm your name and mobile number?\nUSER: \"My name is Fixture Customer Two, and my mobile number is 9000000002.\"\nAARYA: I have your account here under Fixture Customer Two with your pet Buddy. Your last appointment was an OPD consultation on August 3, 2026, at the Test Clinic in Koramangala, Bengaluru. Is that right?\n  [tool: lookup_customer(\"9000000002\") -> MATCH]\nUSER: \"Yes, that's correct.\"\nAARYA: Thank you for confirming. I understand you have a concern about a discount code that did not apply to your last order. I will escalate this to the relevant team for review. Please hold on for a moment. \n\nI am raising an escalation ticket for this issue. The relevant team will investigate and resolve this.\nUSER: \"Thank you, I appreciate your help!\"\nAARYA: [TOOL OUTPUT, not model-composed text — state_resolution spoke this deterministically, turn ends here] I am raising an escalation ticket for the discount code issue with the Finance team. I am also escalating the call quality issue to the Tech team.\n  [tool: state_resolution(\"I am raising an escalation ticket for the discount code issu...\") -> spoken]\nUSER: \"That sounds good, thank you for taking care of that!\"\nAARYA: Is that ok for you, or would you prefer a different resolution?\nUSER: \"That's perfectly fine with me, thank you!\"\nAARYA: Is that all you were looking for or is there anything I can help you with?\nUSER: \"That's all I needed help with, thank you!\"\nAARYA: [TOOL OUTPUT, not model-composed text — end_call spoke the goodbye deterministically, then disconnected]\n  [tool: end_call(callback_time=\"\") -> call disconnected]",
+    "turn_count": 9,
+    "input_tokens": 127157,
+    "output_tokens": 275,
+    "latency_ms": 20623
+  }
+]

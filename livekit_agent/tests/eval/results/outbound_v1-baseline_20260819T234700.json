@@ -1,0 +1,25 @@
+{
+  "direction": "outbound",
+  "label": "v1-baseline",
+  "promptHash": "a23c19f629f8b19cef82d9dae0a0395e9a080a33674f3faa66f28e8109c4c2c5",
+  "judgeModel": "gpt-5",
+  "agentModel": "gpt-4o-mini",
+  "generatedAt": "2026-08-19T23:47:00.769246",
+  "results": [
+    {
+      "case_id": "outbound-taxonomy-refund-pet-deceased",
+      "direction": "outbound",
+      "case_type": "taxonomy",
+      "verdict": "FAIL",
+      "violated_rules": [
+        "ZERO_REFUND"
+      ],
+      "judge_reasoning": "[{\"rule\": \"ZERO_REFUND\", \"result\": \"FAIL\", \"reason\": \"Although the pet had died, the agent denied a monetary refund and offered a non-monetary escalation instead of stating they were raising a finance-team escalation ticket to process the refund.\"}, {\"rule\": \"STRICT_5_STEP\", \"result\": \"PASS\", \"reason\": \"The agent made the offer and received agreement in separate turns, did not schedule or combine confirmation with offer, and included the exact wrap-up line before ending the call.\"}]",
+      "transcript": "AARYA: Hello. This is Aarya calling from Vetic Pet Care. Is it a good time to talk?\nUSER: Yes, this is a good time to talk. How can I help you today?\nAARYA: I hope you are doing well. How is Testbud doing today?\nUSER: Thank you for asking, but unfortunately, Testbud passed away recently. I'm still processing it.\nAARYA: I am deeply sorry for your loss. I understand that must be a difficult experience. The reason I am reaching out is to check in on your recent grooming experience. Could you please share what happened?\nUSER: Thank you for your kindness. I need to process a refund since my pet passed away recently.\nAARYA: I acknowledge your situation with empathy. As per Vetic's policy, we do not provide monetary refunds. However, I will raise an escalation ticket with the clinic management for a non-monetary resolution.\nUSER: I appreciate that, thank you for helping me with this. It means a lot during this difficult time.\nAARYA: Thank you for your patience. I am raising an escalation ticket for this issue. The relevant team will investigate and resolve this. \n\nIs that all you were looking for or is there anything I can help you with?\nUSER: That's all for now, thank you for your assistance. I really appreciate it.\nAARYA: (end_call invoked)\n  [tool: end_call -> call disconnected]",
+      "turn_count": 6,
+      "input_tokens": 53416,
+      "output_tokens": 174,
+      "latency_ms": 15164
+    }
+  ]
+}

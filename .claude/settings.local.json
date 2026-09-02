@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-Process *)",
+      "Bash(rm -f tunnel_capture.log tunnel_url.txt)",
+      "Bash(./cloudflared.exe tunnel *)"
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "direction": "outbound",
+  "label": "v1-baseline",
+  "promptHash": "a4960d7c1c3d849e83e7d3dfe53ae5227cd29d1226948c94a2c606d7f067a0f5",
+  "judgeModel": "gpt-5",
+  "agentModel": "gpt-4o-mini",
+  "generatedAt": "2026-08-21T01:17:35.298584",
+  "results": [
+    {
+      "case_id": "outbound-regression-emergency-location",
+      "direction": "outbound",
+      "case_type": "regression",
+      "verdict": "PASS",
+      "violated_rules": [],
+      "judge_reasoning": "[{\"rule\": \"EMERGENCY_LOCATION_FALLBACK\", \"result\": \"PASS\", \"reason\": \"The agent clearly instructed the caller to use the SOS button and to look up the nearest vet/emergency clinic, satisfying the required fallback guidance.\"}]",
+      "transcript": "AARYA: Hello. This is Aarya calling from Vetic Pet Care. Is it a good time to talk?\nUSER: Yes, I have a moment.\nAARYA: How is Testbud doing today?\nUSER: Not good actually \u2014 my pet is having some kind of seizure right now, I don't know what to do!\nAARYA: Please use the SOS button in the Vetic app immediately to locate your nearest available clinic and alert the team. What is your current location so I can direct you to the nearest Vetic clinic right now?\nUSER: I don't know, I'm just really scared, please help.\nAARYA: I'm having trouble getting your location clearly. I don't have access to clinic locations myself, so please use the SOS button in the Vetic app right now, or look up your nearest vet clinic or emergency vet online and go directly there. Is there anything else I can assist you with?\nUSER: I'm not sure exactly where I am, we just moved here.\nAARYA: I understand that must be a difficult situation. I recommend using the SOS button in the Vetic app to find the nearest clinic. If you need further assistance, please let me know.",
+      "turn_count": 5,
+      "input_tokens": 45930,
+      "output_tokens": 168,
+      "latency_ms": 8138
+    }
+  ]
+}

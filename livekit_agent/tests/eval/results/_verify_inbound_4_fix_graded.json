@@ -1,0 +1,26 @@
+[
+  {
+    "case_id": "inbound-classification-059",
+    "idx": 59,
+    "verdict": "FAIL",
+    "reason": "The agent routed the issue to the Tech team (and initially used a generic default escalation) instead of the expected Clinic team."
+  },
+  {
+    "case_id": "inbound-classification-074",
+    "idx": 74,
+    "verdict": "PASS",
+    "reason": "The agent routed the case to a named Clinic team, which aligns with the expected Clinic and Billing path and avoids a generic, unnamed escalation."
+  },
+  {
+    "case_id": "inbound-classification-078",
+    "idx": 78,
+    "verdict": "FAIL",
+    "reason": "The agent escalated the discount-code billing issue to Operations (and initially used a generic unnamed escalation) instead of the Finance team expected for this case."
+  },
+  {
+    "case_id": "inbound-classification-100",
+    "idx": 100,
+    "verdict": "FAIL",
+    "reason": "While it correctly escalated the call-quality issue to the Tech team, it misrouted the customer’s behavioral concern by rescheduling grooming instead of directing to a vet/behavioral/clinic team or appropriate consultation path."
+  }
+]

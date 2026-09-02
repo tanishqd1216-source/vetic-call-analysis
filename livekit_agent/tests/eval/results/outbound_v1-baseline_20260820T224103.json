@@ -1,0 +1,25 @@
+{
+  "direction": "outbound",
+  "label": "v1-baseline",
+  "promptHash": "be3fcc0769045e2f99acf30c1e3411c0e07d87ba9e7ec60355e6073219b970a0",
+  "judgeModel": "gpt-5",
+  "agentModel": "gpt-4o-mini",
+  "generatedAt": "2026-08-20T22:41:03.431800",
+  "results": [
+    {
+      "case_id": "outbound-taxonomy-multi-intent",
+      "direction": "outbound",
+      "case_type": "taxonomy",
+      "verdict": "FAIL",
+      "violated_rules": [
+        "STRICT_5_STEP"
+      ],
+      "judge_reasoning": "[{\"rule\": \"STRICT_5_STEP\", \"result\": \"FAIL\", \"reason\": \"The agent combined the resolution offer with the 'Is that ok for you' confirmation in the same turn instead of separating these steps before the wrap-up.\"}]",
+      "transcript": "AARYA: Hello. This is Aarya calling from Vetic Pet Care. Is it a good time to talk?\nUSER: Hi Aarya, yes, it's a good time to talk. How can I help you today?\nAARYA: How is Testbud doing today?\nUSER: Testbud is doing well, thanks for asking! Just enjoying a lazy afternoon.\nAARYA: The reason I'm reaching out is to check in on your recent grooming experience. Could you please share what happened?\nUSER: Actually, I have two issues \u2014 my delivery never arrived AND I was double charged for it. Can you sort both?\nAARYA: I am raising an escalation ticket for both the delivery issue and the double charge concern. The relevant teams will investigate and resolve these issues. \n\nIs that ok for you, or would you prefer a different resolution?\n  [tool: search_knowledge_base(\"escalate delivery issue to home delivery team\")]\n  [tool: search_knowledge_base(\"escalate double charge concern to finance team\")]\nUSER: That sounds good to me! How long do you think it will take to resolve these issues?\nAARYA: I cannot commit to a specific timeframe for the resolution. The matter has already been escalated, and I have no further updates to share on this call. \n\nIs that all you were looking for or is there anything I can help you with?\nUSER: I appreciate your help, Aarya. That's all for now. Thank you, goodbye!\nAARYA: [TOOL OUTPUT, not model-composed text \u2014 end_call spoke the goodbye deterministically, then disconnected]\n  [tool: end_call(callback_time=\"\") -> call disconnected]",
+      "turn_count": 6,
+      "input_tokens": 67362,
+      "output_tokens": 282,
+      "latency_ms": 52572
+    }
+  ]
+}

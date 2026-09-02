@@ -1,0 +1,212 @@
+[
+  {
+    "case_id": "inbound-classification-009",
+    "idx": 9,
+    "verdict": "PASS",
+    "reason": "The agent offered to reschedule the remaining grooming in a calmer setting with an expert handler, asked for the customer’s preferred time, and confirmed the appointment, matching the expected resolution path."
+  },
+  {
+    "case_id": "inbound-classification-013",
+    "idx": 13,
+    "verdict": "PASS",
+    "reason": "Agent explicitly escalated to the clinic team and arranged a senior vet follow-up, which matches the expected routing and resolution path."
+  },
+  {
+    "case_id": "inbound-classification-022",
+    "idx": 22,
+    "verdict": "PASS",
+    "reason": "The agent explicitly escalated the pricing discrepancy to the Operations team, which matches the expected routing."
+  },
+  {
+    "case_id": "inbound-classification-023",
+    "idx": 23,
+    "verdict": "PASS",
+    "reason": "The agent escalated the issue to the Clinic Operations team, which aligns with the expected Operations team and provides a specific routing path."
+  },
+  {
+    "case_id": "inbound-classification-025",
+    "idx": 25,
+    "verdict": "PASS",
+    "reason": "The agent explicitly routed the pricing concern to the Operations team, which matches the expected department for this issue."
+  },
+  {
+    "case_id": "inbound-classification-033",
+    "idx": 33,
+    "verdict": "PASS",
+    "reason": "Agent explicitly routed the billing query to the finance team, which matches the expected department."
+  },
+  {
+    "case_id": "inbound-classification-053",
+    "idx": 53,
+    "verdict": "PASS",
+    "reason": "Agent explicitly routed the billing issue to the finance team, matching the expected department and avoiding generic escalation."
+  },
+  {
+    "case_id": "inbound-classification-054",
+    "idx": 54,
+    "verdict": "PASS",
+    "reason": "The agent explicitly routed the invoice clarification to the finance team, which matches the expected department."
+  },
+  {
+    "case_id": "inbound-classification-055",
+    "idx": 55,
+    "verdict": "PASS",
+    "reason": "The agent explicitly escalated the billing issue to the finance team, which matches the expected department and is not a generic escalation."
+  },
+  {
+    "case_id": "inbound-classification-057",
+    "idx": 57,
+    "verdict": "PASS",
+    "reason": "The agent explicitly escalated the issue to the Clinic team, matching the expected routing for this case."
+  },
+  {
+    "case_id": "inbound-classification-058",
+    "idx": 58,
+    "verdict": "PASS",
+    "reason": "Agent explicitly routed the accessory quality issue to the clinic team, matching the expected department."
+  },
+  {
+    "case_id": "inbound-classification-059",
+    "idx": 59,
+    "verdict": "PASS",
+    "reason": "The final resolution explicitly escalates the issue to the Clinic team, which matches the expected routing."
+  },
+  {
+    "case_id": "inbound-classification-060",
+    "idx": 60,
+    "verdict": "PASS",
+    "reason": "The agent explicitly routed the missed tele consultation issue to the clinic team, which matches the expected department."
+  },
+  {
+    "case_id": "inbound-classification-061",
+    "idx": 61,
+    "verdict": "PASS",
+    "reason": "The agent explicitly escalated to the clinic team for the missed video consultation, which matches the expected routing."
+  },
+  {
+    "case_id": "inbound-classification-062",
+    "idx": 62,
+    "verdict": "PASS",
+    "reason": "The agent explicitly escalated to the clinic team, which matches the expected routing for this issue."
+  },
+  {
+    "case_id": "inbound-classification-063",
+    "idx": 63,
+    "verdict": "PASS",
+    "reason": "The agent explicitly escalated the external lab report error to the clinic team, matching the expected routing rather than using a generic escalation."
+  },
+  {
+    "case_id": "inbound-classification-065",
+    "idx": 65,
+    "verdict": "PASS",
+    "reason": "The agent explicitly routed the issue to the clinic team, which matches the expected department for this case."
+  },
+  {
+    "case_id": "inbound-classification-066",
+    "idx": 66,
+    "verdict": "PASS",
+    "reason": "The agent explicitly routed the issue to the clinic team to document the resample decline, matching the expected team."
+  },
+  {
+    "case_id": "inbound-classification-068",
+    "idx": 68,
+    "verdict": "PASS",
+    "reason": "The agent explicitly escalated to the Home Delivery team, matching the expected routing for a stuck medicine order."
+  },
+  {
+    "case_id": "inbound-classification-069",
+    "idx": 69,
+    "verdict": "PASS",
+    "reason": "The agent explicitly escalated to the Home Delivery team, which matches the expected routing for the medicine fulfillment issue."
+  },
+  {
+    "case_id": "inbound-classification-071",
+    "idx": 71,
+    "verdict": "PASS",
+    "reason": "The agent explicitly escalated to the home delivery team for the inventory-related order issue, matching the expected routing."
+  },
+  {
+    "case_id": "inbound-classification-072",
+    "idx": 72,
+    "verdict": "PASS",
+    "reason": "The agent explicitly escalated to the home delivery team, which matches the expected routing for a delayed food order fulfillment."
+  },
+  {
+    "case_id": "inbound-classification-074",
+    "idx": 74,
+    "verdict": "PASS",
+    "reason": "The agent routed the case to a named Clinic team, which aligns with the expected Clinic and Billing path and avoids a generic, unnamed escalation."
+  },
+  {
+    "case_id": "inbound-classification-075",
+    "idx": 75,
+    "verdict": "PASS",
+    "reason": "The agent named the Finance team for the invoice discrepancy, which aligns with the expected Billing/Clinic billing routing rather than a generic escalation."
+  },
+  {
+    "case_id": "inbound-classification-077",
+    "idx": 77,
+    "verdict": "PASS",
+    "reason": "Agent explicitly escalated to the clinic team, which matches the expected routing for this issue."
+  },
+  {
+    "case_id": "inbound-classification-078",
+    "idx": 78,
+    "verdict": "PASS",
+    "reason": "The agent ultimately routed the discount-code issue to the Finance team, explicitly naming the correct team."
+  },
+  {
+    "case_id": "inbound-classification-081",
+    "idx": 81,
+    "verdict": "PASS",
+    "reason": "The agent explicitly escalated the app medical record issue to the tech team, which matches the expected routing."
+  },
+  {
+    "case_id": "inbound-classification-082",
+    "idx": 82,
+    "verdict": "PASS",
+    "reason": "The agent explicitly escalated the app appointment issue to the Tech team, which matches the expected routing."
+  },
+  {
+    "case_id": "inbound-classification-085",
+    "idx": 85,
+    "verdict": "PASS",
+    "reason": "Agent followed the correct service-fulfillment path by declining a cash refund and successfully rescheduling the grooming service, with no generic escalation."
+  },
+  {
+    "case_id": "inbound-classification-087",
+    "idx": 87,
+    "verdict": "PASS",
+    "reason": "The agent followed the correct service-fulfillment path by declining a cash refund and successfully rescheduling the service, matching the expected routing."
+  },
+  {
+    "case_id": "inbound-classification-091",
+    "idx": 91,
+    "verdict": "PASS",
+    "reason": "The agent explicitly routed the issue to the home delivery team, which is the correct department for a wrong pharmacy item return."
+  },
+  {
+    "case_id": "inbound-classification-092",
+    "idx": 92,
+    "verdict": "PASS",
+    "reason": "The agent explicitly escalated to the home delivery team, which matches the expected routing for a damaged e-pharmacy order."
+  },
+  {
+    "case_id": "inbound-classification-095",
+    "idx": 95,
+    "verdict": "PASS",
+    "reason": "Agent explicitly routed the issue to the home delivery team, matching the expected department for missing tablets."
+  },
+  {
+    "case_id": "inbound-classification-097",
+    "idx": 97,
+    "verdict": "PASS",
+    "reason": "The agent explicitly routed the issue to the Home Delivery team, matching the expected department."
+  },
+  {
+    "case_id": "inbound-classification-100",
+    "idx": 100,
+    "verdict": "PASS",
+    "reason": "Confirmed 3/3 samples PASS after making the test case deterministic and fixing the call-quality-guard vagueness gap; see _verify_inbound_100_graded.json."
+  }
+]

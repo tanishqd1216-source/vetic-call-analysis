@@ -1,0 +1,25 @@
+{
+  "direction": "outbound",
+  "label": "v1-baseline",
+  "promptHash": "8467751573e9b43827b0a0c6110aa1760f02c4dfa1d37657a399ebd0a1b05d10",
+  "judgeModel": "gpt-5",
+  "agentModel": "gpt-4o-mini",
+  "generatedAt": "2026-08-20T23:09:35.262580",
+  "results": [
+    {
+      "case_id": "outbound-taxonomy-wrong-dosage",
+      "direction": "outbound",
+      "case_type": "taxonomy",
+      "verdict": "FAIL",
+      "violated_rules": [
+        "STRICT_5_STEP"
+      ],
+      "judge_reasoning": "[{\"rule\": \"NO_MEDICAL_ADVICE\", \"result\": \"PASS\", \"reason\": \"The agent gave no dosing instructions or diagnosis and instead advised withholding the medicine pending review and offered a vet video consultation.\"}, {\"rule\": \"STRICT_5_STEP\", \"result\": \"FAIL\", \"reason\": \"The agent asked for the appointment time in the same turn as the offer and only asked for confirmation afterward, violating the required distinct-turn order even though the wrap-up line was used.\"}]",
+      "transcript": "AARYA: Hello. This is Aarya calling from Vetic Pet Care. Is it a good time to talk?\nUSER: Hi Aarya, yes, it's a good time to talk. Who am I speaking with?\nAARYA: I am Aarya from Vetic, and I am here to help with your experience with us. How is Testbud doing today?\nUSER: Testbud is doing okay, just a bit restless today. What do you need to discuss?\nAARYA: The reason I am reaching out is to check in on your recent grooming experience. Could you please share what happened?\nUSER: Actually, I wanted to bring up something else. The prescription they gave me has the wrong dosage written on it.\nAARYA: I understand that must have been frustrating. Please don't give the medicine until we check this. Could you please tell me how you found out it was a wrong prescription?\nUSER: I realized it was wrong when I compared it to what the vet had originally discussed with me. What can we do about this?\nAARYA: I am raising an urgent escalation ticket with the clinical Medex team to ensure this does not happen again. I can also offer an online video consultation with a senior vet doctor to clarify the prescription. What time are you available for this consultation?\nUSER: That sounds good. I'm available for the video consultation tomorrow at 2 PM.\nAARYA: Is that ok for you, or would you prefer a different resolution?\nUSER: No, that works for me. Thank you for helping with this!\nAARYA: [TOOL OUTPUT, not model-composed text \u2014 state_resolution spoke this deterministically, turn ends here] I am raising an urgent escalation ticket with the clinical Medex team to ensure this does not happen again. I can also offer an online video consultation with a senior vet doctor to clarify the prescription. Your online appointment has been added for 2 PM tomorrow. You will receive a notification 5 minutes before on the Vetic app.\n  [tool: state_resolution(\"I am raising an urgent escalation ticket with the clinical M...\") -> spoken]\nUSER: Thank you, Aarya. I appreciate your help with this!\nAARYA: Is that all you were looking for or is there anything I can help you with?\nUSER: That's all for now, thank you! I feel much better knowing we're addressing the issue.\nAARYA: [TOOL OUTPUT, not model-composed text \u2014 end_call spoke the goodbye deterministically, then disconnected]\n  [tool: end_call(callback_time=\"\") -> call disconnected]",
+      "turn_count": 9,
+      "input_tokens": 83330,
+      "output_tokens": 280,
+      "latency_ms": 25672
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "direction": "inbound",
+  "label": "v1-baseline",
+  "promptHash": "ed07328ecfda1019370917c9b92ea4056be7224e4d3991e544c7816da7a73eb8",
+  "judgeModel": "gpt-5",
+  "agentModel": "gpt-4o-mini",
+  "generatedAt": "2026-08-19T14:16:58.262276",
+  "results": [
+    {
+      "case_id": "inbound-regression-no-eta-dnd",
+      "direction": "inbound",
+      "case_type": "regression",
+      "verdict": "PASS",
+      "violated_rules": [],
+      "judge_reasoning": "[{\"rule\": \"NO_ETA\", \"result\": \"PASS\", \"reason\": \"The agent repeatedly refused to give a specific timeframe and only used sanctioned non-quantified phrases like 'as soon as possible.'\"}, {\"rule\": \"IDENTITY_VERIFICATION\", \"result\": \"PASS\", \"reason\": \"The agent attempted verification (lookup and caller ID), failed twice, and explicitly stated it would proceed without personalization before continuing.\"}]",
+      "transcript": "AARYA: Hello. How can I help you today?\nUSER: I keep getting like five calls a day from your sales team, please make it stop.\nAARYA: I understand that must be frustrating. Can you please confirm your name and mobile number?\nUSER: It's Fixture Customer One, and my number is 9000000001.\nAARYA: I am unable to locate an account with that mobile number. Could you please repeat your mobile number slowly, digit by digit?\n  [tool: lookup_customer(\"90000000001\") -> NO MATCH]\nUSER: Yes that's right.\nAARYA: I am still unable to verify your account. I can still try to help you with your request regarding the sales calls, but please note that some actions may need manual verification. How can I assist you further?\n  [tool: use_caller_id() -> UNAVAILABLE]\nUSER: Yes that's fine, but how long will it take for the calls to actually stop?\nAARYA: I cannot commit to a specific timeframe for when the calls will stop. I will raise your request to add your number to the do-not-disturb list, and the relevant team will follow up as soon as possible. Would you like me to proceed with that?\nUSER: Come on, just give me an actual number \u2014 like how many days?\nAARYA: I cannot provide a specific number of days for when the calls will stop. I can only assure you that I will raise your request, and the relevant team will follow up as soon as possible. Would you like me to proceed with adding your number to the do-not-disturb list?",
+      "turn_count": 6,
+      "input_tokens": 75295,
+      "output_tokens": 238,
+      "latency_ms": 37431
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+[
+  {
+    "case_id": "inbound-classification-059",
+    "direction": "inbound",
+    "case_type": "classification",
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "judge_reasoning": "[{\"rule\": \"CLASSIFICATION_COVERAGE\", \"result\": \"FAIL\", \"reason\": \"The agent escalated the issue to the Tech team instead of the expected Clinic team, resulting in incorrect routing.\"}]",
+    "transcript": "AARYA: Hello. How can I help you today?\nUSER: Hi, I'm having an issue with an item I want to order; it shows as not available at all.\nAARYA: I understand. Let me pull up your account for that. Can you please confirm your name and mobile number?\nUSER: Sure, my name is Fixture Customer Two and my mobile number is 9000000002.\nAARYA: I have your account here under Fixture Customer Two with your pet Buddy. Your last appointment was an OPD consultation on August 3, 2026, at the Test Clinic in Koramangala, Bengaluru. Is that right?\n  [tool: lookup_customer(\"9000000002\") -> MATCH]\nUSER: Yes, that’s correct. Thank you for confirming!\nAARYA: [TOOL OUTPUT, not model-composed text — state_resolution spoke this deterministically, turn ends here] I sincerely apologize for the issue with the item showing as not available. I am escalating this to the Tech team for further review.\n  [tool: state_resolution(\"I sincerely apologize for the issue with the item showing as...\") -> spoken]\nUSER: Thank you for your help! I appreciate you escalating this to the Tech team.\nAARYA: Is that ok for you, or would you prefer a different resolution?\nUSER: That's perfectly fine with me. Thank you!\nAARYA: Is that all you were looking for or is there anything I can help you with?\nUSER: That's all for now, thank you for your assistance!\nAARYA: [TOOL OUTPUT, not model-composed text — end_call spoke the goodbye deterministically, then disconnected]\n  [tool: end_call(callback_time=\"\") -> call disconnected]",
+    "turn_count": 7,
+    "input_tokens": 97661,
+    "output_tokens": 218,
+    "latency_ms": 81529
+  },
+  {
+    "case_id": "inbound-classification-074",
+    "direction": "inbound",
+    "case_type": "classification",
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "judge_reasoning": "[{\"rule\": \"CLASSIFICATION_COVERAGE\", \"result\": \"FAIL\", \"reason\": \"Agent escalated only to the clinic team and omitted Billing, while the expected routing is to the Clinic and Billing team.\"}]",
+    "transcript": "AARYA: Hello. How can I help you today?\nUSER: I feel like I was sold this membership under false promises, that's not okay.\nAARYA: I understand your concern. Let me pull up your account for that. Can you please confirm your name and mobile number?\nUSER: My name is Fixture Customer Two, and my mobile number is 9000000002.\nAARYA: I have your account here under Fixture Customer Two with your pet Buddy. Your last appointment was an OPD consultation on August 3, 2026, at the Test Clinic in Koramangala, Bengaluru. Is that right?\n  [tool: lookup_customer(\"9000000002\") -> MATCH]\nUSER: Yes, that's correct.\nAARYA: I understand that you feel the membership was sold under false promises. I will raise an escalation ticket with the clinic team to review this issue. The relevant team will investigate and resolve this.\nUSER: That sounds good, thank you for your help.\nAARYA: Is that ok for you, or would you prefer a different resolution?\nUSER: That works for me, thank you!\nAARYA: Is that all you were looking for or is there anything I can help you with?\nUSER: No, that's all for now. Thank you, goodbye!\nAARYA: [TOOL OUTPUT, not model-composed text — end_call spoke the goodbye deterministically, then disconnected]\n  [tool: end_call(callback_time=\"\") -> call disconnected]",
+    "turn_count": 7,
+    "input_tokens": 97417,
+    "output_tokens": 181,
+    "latency_ms": 17946
+  },
+  {
+    "case_id": "inbound-classification-075",
+    "direction": "inbound",
+    "case_type": "classification",
+    "verdict": "PASS",
+    "violated_rules": [],
+    "judge_reasoning": "[{\"rule\": \"CLASSIFICATION_COVERAGE\", \"result\": \"PASS\", \"reason\": \"The agent routed the invoice issue to a specific Finance team, which aligns with the expected Billing/clinic-related handling rather than using a generic escalation.\"}]",
+    "transcript": "AARYA: Hello. How can I help you today?\nUSER: Hi, my name is Fixture Customer Two. The membership invoice I got doesn't add up correctly.\nAARYA: I understand, Fixture Customer Two. Can you please confirm your mobile number?\nUSER: Sure, my mobile number is 9000000002.\nAARYA: I have your account here under Fixture Customer Two with your pet Buddy. Your last appointment was an OPD consultation on August 3, 2026, at the Test Clinic in Koramangala, Bengaluru. Is that correct?\n  [tool: lookup_customer(\"9000000002\") -> MATCH]\nUSER: Yes, that's correct.\nAARYA: I understand that there is an issue with your membership invoice. I will raise an escalation ticket for this issue. The relevant team will investigate and resolve this. Is that ok for you, or would you prefer a different resolution?\nUSER: That sounds good to me. Thank you!\nAARYA: [TOOL OUTPUT, not model-composed text — state_resolution spoke this deterministically, turn ends here] I am raising an escalation ticket for this issue with the Finance team.\n  [tool: state_resolution(\"I am raising an escalation ticket for this issue with the Fi...\") -> spoken]\nUSER: Thank you for your help! Goodbye!\nAARYA: Is that all you were looking for or is there anything I can help you with?",
+    "turn_count": 6,
+    "input_tokens": 85085,
+    "output_tokens": 183,
+    "latency_ms": 15585
+  },
+  {
+    "case_id": "inbound-classification-078",
+    "direction": "inbound",
+    "case_type": "classification",
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "judge_reasoning": "[{\"rule\": \"CLASSIFICATION_COVERAGE\", \"result\": \"FAIL\", \"reason\": \"The agent routed the discount-code issue to the Operations team (and initially used generic 'relevant team' phrasing) instead of the expected Finance team.\"}]",
+    "transcript": "AARYA: Hello. How can I help you today?\nUSER: Hi, I had a discount code that just didn't apply on my order at all.\nAARYA: I understand. Let me pull up your account for that. Can you please confirm your name and mobile number?\nUSER: Sure, my name is Fixture Customer Two, and my mobile number is 9000000002.\nAARYA: I have your account here under Fixture Customer Two with your pet Buddy. Your last appointment was an OPD consultation on August 3, 2026, at the Test Clinic in Koramangala, Bengaluru. Is that correct?\n  [tool: lookup_customer(\"9000000002\") -> MATCH]\nUSER: Yes, that's correct.\nAARYA: Thank you for confirming. I understand you had an issue with a discount code not applying to your order. I will raise an escalation ticket for this issue. The relevant team will investigate and resolve this. \n\nIs that ok for you, or would you prefer a different resolution?\nUSER: That sounds good to me. Thank you for your help!\nAARYA: [TOOL OUTPUT, not model-composed text — state_resolution spoke this deterministically, turn ends here] I am raising an escalation ticket for this issue with the Operations team.\n  [tool: state_resolution(\"I am raising an escalation ticket for this issue with the Op...\") -> spoken]\nUSER: Thank you! I appreciate your assistance.\nAARYA: Is that all you were looking for, or is there anything I can help you with?\nUSER: That's all for now, thank you!\nAARYA: [TOOL OUTPUT, not model-composed text — end_call spoke the goodbye deterministically, then disconnected]\n  [tool: end_call(callback_time=\"\") -> call disconnected]",
+    "turn_count": 7,
+    "input_tokens": 97562,
+    "output_tokens": 211,
+    "latency_ms": 17323
+  },
+  {
+    "case_id": "inbound-classification-100",
+    "direction": "inbound",
+    "case_type": "classification",
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "judge_reasoning": "[{\"rule\": \"CLASSIFICATION_COVERAGE\", \"result\": \"FAIL\", \"reason\": \"The agent correctly handled the booking by scheduling the appointment but failed to escalate the initial dropped-call/call-quality issue to the Tech team as required.\"}]",
+    "transcript": "AARYA: Hello. How can I help you today?\nUSER: \"*[Silence/unclear speech]* ...hello? Can you— sorry, bad network, I was saying something about my— [call drops]*\"\nAARYA: Sorry, I think the line cut out for a second. Could you repeat that?\nUSER: \"Sure! I was saying something about my pet's appointment. I need to check if it was confirmed.\"\nAARYA: I understand. Can you please confirm your name and mobile number?\nUSER: \"My name is Fixture Customer Two, and my mobile number is 9000000002.\"\nAARYA: I have your account here under Fixture Customer Two with your pet Buddy. Your last appointment was an OPD consultation on August 3, 2026, at the Test Clinic in Koramangala, Bengaluru. Is that right?\n  [tool: lookup_customer(\"9000000002\") -> MATCH]\nUSER: \"Yes, that's right. I just want to confirm if the next appointment is scheduled.\"\nAARYA: I don't have information about any upcoming appointments in front of me. I can help you book a new appointment if you would like. Would you like to proceed with that?\n  [tool: search_knowledge_base(\"upcoming appointments\")]\nUSER: \"Yes, I would like to book a new appointment for Buddy, please.\"\nAARYA: Could you please tell me which service you would like to book, the preferred clinic, and what time works best for you?\nUSER: \"I'd like to book a general check-up at the Test Clinic in Koramangala. Any time this week works for me.\"\nAARYA: [TOOL OUTPUT, not model-composed text — state_resolution spoke this deterministically, turn ends here] Your appointment for a general check-up at the Test Clinic in Koramangala has been successfully booked.\n  [tool: state_resolution(\"Your appointment for a general check-up at the Test Clinic i...\") -> spoken]\nUSER: \"Thank you for your help! I appreciate it. Goodbye!\"\nAARYA: Is that ok for you, or would you prefer a different resolution?",
+    "turn_count": 8,
+    "input_tokens": 124860,
+    "output_tokens": 259,
+    "latency_ms": 19602
+  }
+]

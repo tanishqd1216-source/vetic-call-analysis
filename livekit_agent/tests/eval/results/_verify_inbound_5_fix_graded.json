@@ -1,0 +1,32 @@
+[
+  {
+    "case_id": "inbound-classification-059",
+    "idx": 59,
+    "verdict": "FAIL",
+    "reason": "The agent routed the issue to the Tech team, whereas the expected routing was to the Clinic team."
+  },
+  {
+    "case_id": "inbound-classification-074",
+    "idx": 74,
+    "verdict": "FAIL",
+    "reason": "Agent routed only to the clinic team and did not involve the Billing team as expected for a membership mis-selling issue."
+  },
+  {
+    "case_id": "inbound-classification-075",
+    "idx": 75,
+    "verdict": "PASS",
+    "reason": "The agent named the Finance team for the invoice discrepancy, which aligns with the expected Billing/Clinic billing routing rather than a generic escalation."
+  },
+  {
+    "case_id": "inbound-classification-078",
+    "idx": 78,
+    "verdict": "FAIL",
+    "reason": "The agent escalated the discount-code issue to Operations (and initially used generic escalation phrasing) instead of routing it to the Finance team as expected."
+  },
+  {
+    "case_id": "inbound-classification-100",
+    "idx": 100,
+    "verdict": "FAIL",
+    "reason": "The agent booked the appointment correctly but failed to explicitly escalate the initial call-quality/dropped-call issue to the Tech team."
+  }
+]

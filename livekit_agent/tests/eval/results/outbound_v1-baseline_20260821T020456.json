@@ -1,0 +1,23 @@
+{
+  "direction": "outbound",
+  "label": "v1-baseline",
+  "promptHash": "a4960d7c1c3d849e83e7d3dfe53ae5227cd29d1226948c94a2c606d7f067a0f5",
+  "judgeModel": "gpt-5",
+  "agentModel": "gpt-4o-mini",
+  "generatedAt": "2026-08-21T02:04:56.337198",
+  "results": [
+    {
+      "case_id": "outbound-taxonomy-premature-end",
+      "direction": "outbound",
+      "case_type": "taxonomy",
+      "verdict": "PASS",
+      "violated_rules": [],
+      "judge_reasoning": "[{\"rule\": \"PREMATURE_END_HANDLING\", \"result\": \"PASS\", \"reason\": \"After the customer asked to end the call, the agent requested a specific callback time, received \\u201c6 PM,\\u201d confirmed it in one sentence via the tool output, and ended the call with the tool handling the goodbye.\"}]",
+      "transcript": "AARYA: Hello. This is Aarya calling from Vetic Pet Care. Is it a good time to talk?\nUSER: Yes, go ahead.\nAARYA: How is Testbud doing today?\nUSER: He's doing well, thanks.\nAARYA: The reason I'm reaching out is to check in on your recent grooming experience. Could you please share what happened?\nUSER: The delivery rider was really rude to me last time, honestly.\nAARYA: I understand that must have been frustrating. I will ensure that this does not happen again. I am raising an escalation ticket with the home delivery team regarding this issue. \n\nIs that ok for you, or would you prefer a different resolution?\nUSER: Actually I have to run right now, can you call me back later?\nAARYA: What specific time would be good for me to call you back?\nUSER: 6 PM would work.\nAARYA: [TOOL OUTPUT, not model-composed text \u2014 end_call spoke this deterministically] I understand. Just to confirm, I will call you back at 6 PM. [goodbye spoken by the tool, then disconnected]\n  [tool: end_call(callback_time=\"6 PM\") -> call disconnected]",
+      "turn_count": 6,
+      "input_tokens": 55211,
+      "output_tokens": 132,
+      "latency_ms": 12710
+    }
+  ]
+}

@@ -1,0 +1,352 @@
+[
+  {
+    "case_id": "outbound-classification-009",
+    "idx": 9,
+    "unaddressed": true,
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "reason": "The agent escalated to the grooming team instead of following the expected clinic-aligned rescheduling path and did not initiate a specific resolution action."
+  },
+  {
+    "case_id": "outbound-classification-010",
+    "idx": 10,
+    "unaddressed": true,
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "reason": "The agent routed the issue to the grooming team instead of the expected Clinic team."
+  },
+  {
+    "case_id": "outbound-classification-013",
+    "idx": 13,
+    "unaddressed": false,
+    "verdict": "PASS",
+    "violated_rules": [],
+    "reason": "Agent routed to the clinic team and arranged a follow-up video consultation with a senior vet, a specific and appropriate resolution path for the consult-explanation issue."
+  },
+  {
+    "case_id": "outbound-classification-022",
+    "idx": 22,
+    "unaddressed": false,
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "reason": "The agent used a generic unnamed escalation (“relevant team”) instead of routing specifically to the Operations team or following a specific matching resolution path."
+  },
+  {
+    "case_id": "outbound-classification-023",
+    "idx": 23,
+    "unaddressed": false,
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "reason": "The agent escalated to the clinic team instead of the expected Operations team for this issue."
+  },
+  {
+    "case_id": "outbound-classification-025",
+    "idx": 25,
+    "unaddressed": false,
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "reason": "The agent used a generic escalation ('relevant team') without naming or routing to Operations or following a specific resolution path for the pricing concern."
+  },
+  {
+    "case_id": "outbound-classification-033",
+    "idx": 33,
+    "unaddressed": false,
+    "verdict": "PASS",
+    "violated_rules": [],
+    "reason": "Agent explicitly routed the issue to the billing/finance team by raising a ticket with the billing team, matching the expected Finance team."
+  },
+  {
+    "case_id": "outbound-classification-035",
+    "idx": 35,
+    "unaddressed": false,
+    "verdict": "PASS",
+    "violated_rules": [],
+    "reason": "The agent correctly routed the EMR app update issue to the tech team, matching the expected department."
+  },
+  {
+    "case_id": "outbound-classification-053",
+    "idx": 53,
+    "unaddressed": false,
+    "verdict": "PASS",
+    "violated_rules": [],
+    "reason": "The agent explicitly routed the incorrect billing issue to the finance team, which matches the expected department."
+  },
+  {
+    "case_id": "outbound-classification-054",
+    "idx": 54,
+    "unaddressed": false,
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "reason": "The agent routed an invoice clarification request to the tech team instead of the expected Finance team."
+  },
+  {
+    "case_id": "outbound-classification-055",
+    "idx": 55,
+    "unaddressed": false,
+    "verdict": "PASS",
+    "violated_rules": [],
+    "reason": "Agent routed the issue to the billing team, which aligns with the expected finance team and constitutes a specific resolution path."
+  },
+  {
+    "case_id": "outbound-classification-057",
+    "idx": 57,
+    "unaddressed": false,
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "reason": "The agent issued a generic escalation to a human agent without naming or routing to the Clinic team or following a clinic-specific resolution path."
+  },
+  {
+    "case_id": "outbound-classification-058",
+    "idx": 58,
+    "unaddressed": false,
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "reason": "Agent routed the issue to the home delivery team, but the expected routing for this case is the Clinic team."
+  },
+  {
+    "case_id": "outbound-classification-059",
+    "idx": 59,
+    "unaddressed": false,
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "reason": "The agent only issued a generic escalation without naming or routing to the Clinic team or following a specific resolution path."
+  },
+  {
+    "case_id": "outbound-classification-060",
+    "idx": 60,
+    "unaddressed": false,
+    "verdict": "PASS",
+    "violated_rules": [],
+    "reason": "The agent explicitly routed the teleconsultation no-show issue to the clinic team, which matches the expected department."
+  },
+  {
+    "case_id": "outbound-classification-061",
+    "idx": 61,
+    "unaddressed": false,
+    "verdict": "PASS",
+    "violated_rules": [],
+    "reason": "The agent explicitly routed the missed video consultation issue to the clinic team, matching the expected department."
+  },
+  {
+    "case_id": "outbound-classification-062",
+    "idx": 62,
+    "unaddressed": false,
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "reason": "Agent routed the issue to a 'lab report team' instead of the expected Clinic team for lab report delays, making the routing incorrect."
+  },
+  {
+    "case_id": "outbound-classification-063",
+    "idx": 63,
+    "unaddressed": false,
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "reason": "The agent escalated to a 'lab report team' instead of routing to the expected Clinic team for a lab report error, resulting in misclassification."
+  },
+  {
+    "case_id": "outbound-classification-064",
+    "idx": 64,
+    "unaddressed": false,
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "reason": "The agent issued a generic escalation without routing to the Clinic team or offering a specific clinical consultation path for X-ray interpretation."
+  },
+  {
+    "case_id": "outbound-classification-065",
+    "idx": 65,
+    "unaddressed": false,
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "reason": "The agent repeatedly redirected to grooming feedback instead of routing to the clinic/lab team or initiating a resampling process, which is the correct path for this issue."
+  },
+  {
+    "case_id": "outbound-classification-066",
+    "idx": 66,
+    "unaddressed": false,
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "reason": "The agent did not route the lab resampling issue to the Clinic team or follow a clinic-specific resolution path, instead refusing assistance."
+  },
+  {
+    "case_id": "outbound-classification-068",
+    "idx": 68,
+    "unaddressed": false,
+    "verdict": "PASS",
+    "violated_rules": [],
+    "reason": "Agent routed the medicine order issue to the Home Delivery team, which matches the expected department."
+  },
+  {
+    "case_id": "outbound-classification-069",
+    "idx": 69,
+    "unaddressed": false,
+    "verdict": "PASS",
+    "violated_rules": [],
+    "reason": "The agent explicitly escalated the stuck medicine fulfillment issue to the Home Delivery team, which matches the expected routing."
+  },
+  {
+    "case_id": "outbound-classification-071",
+    "idx": 71,
+    "unaddressed": false,
+    "verdict": "PASS",
+    "violated_rules": [],
+    "reason": "The agent explicitly routed the order/inventory issue to the Home Delivery team, which matches the expected team."
+  },
+  {
+    "case_id": "outbound-classification-072",
+    "idx": 72,
+    "unaddressed": false,
+    "verdict": "PASS",
+    "violated_rules": [],
+    "reason": "The agent explicitly routed the delayed food order issue to the Home Delivery team, matching the expected department with a specific escalation action."
+  },
+  {
+    "case_id": "outbound-classification-074",
+    "idx": 74,
+    "unaddressed": true,
+    "verdict": "PASS",
+    "violated_rules": [],
+    "reason": "The agent explicitly routed the membership concern to the billing team, which aligns with the expected Billing team for this issue."
+  },
+  {
+    "case_id": "outbound-classification-075",
+    "idx": 75,
+    "unaddressed": true,
+    "verdict": "PASS",
+    "violated_rules": [],
+    "reason": "The agent correctly identified a billing-related issue and explicitly routed it to the billing team instead of using a generic escalation."
+  },
+  {
+    "case_id": "outbound-classification-077",
+    "idx": 77,
+    "unaddressed": true,
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "reason": "The agent routed the membership coverage issue to the tech team instead of the expected clinic team per the case context."
+  },
+  {
+    "case_id": "outbound-classification-078",
+    "idx": 78,
+    "unaddressed": false,
+    "verdict": "PASS",
+    "violated_rules": [],
+    "reason": "The agent routed the issue to the billing team, which aligns with the expected Finance team and is a specific, non-generic escalation."
+  },
+  {
+    "case_id": "outbound-classification-081",
+    "idx": 81,
+    "unaddressed": true,
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "reason": "Agent routed the app medical-records issue to the medical records team instead of the expected tech team."
+  },
+  {
+    "case_id": "outbound-classification-082",
+    "idx": 82,
+    "unaddressed": false,
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "reason": "The agent used a generic, unnamed escalation instead of routing the app appointment issue to the Tech team or following a specific resolution path."
+  },
+  {
+    "case_id": "outbound-classification-085",
+    "idx": 85,
+    "unaddressed": false,
+    "verdict": "PASS",
+    "violated_rules": [],
+    "reason": "Agent correctly denied a cash refund and repeatedly offered to fulfill the original service by rescheduling the grooming, matching the expected resolution path."
+  },
+  {
+    "case_id": "outbound-classification-087",
+    "idx": 87,
+    "unaddressed": false,
+    "verdict": "PASS",
+    "violated_rules": [],
+    "reason": "Agent declined a cash refund and arranged to re-perform the service by scheduling it, which follows the expected resolution path."
+  },
+  {
+    "case_id": "outbound-classification-091",
+    "idx": 91,
+    "unaddressed": false,
+    "verdict": "PASS",
+    "violated_rules": [],
+    "reason": "The agent explicitly routed the medicine return issue to the Home Delivery team, which matches the expected department."
+  },
+  {
+    "case_id": "outbound-classification-092",
+    "idx": 92,
+    "unaddressed": false,
+    "verdict": "PASS",
+    "violated_rules": [],
+    "reason": "Agent explicitly routed the damaged e-pharmacy order to the Home Delivery team, matching the expected department."
+  },
+  {
+    "case_id": "outbound-classification-094",
+    "idx": 94,
+    "unaddressed": false,
+    "verdict": "PASS",
+    "violated_rules": [],
+    "reason": "The agent explicitly escalated the delayed e-pharmacy order to the Home Delivery team, which matches the expected routing."
+  },
+  {
+    "case_id": "outbound-classification-095",
+    "idx": 95,
+    "unaddressed": false,
+    "verdict": "PASS",
+    "violated_rules": [],
+    "reason": "The agent explicitly routed the fewer-tablets delivery issue to the Home Delivery team, matching the expected department."
+  },
+  {
+    "case_id": "outbound-classification-097",
+    "idx": 97,
+    "unaddressed": false,
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "reason": "Agent used a generic, unnamed escalation instead of routing to the Home Delivery team or following a delivery-specific resolution path."
+  },
+  {
+    "case_id": "outbound-classification-100",
+    "idx": 100,
+    "unaddressed": false,
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "reason": "The agent neither named the Tech team nor followed a tech-related resolution path, instead only scheduling a callback after the dropped call."
+  }
+]

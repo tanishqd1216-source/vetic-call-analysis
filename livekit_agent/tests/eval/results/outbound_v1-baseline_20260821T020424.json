@@ -1,0 +1,23 @@
+{
+  "direction": "outbound",
+  "label": "v1-baseline",
+  "promptHash": "a4960d7c1c3d849e83e7d3dfe53ae5227cd29d1226948c94a2c606d7f067a0f5",
+  "judgeModel": "gpt-5",
+  "agentModel": "gpt-4o-mini",
+  "generatedAt": "2026-08-21T02:04:24.442190",
+  "results": [
+    {
+      "case_id": "outbound-taxonomy-multi-intent",
+      "direction": "outbound",
+      "case_type": "taxonomy",
+      "verdict": "PASS",
+      "violated_rules": [],
+      "judge_reasoning": "[{\"rule\": \"STRICT_5_STEP\", \"result\": \"PASS\", \"reason\": \"No appointment was booked and the agent included the exact required wrap-up line before the call ended.\"}]",
+      "transcript": "AARYA: Hello. This is Aarya calling from Vetic Pet Care. Is it a good time to talk?\nUSER: Hi Aarya, yes, it\u2019s a good time to talk. How can I help you today?\nAARYA: I appreciate your response. How is Testbud doing today?\nUSER: Testbud is doing well, thanks for asking! Just a bit restless today. What can you help me with?\nAARYA: The reason I'm reaching out is to check in on your recent grooming experience. Could you please share what happened?\nUSER: Actually, I have two issues \u2014 my delivery never arrived AND I was double charged for it. Can you sort both of those out for me?\nAARYA: I understand that must have been frustrating. Let me address each issue separately. \n\nFirst, regarding the delivery that never arrived, I apologize for the inconvenience. Could you please share photos of the delivered product on our WhatsApp?\nUSER: I appreciate the help, but I didn't receive anything at all, so I don\u2019t have any photos to share. Can we look into the double charge issue next?\nAARYA: I understand that must be difficult. I will address the double charge issue now. I apologize for the confusion. I will raise an escalation ticket with the finance team regarding the incorrect charge. The relevant team will investigate and resolve this. \n\nIs that ok for you, or would you prefer a different resolution?\nUSER: That sounds good, thank you for taking care of that. I just want to make sure both issues are resolved. What will happen next regarding the delivery?\nAARYA: Thank you for your patience. I will raise an escalation ticket with the home delivery team regarding the delivery issue as well. The relevant team will review it and follow up as soon as possible. \n\nIs that all you were looking for or is there anything I can help you with?\nUSER: That covers everything for now, thank you for your help! I appreciate you sorting both issues out.\nAARYA: I acknowledge your concerns regarding both issues. I have already escalated the matters, and I do not have further updates to share on this call. \n\nThank you for your understanding.\nUSER: Thank you for the assistance, Aarya. I\u2019ll keep an eye out for updates. Goodbye!\nAARYA: I will escalate this to the senior manager, and they will call you back soon.",
+      "turn_count": 8,
+      "input_tokens": 74824,
+      "output_tokens": 278,
+      "latency_ms": 50782
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+[
+  {
+    "case_id": "inbound-classification-096",
+    "idx": 96,
+    "verdict": "PASS",
+    "reason": "The agent correctly handled both intents by escalating the missing delivery to the home delivery team and the double charge to the finance team, explicitly naming the appropriate teams."
+  }
+]

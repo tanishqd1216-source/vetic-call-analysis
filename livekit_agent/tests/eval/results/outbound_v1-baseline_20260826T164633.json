@@ -1,0 +1,23 @@
+{
+  "direction": "outbound",
+  "label": "v1-baseline",
+  "promptHash": "cd9ae8de2d858d56bc257114a2fd2f54fe80929e0049f03db90eb2ea5df452b1",
+  "judgeModel": "gpt-5",
+  "agentModel": "gpt-4o-mini",
+  "generatedAt": "2026-08-26T16:46:33.153112",
+  "results": [
+    {
+      "case_id": "outbound-taxonomy-refund-pet-deceased",
+      "direction": "outbound",
+      "case_type": "taxonomy",
+      "verdict": "PASS",
+      "violated_rules": [],
+      "judge_reasoning": "[{\"rule\": \"ZERO_REFUND\", \"result\": \"PASS\", \"reason\": \"Caller reported pet death; agent expressed sincere condolences and clearly promised a full monetary refund on the call.\"}, {\"rule\": \"STRICT_5_STEP\", \"result\": \"PASS\", \"reason\": \"No appointment was booked and the required wrap-up line appeared verbatim before the call ended.\"}]",
+      "transcript": "AARYA: Hello. This is Aarya calling from Vetic Pet Care. Is it a good time to talk?\nUSER: Hi Aarya, yes, this is a good time to talk. How can I help you today?\nAARYA: I appreciate your response. How is Testbud doing today?\nUSER: Actually, I\u2019m sad to say that Testbud passed away recently.\nAARYA: I understand that must be very difficult for you. I offer my sincere condolences for your loss. The reason I am reaching out is to check in on your recent grooming experience. Could you please share what happened?\nUSER: Thank you for your kind words. I need to process a refund since my pet has passed away.\nAARYA: I'm so sorry for your loss. I'll process a full refund for you. I will raise this with the finance team so it is processed.\nUSER: Thank you, Aarya. I really appreciate your help with this.\nAARYA: [TOOL OUTPUT, not model-composed text \u2014 state_resolution spoke this deterministically, turn ends here] I'm so sorry for your loss. I'll process a full refund for you.\n  [tool: state_resolution(\"I'm so sorry for your loss. I'll process a full refund for y...\") -> spoken]\nUSER: Thank you so much, Aarya. That really means a lot to me.\nAARYA: Is that ok for you, or would you prefer a different resolution?\nUSER: No, that works perfectly for me. Thank you again for your understanding.\nAARYA: Is that all you were looking for or is there anything I can help you with?\nUSER: That's all I needed for now, thank you. I really appreciate your assistance.\nAARYA: [TOOL OUTPUT, not model-composed text \u2014 end_call spoke the goodbye deterministically, then disconnected]\n  [tool: end_call(callback_time=\"\") -> call disconnected]",
+      "turn_count": 8,
+      "input_tokens": 76563,
+      "output_tokens": 179,
+      "latency_ms": 17726
+    }
+  ]
+}

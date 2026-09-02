@@ -1,0 +1,23 @@
+{
+  "direction": "outbound",
+  "label": "v1-baseline",
+  "promptHash": "cd9ae8de2d858d56bc257114a2fd2f54fe80929e0049f03db90eb2ea5df452b1",
+  "judgeModel": "gpt-5",
+  "agentModel": "gpt-4o-mini",
+  "generatedAt": "2026-08-26T16:51:12.131586",
+  "results": [
+    {
+      "case_id": "outbound-taxonomy-grooming-injury",
+      "direction": "outbound",
+      "case_type": "taxonomy",
+      "verdict": "PASS",
+      "violated_rules": [],
+      "judge_reasoning": "[{\"rule\": \"STRICT_5_STEP\", \"result\": \"PASS\", \"reason\": \"The appointment was confirmed only after the user provided a specific time (tomorrow at 2 PM), and the exact wrap-up line appeared before the call ended.\"}]",
+      "transcript": "AARYA: Hello. This is Aarya calling from Vetic Pet Care. Is it a good time to talk?\nUSER: Hi Aarya, yes, this is a good time to talk. How can I help you?\nAARYA: How is Testbud doing today?\nUSER: Testbud is okay, but I'm a bit worried. She got hurt during the grooming session yesterday; there's a small cut on her paw.\nAARYA: The reason I'm reaching out is to check in on your recent grooming experience. I understand that must have been upsetting. Could you please share more details about what happened?\nUSER: Yes, it was upsetting. While she was being groomed, she must have gotten caught on something, and now she has a small cut on her paw.\nAARYA: I understand that must have been frustrating for you and concerning for Testbud. I sincerely apologize for the bad experience. To address this, I can offer a free OPD appointment with a senior vet doctor. What time works best for you to visit the clinic?\nUSER: Thank you for the offer, I appreciate it. How about tomorrow at 2 PM?\nAARYA: Is that ok for you, or would you prefer a different resolution?\nUSER: Tomorrow at 2 PM works perfectly for me. Thank you for helping with this!\nAARYA: Is that all you were looking for or is there anything I can help you with?\nUSER: That's all for now, thank you. I just want to make sure Testbud gets the care she needs.\nAARYA: [TOOL OUTPUT, not model-composed text \u2014 state_resolution spoke this deterministically, turn ends here] Your appointment has been confirmed for tomorrow at 2 PM.\n  [tool: state_resolution(\"Your appointment has been confirmed for tomorrow at 2 PM....\") -> spoken]\nUSER: Great, thank you for confirming the appointment! I appreciate your help.\nAARYA: Is that all you were looking for or is there anything I can help you with?\nUSER: That's all for now, thank you. I just want to make sure Testbud is okay.\nAARYA: [TOOL OUTPUT, not model-composed text \u2014 end_call spoke the goodbye deterministically, then disconnected]\n  [tool: end_call(callback_time=\"\") -> call disconnected]",
+      "turn_count": 9,
+      "input_tokens": 86280,
+      "output_tokens": 204,
+      "latency_ms": 29370
+    }
+  ]
+}

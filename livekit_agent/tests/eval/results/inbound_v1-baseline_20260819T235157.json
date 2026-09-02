@@ -1,0 +1,23 @@
+{
+  "direction": "inbound",
+  "label": "v1-baseline",
+  "promptHash": "94e1dd09c4944a7e915ce42c92cf22f9cdc9e83afc1633c80f96e0f3136adbb3",
+  "judgeModel": "gpt-5",
+  "agentModel": "gpt-4o-mini",
+  "generatedAt": "2026-08-19T23:51:57.605498",
+  "results": [
+    {
+      "case_id": "inbound-edge-refuses-mobile-number",
+      "direction": "inbound",
+      "case_type": "edge_case",
+      "verdict": "PASS",
+      "violated_rules": [],
+      "judge_reasoning": "[{\"rule\": \"IDENTITY_VERIFICATION\", \"result\": \"PASS\", \"reason\": \"The agent asked for the mobile number, made one additional request after refusal, then proceeded without personalization while noting limitations.\"}]",
+      "transcript": "AARYA: Hello. This is Aarya from Vetic Pet Care. How can I help you today?\nUSER: Why hasn't my delivery arrived, the app says it was delivered but I never got it.\nAARYA: I understand. Let me pull up your account for that. Can you please confirm your name and mobile number?\nUSER: I'd rather not share my number, can you just help me directly?\nAARYA: I understand. Would you be willing to share your mobile number just so I can pull up your account?\nUSER: Look, I really don't want to give that out, can we just sort out the delivery issue?\nAARYA: I understand your concern. I can still try to help without a verified account, but some actions may need manual verification. Can you please provide more details about the delivery issue?",
+      "turn_count": 4,
+      "input_tokens": 39628,
+      "output_tokens": 101,
+      "latency_ms": 9149
+    }
+  ]
+}

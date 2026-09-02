@@ -1,0 +1,15 @@
+[
+  {
+    "case_id": "inbound-classification-096",
+    "direction": "inbound",
+    "case_type": "classification",
+    "verdict": "PASS",
+    "violated_rules": [],
+    "judge_reasoning": "[{\"rule\": \"CLASSIFICATION_COVERAGE\", \"result\": \"PASS\", \"reason\": \"Handled both intents by escalating the missing delivery to the home delivery team and the double charge to the finance team, not using a generic fallback.\"}]",
+    "transcript": "AARYA: Hello. How can I help you today?\nUSER: Two things — my delivery never arrived AND I was double charged for it, can you sort both?\nAARYA: I understand. Let me pull up your account for that. Can you please confirm your name and mobile number?\nUSER: My name is Fixture Customer Two, and my mobile number is 9000000002.\nAARYA: I have your account here under Fixture Customer Two with your pet Buddy. Your last appointment was an OPD consultation on August 3, 2026, at the Test Clinic in Koramangala, Bengaluru. Is that right?\n  [tool: lookup_customer(\"9000000002\") -> MATCH]\nUSER: Yes, that's correct. Can we address the delivery issue and the double charge now?\nAARYA: [TOOL OUTPUT, not model-composed text — state_resolution spoke this deterministically, turn ends here] I am raising an escalation ticket with the home delivery team regarding the delivery issue.\n  [tool: state_resolution(\"I am raising an escalation ticket with the home delivery tea...\") -> spoken]\nUSER: Thank you for that. What about the double charge?\nAARYA: [TOOL OUTPUT, not model-composed text — state_resolution spoke this deterministically, turn ends here] I am raising an escalation ticket with the finance team regarding the double charge.\n  [tool: state_resolution(\"I am raising an escalation ticket with the finance team rega...\") -> spoken]\nUSER: Thank you for handling both issues. I appreciate your help!\nAARYA: Is that ok for you, or would you prefer a different resolution?\nUSER: That sounds good to me. Thank you for your assistance!\nAARYA: Is that all you were looking for or is there anything I can help you with?\nUSER: That's all for now, thank you!\nAARYA: [TOOL OUTPUT, not model-composed text — end_call spoke the goodbye deterministically, then disconnected]\n  [tool: end_call(callback_time=\"\") -> call disconnected]",
+    "turn_count": 8,
+    "input_tokens": 109968,
+    "output_tokens": 311,
+    "latency_ms": 20713
+  }
+]

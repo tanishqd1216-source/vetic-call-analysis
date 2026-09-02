@@ -1,0 +1,353 @@
+[
+  {
+    "idx": 9,
+    "category": "Grooming Related Issue",
+    "subcategory": "Service Stopped (Anxious Pet)",
+    "department": "Clinic",
+    "actual": "Your appointment has been confirmed for 2 PM on Thursday. You will receive a notification 5 minutes before on the Vetic app. Is that all you were looking for or is there anything I can help you with?",
+    "reason": "The agent rebooked a grooming session with an expert handler instead of routing to the Clinic team or a clinical pathway for an anxious pet, which misroutes the issue.",
+    "tag": "no-escalation-at-all"
+  },
+  {
+    "idx": 10,
+    "category": "Post Grooming Not given",
+    "subcategory": "Doctor was busy, Pet Parent didn't want to wait",
+    "department": "Clinic",
+    "actual": "Your appointment has been confirmed for Thursday afternoon. You will receive a notification 5 minutes before on the Vetic app. Is that all you were looking for or is there anything I can help you with?",
+    "reason": "The agent escalated to the grooming team instead of the Clinic department expected for this 'Post Grooming Not given' issue, routing to the wrong team.",
+    "tag": "no-escalation-at-all"
+  },
+  {
+    "idx": 13,
+    "category": "OPD consultation Issue",
+    "subcategory": "Communication lapse",
+    "department": "Medex",
+    "actual": "Your online appointment has been added for 2 PM. You will receive a notification 5 minutes before on the Vetic app. Is that all you were looking for or is there anything I can help you with?",
+    "reason": "The agent escalated to the clinic team instead of Medex (the expected department), despite arranging a follow-up video consult.",
+    "tag": "no-escalation-at-all"
+  },
+  {
+    "idx": 22,
+    "category": "Appointment_Process",
+    "subcategory": "Incorrect price/information provided",
+    "department": "Sales",
+    "actual": "I cannot guarantee an exact date for the response, but I will ensure it is logged with the finance team for review. They will follow up with you shortly. Is that all you were looking for or is there anything I can help you with?",
+    "reason": "The agent routed the incorrect pricing complaint to the finance team instead of the expected Sales team for appointment pricing discrepancies.",
+    "tag": "wrong-team-named"
+  },
+  {
+    "idx": 23,
+    "category": "Appointment_Process",
+    "subcategory": "Staff Behaviour",
+    "department": "Sales",
+    "actual": "Your online appointment has been added for 2 PM tomorrow. You will receive a notification 5 minutes before on the Vetic app. Is that all you were looking for or is there anything I can help you with?",
+    "reason": "The agent escalated to the clinic team and arranged a vet video call instead of routing the staff-behavior booking complaint to the Sales team as expected.",
+    "tag": "no-escalation-at-all"
+  },
+  {
+    "idx": 25,
+    "category": "Appointment_Process",
+    "subcategory": "Prices too high",
+    "department": "Ops",
+    "actual": "I understand that must have been upsetting. I sincerely apologize for the experience you had regarding the consultation pricing. I will raise an escalation ticket for this issue. The relevant team will investigate and resolve this.",
+    "reason": "The agent used a generic unnamed escalation without routing to the Ops/operations team or offering a specific pricing-resolution path.",
+    "tag": "no-named-team"
+  },
+  {
+    "idx": 33,
+    "category": "In-Clinic issue",
+    "subcategory": "Bill Not explained",
+    "department": "Clinic",
+    "actual": "I cannot guarantee an exact date for the response, but I will ensure it is logged with the billing team for review. They will follow up with you shortly. Is there anything else I can assist you with?",
+    "reason": "The agent routed the issue to the billing team instead of the expected Clinic team for an in-clinic bill explanation.",
+    "tag": "wrong-team-named"
+  },
+  {
+    "idx": 35,
+    "category": "Tech/VetBuddy",
+    "subcategory": "EMR updates not received",
+    "department": "Tech",
+    "actual": "I cannot guarantee an exact date for the updates. However, I will ensure it is logged with the right team. They will follow up with you shortly regarding the status. Is there anything else I can assist you with?",
+    "reason": "The agent routed the EMR update issue to a “medical records team”/“relevant team” instead of the expected Tech/VetBuddy tech team, making the routing incorrect.",
+    "tag": "no-named-team"
+  },
+  {
+    "idx": 53,
+    "category": "Invoice Related Query",
+    "subcategory": "Incorrect Billing",
+    "department": "Clinic",
+    "actual": "I cannot guarantee an exact date for the review. However, I will ensure it is logged with the finance team, and they will follow up shortly.",
+    "reason": "The agent routed the incorrect billing issue to the finance team instead of the expected Clinic department, failing to follow the correct resolution path.",
+    "tag": "wrong-team-named"
+  },
+  {
+    "idx": 54,
+    "category": "Invoice Related Query",
+    "subcategory": "Invoice Clarification required",
+    "department": "Tech",
+    "actual": "I understand that can be confusing. I will raise an escalation ticket with the billing team to review your invoice. The relevant team will investigate and resolve this.",
+    "reason": "Routed the invoice clarification to the billing team instead of the expected Tech team.",
+    "tag": "wrong-team-named"
+  },
+  {
+    "idx": 55,
+    "category": "Invoice Related Query",
+    "subcategory": "Product billed not handed over",
+    "department": "Clinic",
+    "actual": "I cannot guarantee an exact date for the resolution, but I will ensure that your concern is logged with the billing team. They will follow up with you as per their standard turnaround time. Is there anything else you would like assistance with?",
+    "reason": "The agent routed the issue to the billing team instead of the Clinic department expected for a 'product billed not handed over' case.",
+    "tag": "wrong-team-named"
+  },
+  {
+    "idx": 57,
+    "category": "MedEx/Food/Acc_Category",
+    "subcategory": "Prices too high",
+    "department": "Ops",
+    "actual": "I will raise an escalation ticket for this issue. The relevant team will investigate and resolve this. Is that all you were looking for or is there anything I can help you with?",
+    "reason": "The agent gave a generic escalation ('relevant team') without naming Ops or following a specific pricing-resolution path for a 'Prices too high' issue.",
+    "tag": "no-named-team"
+  },
+  {
+    "idx": 58,
+    "category": "MedEx/Food/Acc_Category",
+    "subcategory": "Quality Issue",
+    "department": "Longtail",
+    "actual": "I understand that must have been frustrating. I will raise an escalation ticket with the home delivery team regarding the quality of the accessory you received. The relevant team will investigate and resolve this.",
+    "reason": "Agent routed the accessory quality issue to the home delivery team instead of the expected Longtail department.",
+    "tag": "wrong-team-named"
+  },
+  {
+    "idx": 59,
+    "category": "MedEx/Food/Acc_Category",
+    "subcategory": "Product not available",
+    "department": "Longtail",
+    "actual": "The reason I am reaching out is to check in on your recent OPD appointment. Could you please share what happened?",
+    "reason": "The agent used a generic escalation to a 'human agent/relevant team' without naming the Longtail team or following a specific product-availability resolution path.",
+    "tag": "no-escalation-at-all"
+  },
+  {
+    "idx": 60,
+    "category": "Tele Consultation",
+    "subcategory": "Tele Missed by PP",
+    "department": "Tele",
+    "actual": "Your online appointment has been added for tomorrow at 2 PM. You will receive a notification 5 minutes before on the Vetic app. Is that all you were looking for or is there anything I can help you with?",
+    "reason": "The agent escalated the issue to the clinic team instead of the Tele team expected for a missed tele consultation, despite also rebooking the call.",
+    "tag": "no-escalation-at-all"
+  },
+  {
+    "idx": 61,
+    "category": "Tele Consultation",
+    "subcategory": "Tele Missed by Clinic",
+    "department": "Tele",
+    "actual": "I cannot guarantee an exact date for the resolution, but I will ensure it is logged with the right team. They will follow up with you as soon as possible. Is there anything else I can help you with?",
+    "reason": "Agent used a generic escalation (“raise an escalation ticket” to the “relevant/right team”) without naming the Tele team or following a specific tele-consultation resolution path like rebooking.",
+    "tag": "no-named-team"
+  },
+  {
+    "idx": 62,
+    "category": "Lab Related query",
+    "subcategory": "lab report delay outside TAT - external",
+    "department": "Ops",
+    "actual": "I will raise an escalation ticket for this issue. The relevant team will investigate and resolve this. Is that all you were looking for or is there anything I can help you with?",
+    "reason": "The agent used a generic, unnamed escalation without routing to Ops or offering a specific lab-delay resolution path.",
+    "tag": "no-named-team"
+  },
+  {
+    "idx": 63,
+    "category": "Lab Related query",
+    "subcategory": "Incorrect report - External Lab",
+    "department": "Ops",
+    "actual": "I will raise an escalation ticket for this issue. The relevant team will investigate and resolve this. Is that all you were looking for or is there anything I can help you with?",
+    "reason": "Agent fell back to a generic escalation without naming the Ops team or taking a specific path for an incorrect external lab report.",
+    "tag": "no-named-team"
+  },
+  {
+    "idx": 64,
+    "category": "Lab Related query",
+    "subcategory": "USG / X Ray interpretation",
+    "department": "Medex",
+    "actual": "I will raise an escalation ticket for this issue. The relevant team will investigate and resolve this. Is that all you were looking for or is there anything I can help you with?",
+    "reason": "The agent used a generic unnamed escalation without routing to the Medex team or offering a specific interpretation path for the X-ray query.",
+    "tag": "no-named-team"
+  },
+  {
+    "idx": 65,
+    "category": "Lab Related query",
+    "subcategory": "Resampling required - Accepted",
+    "department": "Ops",
+    "actual": "I will raise the escalation ticket now. The relevant team will investigate and resolve this. Is that all you were looking for or is there anything I can help you with?",
+    "reason": "The agent gave a generic escalation to an unnamed 'relevant team' without naming Ops or taking the specific resampling path expected for this lab resample request.",
+    "tag": "no-named-team"
+  },
+  {
+    "idx": 66,
+    "category": "Lab Related query",
+    "subcategory": "Resampling required - Denied",
+    "department": "Ops",
+    "actual": "I cannot guarantee an exact date for the resolution. However, I will ensure it is logged with the right team, and they will follow up with you as soon as possible. Is there anything else I can assist you with?",
+    "reason": "The agent used a generic escalation to an unspecified 'relevant/right team' without naming Ops or a specific lab-ops path for the resample denial.",
+    "tag": "no-named-team"
+  },
+  {
+    "idx": 68,
+    "category": "Medicine fulfillment issue",
+    "subcategory": "Issue at inventory end",
+    "department": "Longtail",
+    "actual": "I understand that must have been frustrating. I sincerely apologize for the issue with your order. I will raise an escalation ticket with the home delivery team, and the issue will be reviewed shortly.",
+    "reason": "The agent routed the inventory-side medicine issue to the 'home delivery team' instead of the expected Longtail team/flow.",
+    "tag": "wrong-team-named"
+  },
+  {
+    "idx": 69,
+    "category": "Medicine fulfillment issue",
+    "subcategory": "Issue at clinic end",
+    "department": "Longtail",
+    "actual": "I understand that must have been difficult. I sincerely apologize for the issue with your order. I will raise an escalation ticket with the home delivery team, and the issue will be reviewed shortly.",
+    "reason": "The agent routed the clinic-caused medicine fulfillment issue to the Home Delivery team instead of the expected Longtail/clinic team, misclassifying the resolution path.",
+    "tag": "wrong-team-named"
+  },
+  {
+    "idx": 71,
+    "category": "Food fulfillment issue",
+    "subcategory": "Issue at inventory end",
+    "department": "Longtail",
+    "actual": "I cannot guarantee an exact date for the resolution, but I will ensure it is logged with the right team. They will follow up with you as soon as possible. Is that all you were looking for, or is there anything I can help you with?",
+    "reason": "The agent routed the case to the home delivery team and then vaguely to “the right team” instead of the Longtail/inventory team expected for an inventory issue.",
+    "tag": "no-named-team"
+  },
+  {
+    "idx": 72,
+    "category": "Food fulfillment issue",
+    "subcategory": "Issue at clinic end",
+    "department": "Longtail",
+    "actual": "I understand that must have been frustrating. I will raise an escalation ticket with the home delivery team regarding the delay in your food order fulfillment. The relevant team will investigate and resolve this.",
+    "reason": "Routed the issue to the home delivery team instead of the expected Longtail department for a clinic-end food fulfillment delay.",
+    "tag": "wrong-team-named"
+  },
+  {
+    "idx": 74,
+    "category": "Membership Query",
+    "subcategory": "Membership wrong selling",
+    "department": "Clinic",
+    "actual": "I cannot guarantee an exact date for a response, but I will ensure it is logged with the right team. They will follow up with you as soon as possible. Is that all you were looking for or is there anything I can help you with?",
+    "reason": "The agent routed the membership wrong-selling complaint to the billing team instead of the expected Clinic team, misclassifying the issue.",
+    "tag": "no-named-team"
+  },
+  {
+    "idx": 75,
+    "category": "Membership Query",
+    "subcategory": "Membership invoice related",
+    "department": "Tech",
+    "actual": "I cannot guarantee an exact date for the resolution. However, I will ensure it is logged with the billing team, and they will follow up with you shortly.",
+    "reason": "The agent routed the issue to the billing team instead of the expected Tech team for a membership invoice miscalculation.",
+    "tag": "wrong-team-named"
+  },
+  {
+    "idx": 77,
+    "category": "Membership Query",
+    "subcategory": "Incorrect information shared - Membership",
+    "department": "Clinic",
+    "actual": "I cannot guarantee an exact date, but I will make sure it is logged with the right team. They will follow up with you shortly. Is there anything else I can assist you with?",
+    "reason": "The agent escalated to the tech team (and then vaguely to the 'right team') instead of the Clinic team expected for membership coverage issues.",
+    "tag": "no-named-team"
+  },
+  {
+    "idx": 78,
+    "category": "App Related Query",
+    "subcategory": "Offer/Discount not applied",
+    "department": "Tech",
+    "actual": "I cannot guarantee an exact date for the follow-up. However, I will raise the escalation ticket now.",
+    "reason": "The agent used a generic escalation without naming or routing to the Tech/app support team or following a specific resolution path for the discount-not-applied issue.",
+    "tag": "no-escalation-at-all"
+  },
+  {
+    "idx": 81,
+    "category": "App Related Query",
+    "subcategory": "EMR not visible",
+    "department": "Tech",
+    "actual": "I cannot guarantee an exact date for the resolution. However, I will ensure it is logged with the right team, and they will follow up with you shortly.",
+    "reason": "The agent routed the EMR visibility issue to a 'medical records team' and then to an unnamed 'right team' instead of the Tech team or a specific tech resolution path expected for an in-app EMR problem.",
+    "tag": "no-named-team"
+  },
+  {
+    "idx": 82,
+    "category": "App Related Query",
+    "subcategory": "Missing/Incorrect appointment",
+    "department": "Tech",
+    "actual": "Your appointment has been successfully booked for grooming at the Main Street clinic next Wednesday at 2 PM. You can check the details of your appointment on the Vetic app by going to the pet profile in the right bottom corner. Is that all you were looking for or is there anything I can help you with?",
+    "reason": "The agent rebooked a grooming appointment instead of routing the missing/incorrect app appointment issue to the Tech team or following a tech-specific resolution path.",
+    "tag": "no-escalation-at-all"
+  },
+  {
+    "idx": 85,
+    "category": "Refund Related Query",
+    "subcategory": "Refund against advance",
+    "department": "Finance",
+    "actual": "I acknowledge your situation. As per Vetic's policy, we do not provide monetary refunds. However, I will raise an escalation ticket with the clinic management for a non-monetary resolution. I will ensure this is addressed.",
+    "reason": "For a refund-against-advance issue expected to go to Finance, the agent escalated to 'clinic management' with a generic ticket instead of routing to Finance or following a finance-specific resolution path.",
+    "tag": "wrong-team-named"
+  },
+  {
+    "idx": 87,
+    "category": "Refund Related Query",
+    "subcategory": "Service / Product Refund",
+    "department": "Finance",
+    "actual": "You will receive updates regarding the resolution from the relevant team. I will raise the escalation ticket now. Is that all you were looking for or is there anything I can help you with?",
+    "reason": "The agent routed the refund request to clinic management with a generic escalation instead of the Finance team or a finance-specific refund path.",
+    "tag": "no-named-team"
+  },
+  {
+    "idx": 91,
+    "category": "E-Pharmacy",
+    "subcategory": "Medicine Return",
+    "department": "E-Pharmacy",
+    "actual": "Not reached",
+    "reason": "The agent used a generic escalation to a human agent without naming the E-Pharmacy team or following a specific medicine return process.",
+    "tag": "no-named-team"
+  },
+  {
+    "idx": 92,
+    "category": "E-Pharmacy",
+    "subcategory": "Expired / Damage /Wrong Medicine Received",
+    "department": "E-Pharmacy",
+    "actual": "You can send the photos to the WhatsApp number associated with your order confirmation. Once you share the photos, I will raise an escalation ticket with the home delivery team, and the resolution for this will be given shortly.",
+    "reason": "The agent routed the issue to the home delivery team instead of the E-Pharmacy/pharmacy team expected for a damaged/wrong medicine case.",
+    "tag": "wrong-team-named"
+  },
+  {
+    "idx": 94,
+    "category": "E-Pharmacy",
+    "subcategory": "Delay Delivery",
+    "department": "E-Pharmacy",
+    "actual": "I cannot guarantee an exact timeframe for the update. However, the team will review the issue and follow up with you as soon as possible. Is there anything else I can assist you with?",
+    "reason": "The agent escalated to the home delivery team instead of the E-Pharmacy team and did not follow an e-pharmacy–specific resolution path, misrouting the issue.",
+    "tag": "no-escalation-at-all"
+  },
+  {
+    "idx": 95,
+    "category": "E-Pharmacy",
+    "subcategory": "Less Qty Received",
+    "department": "E-Pharmacy",
+    "actual": "I cannot guarantee an exact timeframe, but the team will review the issue and follow up shortly. Is there anything else you would like to discuss?",
+    "reason": "The agent routed the less-quantity pharmacy issue to the home delivery team instead of the E-Pharmacy team expected for this case.",
+    "tag": "no-escalation-at-all"
+  },
+  {
+    "idx": 97,
+    "category": "Home_Delivery",
+    "subcategory": "Others",
+    "department": "Home Delivery",
+    "actual": "I will raise the escalation ticket now. The relevant team will investigate and resolve this. Is that all you were looking for or is there anything I can help you with?",
+    "reason": "Agent used a generic, unnamed escalation instead of routing to the Home Delivery team or following a specific home-delivery resolution path for the order issue.",
+    "tag": "no-named-team"
+  },
+  {
+    "idx": 100,
+    "category": "Unclear/Dropped call",
+    "subcategory": "N/A — needs callback/clarification flow",
+    "department": "N/A",
+    "actual": "I will raise an escalation ticket for your concern about call quality. The relevant team will investigate and resolve this. Is that all you were looking for or is there anything I can help you with?",
+    "reason": "Expected a callback/clarification flow for an unclear/dropped call, but the agent routed it via a generic, unnamed escalation to a 'relevant team' instead.",
+    "tag": "no-named-team"
+  }
+]

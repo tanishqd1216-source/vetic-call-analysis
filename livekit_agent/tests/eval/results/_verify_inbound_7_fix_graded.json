@@ -1,0 +1,44 @@
+[
+  {
+    "case_id": "inbound-classification-053",
+    "idx": 53,
+    "verdict": "PASS",
+    "reason": "Agent explicitly routed the billing issue to the finance team, matching the expected department and avoiding generic escalation."
+  },
+  {
+    "case_id": "inbound-classification-057",
+    "idx": 57,
+    "verdict": "PASS",
+    "reason": "The agent explicitly escalated the issue to the Clinic team, matching the expected routing for this case."
+  },
+  {
+    "case_id": "inbound-classification-059",
+    "idx": 59,
+    "verdict": "FAIL",
+    "reason": "The agent routed the issue to the Tech team (and initially used a generic ticket) instead of the expected Clinic team."
+  },
+  {
+    "case_id": "inbound-classification-074",
+    "idx": 74,
+    "verdict": "FAIL",
+    "reason": "The agent escalated generically to 'the relevant team' without naming Clinic and Billing or following a specific resolution path, despite the expected routing to Clinic and Billing."
+  },
+  {
+    "case_id": "inbound-classification-075",
+    "idx": 75,
+    "verdict": "FAIL",
+    "reason": "The agent used a generic escalation without naming the Clinic/Billing team or following a specific billing-resolution path for the membership invoice issue."
+  },
+  {
+    "case_id": "inbound-classification-078",
+    "idx": 78,
+    "verdict": "FAIL",
+    "reason": "The agent used a generic unnamed escalation ('relevant team') instead of routing to the Finance team or following a specific finance-resolution path."
+  },
+  {
+    "case_id": "inbound-classification-100",
+    "idx": 100,
+    "verdict": "FAIL",
+    "reason": "The agent routed the vaccination records request to the clinic team instead of the expected Tech team, which is the wrong department."
+  }
+]

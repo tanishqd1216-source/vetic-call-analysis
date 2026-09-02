@@ -1,0 +1,28 @@
+[
+  {
+    "case_id": "outbound-classification-009",
+    "direction": "outbound",
+    "case_type": "classification",
+    "verdict": "PASS",
+    "violated_rules": [],
+    "judge_reasoning": "[{\"rule\": \"CLASSIFICATION_COVERAGE\", \"result\": \"PASS\", \"reason\": \"Agent addressed the anxious-pet grooming stoppage with a specific resolution path (rescheduling in a calmer setting with an expert handler), aligning with the expected clinic-led handling without misrouting or generic escalation.\"}]",
+    "transcript": "AARYA: Hello. This is Aarya calling from Vetic Pet Care. Is it a good time to talk?\nUSER: Hi Aarya, yes, it's a good time to talk. How can I help you today?\nAARYA: How is Testbud doing today?\nUSER: Testbud is doing alright, just a bit anxious lately. What do you need to discuss?\nAARYA: The reason I'm reaching out is to check in on your recent experience with us. Could you please share what happened?\nUSER: Sure, my pet got too anxious mid-session, so they stopped the grooming halfway.\nAARYA: I understand that must have been frustrating for you and Testbud. I will ensure that this does not happen again. I can arrange to reschedule the grooming session in a calmer setting with an expert handler. What time works best for you?\nUSER: That sounds great! I’m available next Tuesday afternoon if that works.\nAARYA: [TOOL OUTPUT, not model-composed text — state_resolution spoke this deterministically, turn ends here] I will arrange to reschedule the grooming session in a calmer setting with an expert handler.\n  [tool: state_resolution(\"I will arrange to reschedule the grooming session in a calme...\") -> spoken]\nUSER: Thank you, Aarya. I appreciate your help with this!\nAARYA: Is that ok for you, or would you prefer a different resolution?\nUSER: No, that works perfectly for me. Thank you!\nAARYA: Is that all you were looking for or is there anything I can help you with?\nUSER: That's all I needed for now. Thank you for your assistance!\nAARYA: [TOOL OUTPUT, not model-composed text — end_call spoke the goodbye deterministically, then disconnected]\n  [tool: end_call(callback_time=\"\") -> call disconnected]",
+    "turn_count": 8,
+    "input_tokens": 85612,
+    "output_tokens": 178,
+    "latency_ms": 16786
+  },
+  {
+    "case_id": "outbound-classification-010",
+    "direction": "outbound",
+    "case_type": "classification",
+    "verdict": "PASS",
+    "violated_rules": [],
+    "judge_reasoning": "[{\"rule\": \"CLASSIFICATION_COVERAGE\", \"result\": \"PASS\", \"reason\": \"Agent followed a specific clinic-appropriate resolution path by arranging the missed post-grooming session, without misrouting or generic escalation.\"}]",
+    "transcript": "AARYA: Hello. This is Aarya calling from Vetic Pet Care. Is it a good time to talk?\nUSER: Hi Aarya, yes, this is a good time to talk. How can I help you today?\nAARYA: I appreciate your response. How is Testbud doing today?\nUSER: Testbud is doing well, thank you for asking! Just had a checkup recently.\nAARYA: The reason I'm reaching out is to check in on your recent experience with us. Could you please share what happened?\nUSER: Sure! The vet mentioned that Testbud needed grooming after the checkup, but nobody actually did the post-grooming.\nAARYA: I understand that must have been frustrating. I apologize for the oversight regarding the post-grooming. I will ensure that this does not happen again. I can arrange to schedule the missed post-grooming session. What time works best for you?\nUSER: Thank you, Aarya. I’d appreciate that! How about this Saturday morning?\nAARYA: [TOOL OUTPUT, not model-composed text — state_resolution spoke this deterministically, turn ends here] I apologize for the oversight regarding the post-grooming. I can arrange to schedule the missed post-grooming session.\n  [tool: state_resolution(\"I apologize for the oversight regarding the post-grooming. I...\") -> spoken]\nUSER: Thank you for arranging that! I appreciate your help.\nAARYA: Is that ok for you, or would you prefer a different resolution?\nUSER: No, that sounds perfect. Thank you for taking care of it!\nAARYA: Is that all you were looking for or is there anything I can help you with?\nUSER: That's all for now, thank you! I appreciate your assistance.\nAARYA: [TOOL OUTPUT, not model-composed text — end_call spoke the goodbye deterministically, then disconnected]\n  [tool: end_call(callback_time=\"\") -> call disconnected]",
+    "turn_count": 8,
+    "input_tokens": 85724,
+    "output_tokens": 192,
+    "latency_ms": 15184
+  }
+]

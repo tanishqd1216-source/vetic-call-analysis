@@ -1,0 +1,25 @@
+{
+  "direction": "outbound",
+  "label": "v1-baseline",
+  "promptHash": "a23c19f629f8b19cef82d9dae0a0395e9a080a33674f3faa66f28e8109c4c2c5",
+  "judgeModel": "gpt-5",
+  "agentModel": "gpt-4o-mini",
+  "generatedAt": "2026-08-19T23:49:38.638056",
+  "results": [
+    {
+      "case_id": "outbound-taxonomy-multi-intent",
+      "direction": "outbound",
+      "case_type": "taxonomy",
+      "verdict": "FAIL",
+      "violated_rules": [
+        "STRICT_5_STEP"
+      ],
+      "judge_reasoning": "[{\"rule\": \"STRICT_5_STEP\", \"result\": \"FAIL\", \"reason\": \"The agent did not execute the required five-step sequence as distinct turns: they provided offers but never a separate confirm-agreement (and no time-collection/confirmation), though they did use the wrap-up line.\"}]",
+      "transcript": "AARYA: Hello. This is Aarya calling from Vetic Pet Care. Is it a good time to talk?\nUSER: Hi Aarya, yes, it's a good time to talk. How can I help you today?\nAARYA: How is Testbud doing today?\nUSER: Testbud is doing well, thanks for asking! Just enjoying a lazy afternoon. What do you need to discuss?\nAARYA: The reason I'm reaching out is to check in on your recent grooming experience. Could you please share what happened?\nUSER: Actually, I have two issues \u2014 my delivery never arrived AND I was double charged for it. Can you sort both of those for me?\nAARYA: I understand that must have been frustrating. Let me address each issue separately. \n\nFirst, regarding the delivery that never arrived, I apologize for the issue with your order. Could you please share photos of the delivered product on our WhatsApp?\nUSER: I appreciate the help, but I didn't receive the delivery at all, so I don't have any photos. Can you look into the order status for me? And what about the double charge?\nAARYA: I understand. I will raise an escalation ticket with the home delivery team regarding the order status. \n\nAs for the double charge, I apologize for the inconvenience. I will also escalate this to our finance team to review the invoice and follow up shortly. \n\nThank you for your patience.\nUSER: Thank you, Aarya. I appreciate you looking into both issues. How long should I expect to hear back regarding the updates?\nAARYA: I cannot commit to a specific timeframe, but the relevant teams will follow up as soon as possible.\nUSER: Alright, I understand. Thank you for your help, Aarya. I\u2019ll keep an eye out for their updates.\nAARYA: Is that all you were looking for, or is there anything I can help you with?\nUSER: That's all for now, thank you! I appreciate your assistance today.\nAARYA: (end_call invoked)\n  [tool: end_call -> call disconnected]",
+      "turn_count": 8,
+      "input_tokens": 71806,
+      "output_tokens": 210,
+      "latency_ms": 15035
+    }
+  ]
+}

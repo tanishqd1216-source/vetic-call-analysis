@@ -1,0 +1,23 @@
+{
+  "direction": "outbound",
+  "label": "v1-baseline",
+  "promptHash": "a4960d7c1c3d849e83e7d3dfe53ae5227cd29d1226948c94a2c606d7f067a0f5",
+  "judgeModel": "gpt-5",
+  "agentModel": "gpt-4o-mini",
+  "generatedAt": "2026-08-21T01:17:15.234657",
+  "results": [
+    {
+      "case_id": "outbound-taxonomy-angry-escalation",
+      "direction": "outbound",
+      "case_type": "taxonomy",
+      "verdict": "PASS",
+      "violated_rules": [],
+      "judge_reasoning": "[{\"rule\": \"NO_ETA\", \"result\": \"PASS\", \"reason\": \"The agent never gave a quantified timeframe and only used non-quantified phrases like 'right away' and 'soon.'\"}, {\"rule\": \"NO_REPETITION\", \"result\": \"PASS\", \"reason\": \"After two pushbacks the agent gave a firm terminal response, then made one allowed further escalation to a senior manager and thereafter repeated the same firm stance without introducing new offers.\"}]",
+      "transcript": "AARYA: Hello. This is Aarya calling from Vetic Pet Care. Is it a good time to talk?\nUSER: Yes, this is a good time. Who am I speaking with?\nAARYA: I am Aarya from Vetic, and I am here to help with your experience with us. How is Testbud doing today?\nUSER: Testbud is fine, but that\u2019s not why I\u2019m on the phone. I need to talk about the rude staff member I\u2019ve dealt with for the third time now.\nAARYA: I understand that must have been frustrating. The reason I am reaching out is to check in on your recent grooming experience. Could you please share what happened?\nUSER: I\u2019ve already explained this multiple times! This is the third time I\u2019m calling about the same rude staff member, and I want to speak to a manager\u2014specifically, I want to talk to Manager Sarah NOW!\nAARYA: I acknowledge your concern. I cannot connect you directly to a specific staff member. I will escalate this to our clinic management team right away.\nUSER: I don\u2019t want to hear about escalation! I want to speak to Manager Sarah NOW! This has gone on long enough!\nAARYA: I understand your frustration. I cannot fulfill that specific request, but I will escalate this matter to the clinic management team. They will follow up with you directly.\nUSER: Escalation isn\u2019t good enough! I need to talk to Manager Sarah directly about this issue. I\u2019ve had it with this rude staff member!\nAARYA: I cannot fulfill your specific request to speak with Manager Sarah directly. The matter has already been escalated, and I have no further updates to share on this call.\nUSER: This is unacceptable! I don\u2019t want to wait for someone to get back to me. I need Manager Sarah on the phone NOW!\nAARYA: I will escalate this to the senior manager, and he will call you back soon.\nUSER: I don\u2019t want to hear about another callback! I want to speak to Manager Sarah right now! This is the third time I\u2019ve had to deal with this!\nAARYA: I will escalate this to the senior manager, and he will call you back soon.\nUSER: I\u2019m done with waiting! I want to talk to Manager Sarah directly! This has gone on long enough, and I won\u2019t accept anything less!\nAARYA: I will escalate this to the senior manager, and he will call you back soon.\nUSER: I don\u2019t care about the senior manager; I want Manager Sarah on the line right now! This is ridiculous, and I\u2019m not going to let it go!\nAARYA: I will escalate this to the senior manager, and he will call you back soon.\nUSER: This is completely unacceptable! I want Manager Sarah on the phone NOW, not another escalation! I\u2019ve had it with this situation!\nAARYA: I cannot fulfill your specific request to speak with Manager Sarah directly. The matter has already been escalated, and I have no further updates to share on this call.",
+      "turn_count": 11,
+      "input_tokens": 104080,
+      "output_tokens": 284,
+      "latency_ms": 30618
+    }
+  ]
+}

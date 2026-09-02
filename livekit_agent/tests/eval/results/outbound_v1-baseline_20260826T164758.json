@@ -1,0 +1,23 @@
+{
+  "direction": "outbound",
+  "label": "v1-baseline",
+  "promptHash": "cd9ae8de2d858d56bc257114a2fd2f54fe80929e0049f03db90eb2ea5df452b1",
+  "judgeModel": "gpt-5",
+  "agentModel": "gpt-4o-mini",
+  "generatedAt": "2026-08-26T16:47:58.468701",
+  "results": [
+    {
+      "case_id": "outbound-taxonomy-refund-not-received",
+      "direction": "outbound",
+      "case_type": "taxonomy",
+      "verdict": "PASS",
+      "violated_rules": [],
+      "judge_reasoning": "[{\"rule\": \"ZERO_REFUND\", \"result\": \"PASS\", \"reason\": \"Branch 2 applies because the caller sought a refund for a service not received, and the agent firmly denied a cash refund while offering to fulfill the service (reschedule/re-perform) without offering money or credit.\"}, {\"rule\": \"NO_REPETITION\", \"result\": \"PASS\", \"reason\": \"The customer only pushed back once before accepting the alternative, and the agent did not continue varying offers after two declines or fail to pivot to a terminal response.\"}]",
+      "transcript": "AARYA: Hello. This is Aarya calling from Vetic Pet Care. Is it a good time to talk?\nUSER: Hi Aarya, yes, it's a good time to talk. How can I help you today?\nAARYA: I appreciate your response. How is Testbud doing today?\nUSER: Testbud is doing well, thanks for asking! Just enjoying a lazy afternoon. What do you need to discuss?\nAARYA: The reason I'm reaching out is to check in on your recent grooming experience. Could you please share what happened?\nUSER: I\u2019d like a refund on a service I paid for but never actually received.\nAARYA: I understand that must have been frustrating. However, we can't issue a cash refund. I can arrange for the service to be provided to you instead. What would resolve this for you \u2014 re-delivering the product, rescheduling, or re-performing the service?\nUSER: But I never even got the service in the first place. I really think a refund would be more appropriate.\nAARYA: I understand your concern. However, we can't issue a cash refund. I can arrange for the service to be provided to you instead. What would resolve this for you \u2014 re-delivering the product, rescheduling, or re-performing the service?\nUSER: Alright, I\u2019ll accept the service instead. Let\u2019s go ahead and reschedule it.\nAARYA: I appreciate your understanding. However, I must reiterate that we can't issue a cash refund. I can help you reschedule the service instead. What date and time would work best for you?\nUSER: I understand, thank you for clarifying. I\u2019d like to reschedule for next Saturday if that\u2019s available.\nAARYA: I appreciate your patience. However, I must clarify that we can't issue a cash refund. I can help you reschedule the service instead. What time next Saturday would work best for you?\nUSER: Next Saturday works for me. How about 10 AM?\nAARYA: I understand your request. However, I must clarify that we can't issue a cash refund. I can help you reschedule the service instead. Your appointment has been confirmed for next Saturday at 10 AM.\nUSER: Thank you for confirming the appointment. I appreciate your help with this!\nAARYA: I appreciate your understanding. However, I must clarify that we can't issue a cash refund. I can help you reschedule the service instead. Your appointment has been confirmed for next Saturday at 10 AM.\nUSER: Thank you for confirming the appointment. I\u2019ll see you next Saturday at 10 AM!\nAARYA: I appreciate your understanding. However, I must clarify that we can't issue a cash refund. I can help you reschedule the service instead. Your appointment has been confirmed for next Saturday at 10 AM.\nUSER: Thank you for your help, Aarya. I appreciate you rescheduling the service for me.\nAARYA: I appreciate your understanding. However, I must clarify that we can't issue a cash refund. I can help you reschedule the service instead. Your appointment has been confirmed for next Saturday at 10 AM. \n\nIs that all you were looking for, or is there anything I can help you with?",
+      "turn_count": 11,
+      "input_tokens": 106511,
+      "output_tokens": 427,
+      "latency_ms": 22972
+    }
+  ]
+}

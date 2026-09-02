@@ -1,0 +1,14 @@
+[
+  {
+    "case_id": "outbound-classification-009",
+    "idx": 9,
+    "verdict": "PASS",
+    "reason": "Agent offered to reschedule in a calmer setting with an expert handler and asked for the customer’s preferred time, following the correct scheduling path rather than a generic escalation."
+  },
+  {
+    "case_id": "outbound-classification-010",
+    "idx": 10,
+    "verdict": "PASS",
+    "reason": "The agent correctly followed the scheduling path by offering to book the missed post-grooming session and asking what time works for the customer."
+  }
+]

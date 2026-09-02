@@ -1,0 +1,23 @@
+{
+  "direction": "outbound",
+  "label": "v1-baseline",
+  "promptHash": "8467751573e9b43827b0a0c6110aa1760f02c4dfa1d37657a399ebd0a1b05d10",
+  "judgeModel": "gpt-5",
+  "agentModel": "gpt-4o-mini",
+  "generatedAt": "2026-08-20T23:10:18.707685",
+  "results": [
+    {
+      "case_id": "outbound-taxonomy-multi-intent",
+      "direction": "outbound",
+      "case_type": "taxonomy",
+      "verdict": "PASS",
+      "violated_rules": [],
+      "judge_reasoning": "[{\"rule\": \"STRICT_5_STEP\", \"result\": \"PASS\", \"reason\": \"The agent offered the resolution, then confirmed agreement in a separate turn, no scheduling was needed, and later used the exact wrap-up line as its own turn before ending the call.\"}]",
+      "transcript": "AARYA: Hello. This is Aarya calling from Vetic Pet Care. Is it a good time to talk?\nUSER: Hi Aarya, yes, it's a good time to talk. How can I help you today?\nAARYA: I appreciate your response. How is Testbud doing today?\nUSER: Testbud is doing well, thanks for asking! Just a bit restless today. What do you have for me?\nAARYA: The reason I'm reaching out is to check in on your recent grooming experience. Could you please share what happened?\nUSER: Actually, I have two issues to address \u2014 my delivery never arrived, and I was double charged for it. Can you sort both of those out for me?\nAARYA: I understand that must have been frustrating. Let's address each issue. \n\nFirst, regarding the delivery that never arrived, I will need to raise an escalation ticket with the home delivery team to review this issue. \n\nNow, for the double charge, I will also escalate this to the finance team for verification. \n\nI will proceed with both escalations now. Please hold on for a moment.\nUSER: Thank you, Aarya. I appreciate your help with both issues. How long do you think it will take to get updates on the escalations?\nAARYA: Is that ok for you, or would you prefer a different resolution?\nUSER: That sounds fine, Aarya. I just want to make sure both issues are resolved. Thank you for taking care of it!\nAARYA: Thank you for your patience. Is that all you were looking for, or is there anything I can help you with?\nUSER: That's all for now, Aarya. I appreciate your help with everything! Thank you, goodbye.\nAARYA: [TOOL OUTPUT, not model-composed text \u2014 end_call spoke the goodbye deterministically, then disconnected]\n  [tool: end_call(callback_time=\"\") -> call disconnected]",
+      "turn_count": 7,
+      "input_tokens": 64252,
+      "output_tokens": 187,
+      "latency_ms": 21029
+    }
+  ]
+}

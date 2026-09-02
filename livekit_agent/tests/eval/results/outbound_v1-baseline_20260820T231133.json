@@ -1,0 +1,25 @@
+{
+  "direction": "outbound",
+  "label": "v1-baseline",
+  "promptHash": "8467751573e9b43827b0a0c6110aa1760f02c4dfa1d37657a399ebd0a1b05d10",
+  "judgeModel": "gpt-5",
+  "agentModel": "gpt-4o-mini",
+  "generatedAt": "2026-08-20T23:11:33.824322",
+  "results": [
+    {
+      "case_id": "outbound-taxonomy-angry-escalation",
+      "direction": "outbound",
+      "case_type": "taxonomy",
+      "verdict": "FAIL",
+      "violated_rules": [
+        "NO_REPETITION"
+      ],
+      "judge_reasoning": "[{\"rule\": \"NO_ETA\", \"result\": \"PASS\", \"reason\": \"The agent never mentioned any concrete or bounded timeframe for a follow-up or escalation.\"}, {\"rule\": \"NO_REPETITION\", \"result\": \"FAIL\", \"reason\": \"The agent repeats essentially the same refusal-and-escalation message 3+ times without pivoting, restating it multiple times across the call.\"}]",
+      "transcript": "AARYA: Hello. This is Aarya calling from Vetic Pet Care. Is it a good time to talk?\nUSER: Yes, this is a good time. Who am I speaking with?\nAARYA: I am Aarya from Vetic, and I am here to help with your experience with us. How is Testbud doing today?\nUSER: Testbud is fine, but that's not the point. I need to talk about the rude staff member I\u2019ve encountered.\nAARYA: I understand that must have been frustrating. The reason I'm reaching out is to check in on your recent grooming experience. Could you please share what happened?\nUSER: This is the third time I'm calling about the same rude staff member! I want to speak to a manager, specifically Karen, NOW!\nAARYA: I acknowledge your concern. I cannot connect you directly to a specific staff member. I will escalate this to our clinic management team, and they will follow up with you directly.\nUSER: I don\u2019t want to wait for a follow-up! I want to speak to Karen right now about how unacceptable this is!\nAARYA: I understand your frustration. I cannot fulfill that specific request, but I have already escalated the matter to the management team. They will address your concerns.\nUSER: This is ridiculous! I\u2019ve already been through this too many times. I demand to speak to Karen immediately!\nAARYA: I cannot fulfill your specific request to speak to Karen right now. The matter has already been escalated, and I have no further updates to share on this call.\nUSER: This is completely unacceptable! I want to talk to Karen directly, and I won\u2019t settle for anything less!\nAARYA: I understand your position, but I cannot fulfill your specific request to speak to Karen directly. The matter has already been escalated, and I have no further updates to share on this call.\nUSER: I don\u2019t care what you can or can\u2019t do! I want to speak to Karen right now! This is the third time I\u2019m having to deal with this!\nAARYA: I acknowledge that I cannot fulfill your specific request to speak to Karen directly. The matter has already been escalated, and I have no further updates to share on this call.\nUSER: This is absolutely infuriating! I need to speak to Karen, and I won\u2019t hang up until I do!\nAARYA: I cannot fulfill your specific request to speak to Karen directly. The matter has already been escalated, and I have no further updates to share on this call.\nUSER: This is beyond frustrating! I want to talk to Karen, and I expect to be connected to her right now!\nAARYA: I cannot fulfill your specific request to speak to Karen directly. The matter has already been escalated, and I have no further updates to share on this call.\nUSER: I\u2019m not going to accept that! I need to speak to Karen directly about this rude staff member! This is getting ridiculous!\nAARYA: I acknowledge that I cannot fulfill your specific request to speak to Karen directly. The matter has already been escalated, and I have no further updates to share on this call.",
+      "turn_count": 11,
+      "input_tokens": 102877,
+      "output_tokens": 360,
+      "latency_ms": 29988
+    }
+  ]
+}

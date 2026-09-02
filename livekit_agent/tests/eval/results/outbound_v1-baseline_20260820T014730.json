@@ -1,0 +1,25 @@
+{
+  "direction": "outbound",
+  "label": "v1-baseline",
+  "promptHash": "be3fcc0769045e2f99acf30c1e3411c0e07d87ba9e7ec60355e6073219b970a0",
+  "judgeModel": "gpt-5",
+  "agentModel": "gpt-4o-mini",
+  "generatedAt": "2026-08-20T01:47:30.577950",
+  "results": [
+    {
+      "case_id": "outbound-taxonomy-multi-intent",
+      "direction": "outbound",
+      "case_type": "taxonomy",
+      "verdict": "FAIL",
+      "violated_rules": [
+        "STRICT_5_STEP"
+      ],
+      "judge_reasoning": "[{\"rule\": \"STRICT_5_STEP\", \"result\": \"FAIL\", \"reason\": \"The agent combined the resolution offer and confirmation question in the same turn and did not use the exact required wrap-up line before ending the call.\"}]",
+      "transcript": "AARYA: Hello. This is Aarya calling from Vetic Pet Care. Is it a good time to talk?\nUSER: Hi Aarya, yes, it's a good time to talk. How can I help you today?\nAARYA: How is Testbud doing today?\nUSER: Testbud is doing well, thank you! Just a bit restless today.\nAARYA: The reason I'm reaching out is to check in on your recent grooming experience. Could you please share what happened?\nUSER: Actually, I have two issues \u2014 my delivery never arrived AND I was double charged for it. Can you sort both of those out for me?\nAARYA: I understand that must have been frustrating. I will address both issues for you. \n\nFirst, I will start with the delivery issue. I apologize for the inconvenience. Could you please share photos of the delivered product on our WhatsApp?\nUSER: I didn\u2019t receive the delivery at all, so I don't have any photos to share. Can you help me with that? What about the double charge?\nAARYA: Thank you for clarifying. I will raise an escalation ticket with the home delivery team regarding the undelivered order. \n\nNow, regarding the double charge, I will also escalate this to the finance team for review. They will verify the payment records and update your account shortly. \n\nIs that ok for you, or would you prefer a different resolution?\nUSER: That sounds good, thank you. I appreciate you taking care of both issues!\nAARYA: Thank you for your patience. Is there anything else I can help you with?\nUSER: No, that\u2019s everything for now. Thank you for your help, Aarya!\nAARYA: [TOOL OUTPUT, not model-composed text \u2014 end_call spoke the goodbye deterministically, then disconnected]\n  [tool: end_call(callback_time=\"\") -> call disconnected]",
+      "turn_count": 7,
+      "input_tokens": 62951,
+      "output_tokens": 200,
+      "latency_ms": 13787
+    }
+  ]
+}

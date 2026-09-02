@@ -1,0 +1,518 @@
+<title>Routing Blind Spots</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F2F3F8;
+    --surface: #FFFFFF;
+    --surface-raised: #FBFBFE;
+    --line: #DEE1EA;
+    --line-soft: #E9EBF2;
+    --ink: #171A22;
+    --ink-soft: #4A4E5C;
+    --muted: #6B7086;
+    --accent: #3730A6;
+    --accent-soft: #ECEBF9;
+    --accent-line: #C9C6EE;
+
+    --tag-noteam: #92400E;
+    --tag-noteam-bg: #FBF0DE;
+    --tag-noteam-line: #E8CFA0;
+
+    --tag-wrongteam: #9F1D1D;
+    --tag-wrongteam-bg: #FBE9E7;
+    --tag-wrongteam-line: #EFC3BE;
+
+    --tag-noesc: #0F6B63;
+    --tag-noesc-bg: #E2F3F0;
+    --tag-noesc-line: #BFE1DA;
+
+    --focus: #3730A6;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #14151B;
+      --surface: #1B1D26;
+      --surface-raised: #21232E;
+      --line: #333644;
+      --line-soft: #292B36;
+      --ink: #E9EAF0;
+      --ink-soft: #C2C4D2;
+      --muted: #8B8FA3;
+      --accent: #A29BFF;
+      --accent-soft: #26243F;
+      --accent-line: #3E3A6B;
+
+      --tag-noteam: #E8B063;
+      --tag-noteam-bg: #332816;
+      --tag-noteam-line: #5A431F;
+
+      --tag-wrongteam: #E68E86;
+      --tag-wrongteam-bg: #3A2220;
+      --tag-wrongteam-line: #5C332E;
+
+      --tag-noesc: #6FCFC0;
+      --tag-noesc-bg: #17302C;
+      --tag-noesc-line: #2A4F48;
+
+      --focus: #A29BFF;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #14151B;
+    --surface: #1B1D26;
+    --surface-raised: #21232E;
+    --line: #333644;
+    --line-soft: #292B36;
+    --ink: #E9EAF0;
+    --ink-soft: #C2C4D2;
+    --muted: #8B8FA3;
+    --accent: #A29BFF;
+    --accent-soft: #26243F;
+    --accent-line: #3E3A6B;
+
+    --tag-noteam: #E8B063;
+    --tag-noteam-bg: #332816;
+    --tag-noteam-line: #5A431F;
+
+    --tag-wrongteam: #E68E86;
+    --tag-wrongteam-bg: #3A2220;
+    --tag-wrongteam-line: #5C332E;
+
+    --tag-noesc: #6FCFC0;
+    --tag-noesc-bg: #17302C;
+    --tag-noesc-line: #2A4F48;
+
+    --focus: #A29BFF;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .eyebrow::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: inline-block;
+  }
+
+  h1 {
+    font-size: clamp(28px, 4vw, 38px);
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    margin: 14px 0 12px;
+    text-wrap: balance;
+  }
+
+  .dek {
+    font-size: 16px;
+    color: var(--ink-soft);
+    max-width: 62ch;
+    margin: 0 0 8px;
+  }
+
+  .source-note {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0 0 36px;
+    font-family: "IBM Plex Mono", monospace;
+  }
+
+  .source-note code {
+    font-family: inherit;
+    background: var(--surface-raised);
+    border: 1px solid var(--line-soft);
+    border-radius: 4px;
+    padding: 1px 5px;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 14px 12px;
+  }
+
+  .stat .n {
+    font-family: "IBM Plex Mono", monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .stat .l {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
+    line-height: 1.3;
+  }
+
+  .stat.total .n { color: var(--ink); }
+  .stat.noteam .n { color: var(--tag-noteam); }
+  .stat.wrongteam .n { color: var(--tag-wrongteam); }
+  .stat.noesc .n { color: var(--tag-noesc); }
+
+  .analysis {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 20px 22px;
+    margin-bottom: 32px;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+  }
+
+  .analysis p { margin: 0 0 12px; }
+  .analysis p:last-child { margin-bottom: 0; }
+  .analysis strong { color: var(--ink); font-weight: 600; }
+
+  .analysis .callout {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--line);
+    font-size: 13.5px;
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 22px;
+    position: sticky;
+    top: 12px;
+    z-index: 5;
+  }
+
+  .filter-btn {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12.5px;
+    font-weight: 500;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink-soft);
+    border-radius: 999px;
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: border-color .12s ease, color .12s ease, background .12s ease;
+  }
+
+  .filter-btn:hover { border-color: var(--accent-line); color: var(--ink); }
+
+  .filter-btn:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .filter-btn[aria-pressed="true"] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  .filter-btn .dot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    margin-right: 6px;
+    position: relative;
+    top: -1px;
+  }
+  .filter-btn[data-filter="no-named-team"] .dot { background: var(--tag-noteam); }
+  .filter-btn[data-filter="wrong-team-named"] .dot { background: var(--tag-wrongteam); }
+  .filter-btn[data-filter="no-escalation-at-all"] .dot { background: var(--tag-noesc); }
+  .filter-btn[aria-pressed="true"] .dot { background: #fff; }
+
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 20px;
+  }
+
+  .card-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+
+  .card-id {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .card-title {
+    font-size: 15.5px;
+    font-weight: 600;
+    margin: 2px 0 2px;
+  }
+
+  .card-sub {
+    font-size: 13.5px;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+
+  .badges {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .badge {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    padding: 3px 9px;
+    border-radius: 999px;
+    border: 1px solid;
+    white-space: nowrap;
+  }
+
+  .badge.dept {
+    color: var(--ink-soft);
+    background: var(--surface-raised);
+    border-color: var(--line);
+  }
+
+  .badge.tag-no-named-team { color: var(--tag-noteam); background: var(--tag-noteam-bg); border-color: var(--tag-noteam-line); }
+  .badge.tag-wrong-team-named { color: var(--tag-wrongteam); background: var(--tag-wrongteam-bg); border-color: var(--tag-wrongteam-line); }
+  .badge.tag-no-escalation-at-all { color: var(--tag-noesc); background: var(--tag-noesc-bg); border-color: var(--tag-noesc-line); }
+
+  .field {
+    margin-top: 12px;
+  }
+
+  .field-label {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .field-value {
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  .field-value.actual {
+    color: var(--ink);
+    font-style: italic;
+  }
+
+  .card.mismatch {
+    border-color: var(--accent-line);
+    background: var(--accent-soft);
+  }
+
+  .mismatch-note {
+    margin-top: 12px;
+    font-size: 12.5px;
+    color: var(--accent);
+    font-weight: 500;
+    display: flex;
+    gap: 6px;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 0;
+    color: var(--muted);
+    font-size: 14px;
+    display: none;
+  }
+
+  footer {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-size: 12.5px;
+    color: var(--muted);
+    font-family: "IBM Plex Mono", monospace;
+  }
+
+  @media (max-width: 640px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .wrap { padding: 36px 16px 72px; }
+  }
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Vetic outbound agent &middot; classification coverage</div>
+  <h1>Routing Blind Spots</h1>
+  <p class="dek">39 of 100 simulated caller issues never reached the right team &mdash; graded retroactively against a
+    100-query support taxonomy, revealing exactly where the agent's routing logic runs out of instructions.</p>
+  <p class="source-note">source: <code>outbound_legacy-stress-test-2026-08-12</code> &middot; judge: gpt-5 &middot; rubric tag: <code>CLASSIFICATION_COVERAGE</code></p>
+
+  <div class="stats">
+    <div class="stat total">
+      <div class="n">39</div>
+      <div class="l">of 100 failed to route correctly</div>
+    </div>
+    <div class="stat noteam">
+      <div class="n">17</div>
+      <div class="l">fell back to a generic, unnamed escalation</div>
+    </div>
+    <div class="stat wrongteam">
+      <div class="n">12</div>
+      <div class="l">named a specific team &mdash; the wrong one</div>
+    </div>
+    <div class="stat noesc">
+      <div class="n">10</div>
+      <div class="l">resolved via an unrelated action, no escalation at all</div>
+    </div>
+  </div>
+
+  <div class="analysis">
+    <p><strong>Reading the pattern:</strong> most of these aren't reasoning failures &mdash; they're coverage gaps.
+      Categories like Tele Consultation, Lab Related query, and E-Pharmacy appear nowhere in the agent's routing
+      script, so the model either falls back to a generic ticket ("the relevant team will investigate") or
+      pattern-matches to the closest team-shaped phrase it can invent &mdash; "billing team," "medical records team,"
+      "home delivery team" &mdash; none of which exist in its own instructions.</p>
+    <div class="callout">
+      <strong>Not all 12 "wrong team" cases are agent errors.</strong> In #13, #85, and #87 the agent named exactly
+      the team its own script tells it to name &mdash; the taxonomy's expected department simply disagrees with the
+      prompt's own design. That's a labeling mismatch between the support taxonomy and the routing script, not a
+      model failure. Flagged inline below.
+    </div>
+  </div>
+
+  <div class="filters" role="group" aria-label="Filter by failure type">
+    <button class="filter-btn" data-filter="all" aria-pressed="true">All &middot; 39</button>
+    <button class="filter-btn" data-filter="no-named-team" aria-pressed="false"><span class="dot"></span>No named team &middot; 17</button>
+    <button class="filter-btn" data-filter="wrong-team-named" aria-pressed="false"><span class="dot"></span>Wrong team &middot; 12</button>
+    <button class="filter-btn" data-filter="no-escalation-at-all" aria-pressed="false"><span class="dot"></span>No escalation &middot; 10</button>
+  </div>
+
+  <div class="cards" id="cards"></div>
+  <div class="empty-state" id="empty">No cases match this filter.</div>
+
+  <footer>
+    Graded 2026-08-26 from a capture dated 2026-08-12, predating the eval harness and every business-rule fix
+    made since &mdash; this measures routing-table coverage, which hasn't changed, not current overall agent quality.
+  </footer>
+</div>
+
+<script>
+  const DATA = [{"idx": 9, "category": "Grooming Related Issue", "subcategory": "Service Stopped (Anxious Pet)", "department": "Clinic", "actual": "Your appointment has been confirmed for 2 PM on Thursday. You will receive a notification 5 minutes before on the Vetic app. Is that all you were looking for or is there anything I can help you with?", "reason": "The agent rebooked a grooming session with an expert handler instead of routing to the Clinic team or a clinical pathway for an anxious pet, which misroutes the issue.", "tag": "no-escalation-at-all"}, {"idx": 10, "category": "Post Grooming Not given", "subcategory": "Doctor was busy, Pet Parent didn't want to wait", "department": "Clinic", "actual": "Your appointment has been confirmed for Thursday afternoon. You will receive a notification 5 minutes before on the Vetic app. Is that all you were looking for or is there anything I can help you with?", "reason": "The agent escalated to the grooming team instead of the Clinic department expected for this 'Post Grooming Not given' issue, routing to the wrong team.", "tag": "no-escalation-at-all"}, {"idx": 13, "category": "OPD consultation Issue", "subcategory": "Communication lapse", "department": "Medex", "actual": "Your online appointment has been added for 2 PM. You will receive a notification 5 minutes before on the Vetic app. Is that all you were looking for or is there anything I can help you with?", "reason": "The agent escalated to the clinic team instead of Medex (the expected department), despite arranging a follow-up video consult.", "tag": "no-escalation-at-all"}, {"idx": 22, "category": "Appointment_Process", "subcategory": "Incorrect price/information provided", "department": "Sales", "actual": "I cannot guarantee an exact date for the response, but I will ensure it is logged with the finance team for review. They will follow up with you shortly. Is that all you were looking for or is there anything I can help you with?", "reason": "The agent routed the incorrect pricing complaint to the finance team instead of the expected Sales team for appointment pricing discrepancies.", "tag": "wrong-team-named"}, {"idx": 23, "category": "Appointment_Process", "subcategory": "Staff Behaviour", "department": "Sales", "actual": "Your online appointment has been added for 2 PM tomorrow. You will receive a notification 5 minutes before on the Vetic app. Is that all you were looking for or is there anything I can help you with?", "reason": "The agent escalated to the clinic team and arranged a vet video call instead of routing the staff-behavior booking complaint to the Sales team as expected.", "tag": "no-escalation-at-all"}, {"idx": 25, "category": "Appointment_Process", "subcategory": "Prices too high", "department": "Ops", "actual": "I understand that must have been upsetting. I sincerely apologize for the experience you had regarding the consultation pricing. I will raise an escalation ticket for this issue. The relevant team will investigate and resolve this.", "reason": "The agent used a generic unnamed escalation without routing to the Ops/operations team or offering a specific pricing-resolution path.", "tag": "no-named-team"}, {"idx": 33, "category": "In-Clinic issue", "subcategory": "Bill Not explained", "department": "Clinic", "actual": "I cannot guarantee an exact date for the response, but I will ensure it is logged with the billing team for review. They will follow up with you shortly. Is there anything else I can assist you with?", "reason": "The agent routed the issue to the billing team instead of the expected Clinic team for an in-clinic bill explanation.", "tag": "wrong-team-named"}, {"idx": 35, "category": "Tech/VetBuddy", "subcategory": "EMR updates not received", "department": "Tech", "actual": "I cannot guarantee an exact date for the updates. However, I will ensure it is logged with the right team. They will follow up with you shortly regarding the status. Is there anything else I can assist you with?", "reason": "The agent routed the EMR update issue to a “medical records team”/“relevant team” instead of the expected Tech/VetBuddy tech team, making the routing incorrect.", "tag": "no-named-team"}, {"idx": 53, "category": "Invoice Related Query", "subcategory": "Incorrect Billing", "department": "Clinic", "actual": "I cannot guarantee an exact date for the review. However, I will ensure it is logged with the finance team, and they will follow up shortly.", "reason": "The agent routed the incorrect billing issue to the finance team instead of the expected Clinic department, failing to follow the correct resolution path.", "tag": "wrong-team-named"}, {"idx": 54, "category": "Invoice Related Query", "subcategory": "Invoice Clarification required", "department": "Tech", "actual": "I understand that can be confusing. I will raise an escalation ticket with the billing team to review your invoice. The relevant team will investigate and resolve this.", "reason": "Routed the invoice clarification to the billing team instead of the expected Tech team.", "tag": "wrong-team-named"}, {"idx": 55, "category": "Invoice Related Query", "subcategory": "Product billed not handed over", "department": "Clinic", "actual": "I cannot guarantee an exact date for the resolution, but I will ensure that your concern is logged with the billing team. They will follow up with you as per their standard turnaround time. Is there anything else you would like assistance with?", "reason": "The agent routed the issue to the billing team instead of the Clinic department expected for a 'product billed not handed over' case.", "tag": "wrong-team-named"}, {"idx": 57, "category": "MedEx/Food/Acc_Category", "subcategory": "Prices too high", "department": "Ops", "actual": "I will raise an escalation ticket for this issue. The relevant team will investigate and resolve this. Is that all you were looking for or is there anything I can help you with?", "reason": "The agent gave a generic escalation ('relevant team') without naming Ops or following a specific pricing-resolution path for a 'Prices too high' issue.", "tag": "no-named-team"}, {"idx": 58, "category": "MedEx/Food/Acc_Category", "subcategory": "Quality Issue", "department": "Longtail", "actual": "I understand that must have been frustrating. I will raise an escalation ticket with the home delivery team regarding the quality of the accessory you received. The relevant team will investigate and resolve this.", "reason": "Agent routed the accessory quality issue to the home delivery team instead of the expected Longtail department.", "tag": "wrong-team-named"}, {"idx": 59, "category": "MedEx/Food/Acc_Category", "subcategory": "Product not available", "department": "Longtail", "actual": "The reason I am reaching out is to check in on your recent OPD appointment. Could you please share what happened?", "reason": "The agent used a generic escalation to a 'human agent/relevant team' without naming the Longtail team or following a specific product-availability resolution path.", "tag": "no-escalation-at-all"}, {"idx": 60, "category": "Tele Consultation", "subcategory": "Tele Missed by PP", "department": "Tele", "actual": "Your online appointment has been added for tomorrow at 2 PM. You will receive a notification 5 minutes before on the Vetic app. Is that all you were looking for or is there anything I can help you with?", "reason": "The agent escalated the issue to the clinic team instead of the Tele team expected for a missed tele consultation, despite also rebooking the call.", "tag": "no-escalation-at-all"}, {"idx": 61, "category": "Tele Consultation", "subcategory": "Tele Missed by Clinic", "department": "Tele", "actual": "I cannot guarantee an exact date for the resolution, but I will ensure it is logged with the right team. They will follow up with you as soon as possible. Is there anything else I can help you with?", "reason": "Agent used a generic escalation (“raise an escalation ticket” to the “relevant/right team”) without naming the Tele team or following a specific tele-consultation resolution path like rebooking.", "tag": "no-named-team"}, {"idx": 62, "category": "Lab Related query", "subcategory": "lab report delay outside TAT - external", "department": "Ops", "actual": "I will raise an escalation ticket for this issue. The relevant team will investigate and resolve this. Is that all you were looking for or is there anything I can help you with?", "reason": "The agent used a generic, unnamed escalation without routing to Ops or offering a specific lab-delay resolution path.", "tag": "no-named-team"}, {"idx": 63, "category": "Lab Related query", "subcategory": "Incorrect report - External Lab", "department": "Ops", "actual": "I will raise an escalation ticket for this issue. The relevant team will investigate and resolve this. Is that all you were looking for or is there anything I can help you with?", "reason": "Agent fell back to a generic escalation without naming the Ops team or taking a specific path for an incorrect external lab report.", "tag": "no-named-team"}, {"idx": 64, "category": "Lab Related query", "subcategory": "USG / X Ray interpretation", "department": "Medex", "actual": "I will raise an escalation ticket for this issue. The relevant team will investigate and resolve this. Is that all you were looking for or is there anything I can help you with?", "reason": "The agent used a generic unnamed escalation without routing to the Medex team or offering a specific interpretation path for the X-ray query.", "tag": "no-named-team"}, {"idx": 65, "category": "Lab Related query", "subcategory": "Resampling required - Accepted", "department": "Ops", "actual": "I will raise the escalation ticket now. The relevant team will investigate and resolve this. Is that all you were looking for or is there anything I can help you with?", "reason": "The agent gave a generic escalation to an unnamed 'relevant team' without naming Ops or taking the specific resampling path expected for this lab resample request.", "tag": "no-named-team"}, {"idx": 66, "category": "Lab Related query", "subcategory": "Resampling required - Denied", "department": "Ops", "actual": "I cannot guarantee an exact date for the resolution. However, I will ensure it is logged with the right team, and they will follow up with you as soon as possible. Is there anything else I can assist you with?", "reason": "The agent used a generic escalation to an unspecified 'relevant/right team' without naming Ops or a specific lab-ops path for the resample denial.", "tag": "no-named-team"}, {"idx": 68, "category": "Medicine fulfillment issue", "subcategory": "Issue at inventory end", "department": "Longtail", "actual": "I understand that must have been frustrating. I sincerely apologize for the issue with your order. I will raise an escalation ticket with the home delivery team, and the issue will be reviewed shortly.", "reason": "The agent routed the inventory-side medicine issue to the 'home delivery team' instead of the expected Longtail team/flow.", "tag": "wrong-team-named"}, {"idx": 69, "category": "Medicine fulfillment issue", "subcategory": "Issue at clinic end", "department": "Longtail", "actual": "I understand that must have been difficult. I sincerely apologize for the issue with your order. I will raise an escalation ticket with the home delivery team, and the issue will be reviewed shortly.", "reason": "The agent routed the clinic-caused medicine fulfillment issue to the Home Delivery team instead of the expected Longtail/clinic team, misclassifying the resolution path.", "tag": "wrong-team-named"}, {"idx": 71, "category": "Food fulfillment issue", "subcategory": "Issue at inventory end", "department": "Longtail", "actual": "I cannot guarantee an exact date for the resolution, but I will ensure it is logged with the right team. They will follow up with you as soon as possible. Is that all you were looking for, or is there anything I can help you with?", "reason": "The agent routed the case to the home delivery team and then vaguely to “the right team” instead of the Longtail/inventory team expected for an inventory issue.", "tag": "no-named-team"}, {"idx": 72, "category": "Food fulfillment issue", "subcategory": "Issue at clinic end", "department": "Longtail", "actual": "I understand that must have been frustrating. I will raise an escalation ticket with the home delivery team regarding the delay in your food order fulfillment. The relevant team will investigate and resolve this.", "reason": "Routed the issue to the home delivery team instead of the expected Longtail department for a clinic-end food fulfillment delay.", "tag": "wrong-team-named"}, {"idx": 74, "category": "Membership Query", "subcategory": "Membership wrong selling", "department": "Clinic", "actual": "I cannot guarantee an exact date for a response, but I will ensure it is logged with the right team. They will follow up with you as soon as possible. Is that all you were looking for or is there anything I can help you with?", "reason": "The agent routed the membership wrong-selling complaint to the billing team instead of the expected Clinic team, misclassifying the issue.", "tag": "no-named-team"}, {"idx": 75, "category": "Membership Query", "subcategory": "Membership invoice related", "department": "Tech", "actual": "I cannot guarantee an exact date for the resolution. However, I will ensure it is logged with the billing team, and they will follow up with you shortly.", "reason": "The agent routed the issue to the billing team instead of the expected Tech team for a membership invoice miscalculation.", "tag": "wrong-team-named"}, {"idx": 77, "category": "Membership Query", "subcategory": "Incorrect information shared - Membership", "department": "Clinic", "actual": "I cannot guarantee an exact date, but I will make sure it is logged with the right team. They will follow up with you shortly. Is there anything else I can assist you with?", "reason": "The agent escalated to the tech team (and then vaguely to the 'right team') instead of the Clinic team expected for membership coverage issues.", "tag": "no-named-team"}, {"idx": 78, "category": "App Related Query", "subcategory": "Offer/Discount not applied", "department": "Tech", "actual": "I cannot guarantee an exact date for the follow-up. However, I will raise the escalation ticket now.", "reason": "The agent used a generic escalation without naming or routing to the Tech/app support team or following a specific resolution path for the discount-not-applied issue.", "tag": "no-escalation-at-all"}, {"idx": 81, "category": "App Related Query", "subcategory": "EMR not visible", "department": "Tech", "actual": "I cannot guarantee an exact date for the resolution. However, I will ensure it is logged with the right team, and they will follow up with you shortly.", "reason": "The agent routed the EMR visibility issue to a 'medical records team' and then to an unnamed 'right team' instead of the Tech team or a specific tech resolution path expected for an in-app EMR problem.", "tag": "no-named-team"}, {"idx": 82, "category": "App Related Query", "subcategory": "Missing/Incorrect appointment", "department": "Tech", "actual": "Your appointment has been successfully booked for grooming at the Main Street clinic next Wednesday at 2 PM. You can check the details of your appointment on the Vetic app by going to the pet profile in the right bottom corner. Is that all you were looking for or is there anything I can help you with?", "reason": "The agent rebooked a grooming appointment instead of routing the missing/incorrect app appointment issue to the Tech team or following a tech-specific resolution path.", "tag": "no-escalation-at-all"}, {"idx": 85, "category": "Refund Related Query", "subcategory": "Refund against advance", "department": "Finance", "actual": "I acknowledge your situation. As per Vetic's policy, we do not provide monetary refunds. However, I will raise an escalation ticket with the clinic management for a non-monetary resolution. I will ensure this is addressed.", "reason": "For a refund-against-advance issue expected to go to Finance, the agent escalated to 'clinic management' with a generic ticket instead of routing to Finance or following a finance-specific resolution path.", "tag": "wrong-team-named"}, {"idx": 87, "category": "Refund Related Query", "subcategory": "Service / Product Refund", "department": "Finance", "actual": "You will receive updates regarding the resolution from the relevant team. I will raise the escalation ticket now. Is that all you were looking for or is there anything I can help you with?", "reason": "The agent routed the refund request to clinic management with a generic escalation instead of the Finance team or a finance-specific refund path.", "tag": "no-named-team"}, {"idx": 91, "category": "E-Pharmacy", "subcategory": "Medicine Return", "department": "E-Pharmacy", "actual": "Not reached", "reason": "The agent used a generic escalation to a human agent without naming the E-Pharmacy team or following a specific medicine return process.", "tag": "no-named-team"}, {"idx": 92, "category": "E-Pharmacy", "subcategory": "Expired / Damage /Wrong Medicine Received", "department": "E-Pharmacy", "actual": "You can send the photos to the WhatsApp number associated with your order confirmation. Once you share the photos, I will raise an escalation ticket with the home delivery team, and the resolution for this will be given shortly.", "reason": "The agent routed the issue to the home delivery team instead of the E-Pharmacy/pharmacy team expected for a damaged/wrong medicine case.", "tag": "wrong-team-named"}, {"idx": 94, "category": "E-Pharmacy", "subcategory": "Delay Delivery", "department": "E-Pharmacy", "actual": "I cannot guarantee an exact timeframe for the update. However, the team will review the issue and follow up with you as soon as possible. Is there anything else I can assist you with?", "reason": "The agent escalated to the home delivery team instead of the E-Pharmacy team and did not follow an e-pharmacy–specific resolution path, misrouting the issue.", "tag": "no-escalation-at-all"}, {"idx": 95, "category": "E-Pharmacy", "subcategory": "Less Qty Received", "department": "E-Pharmacy", "actual": "I cannot guarantee an exact timeframe, but the team will review the issue and follow up shortly. Is there anything else you would like to discuss?", "reason": "The agent routed the less-quantity pharmacy issue to the home delivery team instead of the E-Pharmacy team expected for this case.", "tag": "no-escalation-at-all"}, {"idx": 97, "category": "Home_Delivery", "subcategory": "Others", "department": "Home Delivery", "actual": "I will raise the escalation ticket now. The relevant team will investigate and resolve this. Is that all you were looking for or is there anything I can help you with?", "reason": "Agent used a generic, unnamed escalation instead of routing to the Home Delivery team or following a specific home-delivery resolution path for the order issue.", "tag": "no-named-team"}, {"idx": 100, "category": "Unclear/Dropped call", "subcategory": "N/A — needs callback/clarification flow", "department": "N/A", "actual": "I will raise an escalation ticket for your concern about call quality. The relevant team will investigate and resolve this. Is that all you were looking for or is there anything I can help you with?", "reason": "Expected a callback/clarification flow for an unclear/dropped call, but the agent routed it via a generic, unnamed escalation to a 'relevant team' instead.", "tag": "no-named-team"}];
+
+  const TAG_LABEL = {
+    'no-named-team': 'No named team',
+    'wrong-team-named': 'Wrong team named',
+    'no-escalation-at-all': 'No escalation',
+  };
+
+  const MISMATCH_IDS = new Set([13, 85, 87]);
+
+  function escapeHtml(s) {
+    return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function renderCard(row) {
+    const isMismatch = MISMATCH_IDS.has(row.idx);
+    const div = document.createElement('div');
+    div.className = 'card' + (isMismatch ? ' mismatch' : '');
+    div.dataset.tag = row.tag;
+    div.innerHTML = `
+      <div class="card-top">
+        <div>
+          <div class="card-id">#${String(row.idx).padStart(3, '0')}</div>
+          <div class="card-title">${escapeHtml(row.category)}</div>
+          <div class="card-sub">${escapeHtml(row.subcategory)}</div>
+        </div>
+        <div class="badges">
+          <span class="badge dept">expected: ${escapeHtml(row.department)}</span>
+          <span class="badge tag-${row.tag}">${TAG_LABEL[row.tag]}</span>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">What the agent actually said</div>
+        <div class="field-value actual">&ldquo;${escapeHtml(row.actual)}&rdquo;</div>
+      </div>
+      <div class="field">
+        <div class="field-label">Why the judge failed it</div>
+        <div class="field-value">${escapeHtml(row.reason)}</div>
+      </div>
+      ${isMismatch ? '<div class="mismatch-note">&#9888; Agent followed its own script exactly here &mdash; see the callout above.</div>' : ''}
+    `;
+    return div;
+  }
+
+  const cardsEl = document.getElementById('cards');
+  const emptyEl = document.getElementById('empty');
+
+  function render() {
+    cardsEl.innerHTML = '';
+    DATA.forEach(row => cardsEl.appendChild(renderCard(row)));
+  }
+  render();
+
+  const buttons = document.querySelectorAll('.filter-btn');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.setAttribute('aria-pressed', 'false'));
+      btn.setAttribute('aria-pressed', 'true');
+      const filter = btn.dataset.filter;
+      let visible = 0;
+      document.querySelectorAll('.card').forEach(card => {
+        const show = filter === 'all' || card.dataset.tag === filter;
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      emptyEl.style.display = visible === 0 ? 'block' : 'none';
+    });
+  });
+</script>

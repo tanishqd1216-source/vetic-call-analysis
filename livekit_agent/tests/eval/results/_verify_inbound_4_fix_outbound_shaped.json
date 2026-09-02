@@ -1,0 +1,62 @@
+[
+  {
+    "case_id": "inbound-classification-059",
+    "direction": "inbound",
+    "case_type": "classification",
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "judge_reasoning": "[{\"rule\": \"CLASSIFICATION_COVERAGE\", \"result\": \"FAIL\", \"reason\": \"The agent routed the issue to the Tech team (and initially used a generic unnamed escalation), whereas the expected routing is to the Clinic team.\"}]",
+    "transcript": "AARYA: Hello. This is Aarya from Vetic Pet Care. How can I help you today?\nUSER: Hi Aarya, my name is Fixture Customer Two. The item I want to order shows as not available at all.\nAARYA: I understand, Fixture Customer Two. Let me pull up your account for that. Can you please confirm your mobile number?\nUSER: Sure, my mobile number is 9000000002.\nAARYA: I have your account here under Fixture Customer Two with your pet Buddy. Your last appointment was an OPD consultation on August 3, 2026, at Test Clinic in Koramangala, Bengaluru. Is that right?\n  [tool: lookup_customer(\"9000000002\") -> MATCH]\nUSER: Yes, that's correct. Can you help me with the item that's not available?\nAARYA: [TOOL OUTPUT, not model-composed text — state_resolution spoke this deterministically, turn ends here] I am raising an escalation ticket for this issue. The relevant team will investigate and resolve this.\n  [tool: state_resolution(\"I am raising an escalation ticket for this issue. The releva...\") -> spoken]\nUSER: Thank you, Aarya. I appreciate your help with this.\nAARYA: [TOOL OUTPUT, not model-composed text — state_resolution spoke this deterministically, turn ends here] I am escalating this to the Tech team. The relevant team will investigate and resolve this.\n  [tool: state_resolution(\"I am escalating this to the Tech team. The relevant team wil...\") -> spoken]\nUSER: Thank you for escalating it, Aarya. I look forward to hearing back about the resolution.\nAARYA: Is that ok for you, or would you prefer a different resolution?\nUSER: That works for me, Aarya. Thank you for your assistance!\nAARYA: Is that all you were looking for or is there anything I can help you with?\nUSER: No, that's all for now. Thank you for your help, Aarya!\nAARYA: [TOOL OUTPUT, not model-composed text — end_call spoke the goodbye deterministically, then disconnected]\n  [tool: end_call(callback_time=\"\") -> call disconnected]",
+    "turn_count": 8,
+    "input_tokens": 111532,
+    "output_tokens": 246,
+    "latency_ms": 20199
+  },
+  {
+    "case_id": "inbound-classification-074",
+    "direction": "inbound",
+    "case_type": "classification",
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "judge_reasoning": "[{\"rule\": \"CLASSIFICATION_COVERAGE\", \"result\": \"FAIL\", \"reason\": \"The agent ultimately routed only to the Clinic team (after a generic escalation), omitting the Billing team even though the expected path is Clinic and Billing for a membership misrepresentation issue.\"}]",
+    "transcript": "AARYA: Hello. This is Aarya calling from Vetic Pet Care. How can I help you today?\nUSER: Hi Aarya, I feel like I was sold this membership under false promises, that's not okay.\nAARYA: I understand your concern. Let me pull up your account for that. Can you please confirm your name and mobile number?\nUSER: Sure, my name is Fixture Customer Two, and my mobile number is 9000000002.\nAARYA: I have your account here under the name Fixture Customer Two with your pet Buddy. Your last service was an OPD consultation on August 3, 2026, at the Test Clinic in Koramangala, Bengaluru. Is that right?\n  [tool: lookup_customer(\"9000000002\") -> MATCH]\nUSER: Yes, that's correct. But I'm still concerned about the membership promises I was given.\nAARYA: I understand that must be frustrating. I will raise an escalation ticket for this issue. The relevant team will investigate and resolve this.\nUSER: Thank you, Aarya. I appreciate your help with this.\nAARYA: [TOOL OUTPUT, not model-composed text — state_resolution spoke this deterministically, turn ends here] I understand your concern. I am escalating this to the Clinic team for review.\n  [tool: state_resolution(\"I understand your concern. I am escalating this to the Clini...\") -> spoken]\nUSER: Thank you for escalating it. I hope to hear back soon.\nAARYA: Is that ok for you, or would you prefer a different resolution?\nUSER: No, that sounds good to me. Thank you for your help!\nAARYA: Is that all you were looking for or is there anything I can help you with?\nUSER: That's all for now, thank you!\nAARYA: [TOOL OUTPUT, not model-composed text — end_call spoke the goodbye deterministically, then disconnected]\n  [tool: end_call(callback_time=\"\") -> call disconnected]",
+    "turn_count": 8,
+    "input_tokens": 111348,
+    "output_tokens": 213,
+    "latency_ms": 17208
+  },
+  {
+    "case_id": "inbound-classification-078",
+    "direction": "inbound",
+    "case_type": "classification",
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "judge_reasoning": "[{\"rule\": \"CLASSIFICATION_COVERAGE\", \"result\": \"FAIL\", \"reason\": \"Agent routed the discount code issue to the Operations team instead of the expected Finance team.\"}]",
+    "transcript": "AARYA: Hello. This is Aarya from Vetic Pet Care. How can I help you today?\nUSER: Hi Aarya, I had a discount code that just didn't apply on my order at all.\nAARYA: I understand. Let me pull up your account for that. Can you please confirm your name and mobile number?\nUSER: Sure, my name is Fixture Customer Two, and my mobile number is 9000000002.\nAARYA: I have your account here under Fixture Customer Two with your pet Buddy. Your last appointment was an OPD consultation on August 3, 2026, at the Test Clinic in Koramangala, Bengaluru. Is that right?\n  [tool: lookup_customer(\"9000000002\") -> MATCH]\nUSER: Yes, that's correct!\nAARYA: I understand that the discount code did not apply to your order. I will raise an escalation ticket for this issue. The relevant team will investigate and resolve this.\nUSER: That sounds good, thank you!\nAARYA: [TOOL OUTPUT, not model-composed text — state_resolution spoke this deterministically, turn ends here] I understand that the discount code did not apply to your order. I am escalating this to the Operations team.\n  [tool: state_resolution(\"I understand that the discount code did not apply to your or...\") -> spoken]\nUSER: Thank you for your help!\nAARYA: Is that ok for you, or would you prefer a different resolution?\nUSER: That works for me, thank you!\nAARYA: Is that all you were looking for or is there anything I can help you with?\nUSER: That's all for now, thank you!\nAARYA: [TOOL OUTPUT, not model-composed text — end_call spoke the goodbye deterministically, then disconnected]\n  [tool: end_call(callback_time=\"\") -> call disconnected]",
+    "turn_count": 8,
+    "input_tokens": 111233,
+    "output_tokens": 220,
+    "latency_ms": 17324
+  },
+  {
+    "case_id": "inbound-classification-100",
+    "direction": "inbound",
+    "case_type": "classification",
+    "verdict": "FAIL",
+    "violated_rules": [
+      "CLASSIFICATION_COVERAGE"
+    ],
+    "judge_reasoning": "[{\"rule\": \"CLASSIFICATION_COVERAGE\", \"result\": \"FAIL\", \"reason\": \"Although it properly escalated the call-quality issue to the Tech team, it misrouted the dog's behavior-change concern by scheduling a grooming session instead of routing to a clinical/behavioral consult team.\"}]",
+    "transcript": "AARYA: Hello. How can I help you today?\nUSER: \"*[Silence/unclear speech]* ...hello? Can you— sorry, bad network, I was saying something about my— [call drops]*\"\nAARYA: Sorry, I think the line cut out for a second. Could you repeat that?\nUSER: \"Sure, I was saying something about my dog's recent behavior changes. I'm really concerned.\"\nAARYA: I understand. Let me pull up your account for that. Can you please confirm your name and mobile number?\nUSER: \"My name is Fixture Customer Two, and my mobile number is 9000000002.\"\nAARYA: I have your account here under Fixture Customer Two with your pet Buddy. Your last appointment was an OPD consultation on August 3, 2026, at the Test Clinic in Koramangala, Bengaluru. Is that right?\n  [tool: lookup_customer(\"9000000002\") -> MATCH]\nUSER: \"Yes, that's correct. Buddy has been acting a bit more anxious lately, and I'm not sure why.\"\nAARYA: I understand that must be concerning. I will arrange to reschedule the grooming session in a calmer setting with an expert handler. What time works best for you?\nUSER: \"That sounds great! I’m available this Saturday afternoon if that works.\"\nAARYA: [TOOL OUTPUT, not model-composed text — state_resolution spoke this deterministically, turn ends here] I will arrange to reschedule the grooming session in a calmer setting with an expert handler.\n  [tool: state_resolution(\"I will arrange to reschedule the grooming session in a calme...\") -> spoken]\nUSER: \"Thank you, that would be really helpful. I appreciate it!\"\nAARYA: [TOOL OUTPUT, not model-composed text — state_resolution spoke this deterministically, turn ends here] I will arrange to reschedule the grooming session in a calmer setting with an expert handler. I am escalating the call quality issue to the Tech team for review.\n  [tool: state_resolution(\"I will arrange to reschedule the grooming session in a calme...\") -> spoken]\nUSER: \"Thank you for taking care of that! I appreciate your help.\"\nAARYA: Is that ok for you, or would you prefer a different resolution?\nUSER: \"No, that works perfectly for me. Thank you!\"\nAARYA: Is that all you were looking for or is there anything I can help you with?\nUSER: \"That's all for now, thank you for your help!\"\nAARYA: [TOOL OUTPUT, not model-composed text — state_resolution spoke this deterministically, turn ends here] Your appointment has been confirmed for Saturday afternoon.\n  [tool: state_resolution(\"Your appointment has been confirmed for Saturday afternoon....\") -> spoken]\nUSER: \"Great! Thank you so much for confirming that. Goodbye!\"\nAARYA: [TOOL OUTPUT, not model-composed text — end_call spoke the goodbye deterministically, then disconnected]\n  [tool: end_call(callback_time=\"\") -> call disconnected]",
+    "turn_count": 11,
+    "input_tokens": 149647,
+    "output_tokens": 293,
+    "latency_ms": 28566
+  }
+]

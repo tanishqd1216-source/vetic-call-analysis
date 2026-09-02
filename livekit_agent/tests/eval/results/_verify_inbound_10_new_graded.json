@@ -1,0 +1,62 @@
+[
+  {
+    "case_id": "inbound-classification-028",
+    "idx": 28,
+    "verdict": "PASS",
+    "reason": "The agent explicitly routed the issue to the Clinic Operations team, which is the correct team for a provider unavailability at the clinic."
+  },
+  {
+    "case_id": "inbound-classification-031",
+    "idx": 31,
+    "verdict": "PASS",
+    "reason": "The agent explicitly routed the complaint to the Clinic Operations team, which is the correct department for unhygienic clinic premises."
+  },
+  {
+    "case_id": "inbound-classification-032",
+    "idx": 32,
+    "verdict": "PASS",
+    "reason": "The agent explicitly routed the upselling complaint to the Clinic Operations team, which matches the expected department."
+  },
+  {
+    "case_id": "inbound-classification-046",
+    "idx": 46,
+    "verdict": "PASS",
+    "reason": "Agent explicitly escalated to the Home Delivery team for the missing sub-order items, matching the expected routing."
+  },
+  {
+    "case_id": "inbound-classification-047",
+    "idx": 47,
+    "verdict": "PASS",
+    "reason": "The agent explicitly escalated to the Home Delivery team for the short-quantity issue, matching the expected routing."
+  },
+  {
+    "case_id": "inbound-classification-048",
+    "idx": 48,
+    "verdict": "PASS",
+    "reason": "The agent explicitly escalated the issue to the Home Delivery team, which matches the expected routing for delivery process problems."
+  },
+  {
+    "case_id": "inbound-classification-049",
+    "idx": 49,
+    "verdict": "PASS",
+    "reason": "The agent routed the issue to the home delivery team, which is the correct department for a missing free gift with an order."
+  },
+  {
+    "case_id": "inbound-classification-084",
+    "idx": 84,
+    "verdict": "PASS",
+    "reason": "The agent escalated the repeated notification problem to the Tech team, which matches the expected routing for this issue."
+  },
+  {
+    "case_id": "inbound-classification-089",
+    "idx": 89,
+    "verdict": "PASS",
+    "reason": "Agent routed the payment-reflection issue to the finance team with a specific action to verify and update records, matching the expected department."
+  },
+  {
+    "case_id": "inbound-classification-090",
+    "idx": 90,
+    "verdict": "PASS",
+    "reason": "Agent explicitly routed the cash-on-delivery payment issue to the Home Delivery team, which matches the expected department."
+  }
+]

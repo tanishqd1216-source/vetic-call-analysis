@@ -1,0 +1,25 @@
+{
+  "direction": "outbound",
+  "label": "v1-baseline",
+  "promptHash": "be3fcc0769045e2f99acf30c1e3411c0e07d87ba9e7ec60355e6073219b970a0",
+  "judgeModel": "gpt-5",
+  "agentModel": "gpt-4o-mini",
+  "generatedAt": "2026-08-20T01:46:02.394256",
+  "results": [
+    {
+      "case_id": "outbound-taxonomy-grooming-injury",
+      "direction": "outbound",
+      "case_type": "taxonomy",
+      "verdict": "FAIL",
+      "violated_rules": [
+        "STRICT_5_STEP"
+      ],
+      "judge_reasoning": "[{\"rule\": \"STRICT_5_STEP\", \"result\": \"FAIL\", \"reason\": \"The agent combined the offer and time-collection in one turn and asked for confirmation after the time was provided, so the required distinct offer -> confirm-agreement -> time-collection -> time confirmation -> exact wrap-up sequence was not followed.\"}]",
+      "transcript": "AARYA: Hello. This is Aarya calling from Vetic Pet Care. Is it a good time to talk?\nUSER: Hi Aarya, yes, this is a good time to talk. How can I help you today?\nAARYA: I hope you are doing well. How is Testbud doing today?\nUSER: Testbud is okay, but I'm a bit worried. She got hurt during the grooming session yesterday; there's a small cut on her paw.\nAARYA: I understand that must have been upsetting. The reason I'm reaching out is to check in on your recent grooming experience. Could you please share more details about what happened?\nUSER: Sure, during the grooming session, Testbud must have gotten a bit nervous, and she ended up with a small cut on her paw. I'm really concerned about it.\nAARYA: I sincerely apologize for the bad experience. It is concerning to hear that Testbud got a cut during the grooming session. I can offer a free OPD appointment with a senior vet doctor to assess the cut. What time works best for you to visit the clinic?\nUSER: Thank you, I appreciate that. Could we schedule the appointment for tomorrow at 3 PM?\nAARYA: Is that ok for you, or would you prefer a different resolution?\nUSER: Tomorrow at 3 PM works perfectly for me. Thank you for arranging that!\nAARYA: Your appointment has been confirmed for tomorrow at 3 PM. Is that all you were looking for or is there anything I can help you with?\nUSER: That's all for now, thank you! I really appreciate your help today.\nAARYA: [TOOL OUTPUT, not model-composed text \u2014 end_call spoke the goodbye deterministically, then disconnected]\n  [tool: end_call(callback_time=\"\") -> call disconnected]",
+      "turn_count": 7,
+      "input_tokens": 63069,
+      "output_tokens": 180,
+      "latency_ms": 15536
+    }
+  ]
+}

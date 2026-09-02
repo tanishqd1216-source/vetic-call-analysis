@@ -1,0 +1,23 @@
+{
+  "direction": "outbound",
+  "label": "v1-baseline",
+  "promptHash": "a4960d7c1c3d849e83e7d3dfe53ae5227cd29d1226948c94a2c606d7f067a0f5",
+  "judgeModel": "gpt-5",
+  "agentModel": "gpt-4o-mini",
+  "generatedAt": "2026-08-21T02:07:01.337902",
+  "results": [
+    {
+      "case_id": "outbound-taxonomy-refund-not-received",
+      "direction": "outbound",
+      "case_type": "taxonomy",
+      "verdict": "PASS",
+      "violated_rules": [],
+      "judge_reasoning": "[{\"rule\": \"ZERO_REFUND\", \"result\": \"PASS\", \"reason\": \"The agent consistently denied monetary refunds and offered only a non-monetary escalation without implying a refund at any point.\"}, {\"rule\": \"NO_REPETITION\", \"result\": \"PASS\", \"reason\": \"After a single pushback the agent restated the same non-monetary escalation and, once the customer accepted, provided a firm terminal statement without introducing new varied offers.\"}]",
+      "transcript": "AARYA: Hello. This is Aarya calling from Vetic Pet Care. Is it a good time to talk?\nUSER: Hi Aarya, yes, it's a good time to talk. How can I help you today?\nAARYA: How is Testbud doing today?\nUSER: Testbud is doing well, thanks for asking! Just a bit playful as usual. What do you need to discuss?\nAARYA: The reason I'm reaching out is to check in on your recent grooming experience. Could you please share what happened?\nUSER: Sure, I\u2019d like a refund on a service I paid for but never actually received.\nAARYA: I understand that must have been frustrating. As per Vetic's policy, we do not provide monetary refunds. However, I will raise an escalation ticket with the clinic management for a non-monetary resolution.\nUSER: I appreciate that, but I never even got the service. Is there really no way to get a monetary refund?\nAARYA: As per Vetic's policy, we do not provide monetary refunds. However, I will raise an escalation ticket with the clinic management for a non-monetary resolution. Is that ok for you, or would you prefer a different resolution?\nUSER: I understand. Yes, I\u2019ll accept the non-monetary resolution. Thank you for your help with this.\nAARYA: I acknowledge that I cannot fulfill your specific request for a monetary refund. As per Vetic's policy, we do not provide monetary refunds. The matter has already been escalated for a non-monetary resolution, and I have no further updates to share on this call. Is there anything else I can help you with?\nUSER: No, that covers everything for now. Thank you for your assistance, Aarya. Goodbye!\nAARYA: [TOOL OUTPUT, not model-composed text \u2014 state_resolution spoke this deterministically, turn ends here] I will escalate this to the senior manager, and he will call you back soon. As per Vetic's policy, we do not provide monetary refunds. However, I will raise an escalation ticket with the clinic management for a non-monetary resolution.\n  [tool: state_resolution(\"I will escalate this to the senior manager, and he will call...\") -> spoken]",
+      "turn_count": 7,
+      "input_tokens": 65445,
+      "output_tokens": 276,
+      "latency_ms": 55520
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "direction": "outbound",
+  "label": "v1-baseline",
+  "promptHash": "7fa6ae4cae171d2586ca90b0a0856e799492272d9eb3b3c3cf9971e253d33761",
+  "judgeModel": "gpt-5",
+  "agentModel": "gpt-4o-mini",
+  "generatedAt": "2026-08-20T23:15:34.955159",
+  "results": [
+    {
+      "case_id": "outbound-taxonomy-ambiguous-vague",
+      "direction": "outbound",
+      "case_type": "taxonomy",
+      "verdict": "FAIL",
+      "violated_rules": [
+        "STRICT_5_STEP"
+      ],
+      "judge_reasoning": "[{\"rule\": \"STRICT_5_STEP\", \"result\": \"FAIL\", \"reason\": \"The agent combined the resolution offer with the \\u201cis that ok for you\\u201d confirmation in the same turn instead of separate, ordered turns.\"}]",
+      "transcript": "AARYA: Hello. This is Aarya calling from Vetic Pet Care. Is it a good time to talk?\nUSER: Hi Aarya, yes, this is a good time to talk. How can I help you?\nAARYA: How is Testbud doing today?\nUSER: Testbud is doing well, thanks for asking! Just a bit more energetic than usual.\nAARYA: The reason I'm reaching out is to check in on your recent grooming experience. Could you please share what happened?\nUSER: Actually, something's just off with my order, I don't know what exactly. Can someone check?\nAARYA: I understand that must have been frustrating. I will need to look into the details of your order. Could you please provide me with more information about the specific issue you are facing?\nUSER: Well, actually, the box looked damaged when it arrived.\nAARYA: I apologize for the issue with the order. Could you please share photos of the delivered product on our WhatsApp?\nUSER: Sure, I can do that. Is there anything else you need from me?\nAARYA: I am raising an escalation ticket with the home delivery team, and the issue will be reviewed shortly. Is that ok for you, or would you prefer a different resolution?\nUSER: That sounds fine to me. I appreciate your help with this!\nAARYA: Is that all you were looking for or is there anything I can help you with?\nUSER: I think that's everything for now. Thank you for your assistance!\nAARYA: [TOOL OUTPUT, not model-composed text \u2014 end_call spoke the goodbye deterministically, then disconnected]\n  [tool: end_call(callback_time=\"\") -> call disconnected]",
+      "turn_count": 8,
+      "input_tokens": 73892,
+      "output_tokens": 177,
+      "latency_ms": 26856
+    }
+  ]
+}

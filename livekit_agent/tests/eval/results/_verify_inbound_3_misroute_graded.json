@@ -1,0 +1,20 @@
+[
+  {
+    "case_id": "inbound-classification-059",
+    "idx": 59,
+    "verdict": "PASS",
+    "reason": "The final resolution explicitly escalates the issue to the Clinic team, which matches the expected routing."
+  },
+  {
+    "case_id": "inbound-classification-078",
+    "idx": 78,
+    "verdict": "PASS",
+    "reason": "The agent ultimately routed the discount-code issue to the Finance team, explicitly naming the correct team."
+  },
+  {
+    "case_id": "inbound-classification-089",
+    "idx": 89,
+    "verdict": "PASS",
+    "reason": "Agent routed the payment-reflection issue to the finance team with a specific action to verify and update records, matching the expected department."
+  }
+]

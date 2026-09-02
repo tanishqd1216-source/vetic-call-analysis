@@ -1,0 +1,37 @@
+[
+  {
+    "case_id": "outbound-classification-022",
+    "idx": 22,
+    "expected_team": "Operations team",
+    "verdict": "PASS",
+    "reason": "The agent explicitly routed the pricing discrepancy to the Operations team, which matches the expected department."
+  },
+  {
+    "case_id": "outbound-classification-025",
+    "idx": 25,
+    "expected_team": "Operations team",
+    "verdict": "PASS",
+    "reason": "The agent explicitly escalated the pricing concern to the Operations team, which matches the expected routing."
+  },
+  {
+    "case_id": "outbound-classification-058",
+    "idx": 58,
+    "expected_team": "Clinic team",
+    "verdict": "PASS",
+    "reason": "The agent explicitly routed the issue to the clinic team, which matches the expected department."
+  },
+  {
+    "case_id": "outbound-classification-082",
+    "idx": 82,
+    "expected_team": "Tech team",
+    "verdict": "PASS",
+    "reason": "The agent explicitly escalated the appointment display issue to the Tech team, matching the expected routing."
+  },
+  {
+    "case_id": "outbound-classification-100",
+    "idx": 100,
+    "expected_team": "Tech team",
+    "verdict": "PASS",
+    "reason": "Agent explicitly routed the call quality issue to the Tech team, matching the expected classification."
+  }
+]
