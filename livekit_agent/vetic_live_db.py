@@ -11,17 +11,27 @@ VETIC_MONGO_URI is configured.
 import os
 import re
 
-from pymongo import MongoClient
-from pymongo.errors import PyMongoError
-
 import vetic_db as _fallback
+
+try:
+    from pymongo import MongoClient
+    from pymongo.errors import PyMongoError
+    _PYMONGO_AVAILABLE = True
+except ImportError:
+    MongoClient = None
+    PyMongoError = Exception
+    _PYMONGO_AVAILABLE = False
 
 MONGO_URI = os.environ.get("VETIC_MONGO_URI")
 MONGO_DB = os.environ.get("VETIC_MONGO_DB", "user_profile")
 MONGO_COLLECTION = os.environ.get("VETIC_MONGO_COLLECTION", "user_profile")
 
 _collection = None
-if MONGO_URI:
+if not MONGO_URI:
+    print("[vetic_live_db] VETIC_MONGO_URI not set — falling back to vetic_db (static file)")
+elif not _PYMONGO_AVAILABLE:
+    print("[vetic_live_db] VETIC_MONGO_URI is set but pymongo is not installed — falling back to vetic_db (static file)")
+else:
     try:
         _client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=3000)
         _collection = _client[MONGO_DB][MONGO_COLLECTION]
@@ -29,8 +39,6 @@ if MONGO_URI:
     except PyMongoError as e:  # pragma: no cover
         print(f"[vetic_live_db] Failed to connect to Mongo: {e}")
         _collection = None
-else:
-    print("[vetic_live_db] VETIC_MONGO_URI not set — falling back to vetic_db (static file)")
 
 
 def _phone_digits(x) -> str:

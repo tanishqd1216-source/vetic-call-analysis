@@ -7,7 +7,8 @@ livekit-plugins-noise-cancellation>=0.3.0  # >=0.3.0 required — 0.2.6's NC() p
 pandas>=2.0
 openpyxl>=3.1
 python-dotenv>=1.0
-pymongo>=4.6  # live customer lookup (vetic_live_db.py), falls back to vetic_db.py's static file if unset
+# pymongo is optional — install it yourself if you set VETIC_MONGO_URI; vetic_live_db.py
+# falls back to vetic_db.py's static file when it's absent or unconfigured
 
 # web-call front-end (token + page server)
 fastapi>=0.110
@@ -24,3 +25,6 @@ sentence-transformers
 # eval harness (tests/eval/) — LLM judge + golden-set files
 anthropic>=0.40
 pyyaml>=6.0
+
+# call tracing — exports OTel spans to LangSmith (see agent_inbound.py / agent_outbound.py setup_langsmith())
+langsmith[livekit]>=0.3
