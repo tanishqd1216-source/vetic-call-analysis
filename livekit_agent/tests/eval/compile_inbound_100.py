@@ -60,6 +60,14 @@ TAXONOMY_LABEL_DISAGREEMENT = {
     16: ("Clinic team", "taxonomy says Medex (a medicine/product brand, unrelated to a "
          "pet-handling complaint) — looks like a taxonomy labeling error; Clinic team is "
          "the sensible answer"),
+    # Added during the reconciliation-rerun fix pass, aligning with outbound's equivalent
+    # corrections (see compile_outbound_100.FIXED_39):
+    1: ("Grooming team", "taxonomy says Clinic, but the agent's own dedicated Grooming team "
+        "is the more specific and correct answer for an uneven-haircut complaint"),
+    8: ("Grooming team", "taxonomy says Clinic, but the agent's own dedicated Grooming team "
+        "is the more specific and correct answer for a medicated-bath-skipped complaint"),
+    56: ("Clinic and Billing team", "taxonomy says Tech; the discount-ownership rule "
+         "designates Clinic and Billing as the single owner of all discount/offer complaints"),
 }
 
 LEGACY_FILE = RESULTS / "inbound_legacy-stress-test-2026-08-12_20260826T142903.json"

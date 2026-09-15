@@ -20,9 +20,9 @@ SRC = HERE / "results" / "_verify_routing_fixes_outbound.json"
 CORRECTED = {
     9:  dict(team="Clinic (grooming team's own reschedule action, no team named)", unaddressed=True),
     10: dict(team="Clinic (agent's own script says grooming team)", unaddressed=True),
-    22: dict(team="Operations team"),
-    23: dict(team="Operations team"),
-    25: dict(team="Operations team"),
+    22: dict(team="Clinic Operations team"),
+    23: dict(team="Clinic Operations team"),
+    25: dict(team="Clinic Operations team"),
     33: dict(team="Finance team"),
     35: dict(team="Tech team"),
     53: dict(team="Finance team"),

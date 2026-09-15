@@ -3,14 +3,18 @@
 Simulates each golden-set case as a text-only conversation (no LiveKit/STT/TTS —
 same "pure text simulation" approach as tests/run_stress_test_inbound.py, whose
 tool-calling mechanics this reuses), grades the resulting transcript with an LLM
-judge (rubric.py) against only the rules the case declares in scope, then reports
-results to the ai-call-agent-master dashboard's /api/evals/* routes and always
+judge (rubric.py) against only the rules the case declares in scope, and always
 writes a local JSON artifact (never solely fire-and-forget — eval results are the
 deliverable, not a side telemetry stream).
 
+For LangSmith-tracked runs (datasets, experiments, repeated trials), use
+run_langsmith_eval.py instead — it reuses simulate_case()/rubric.py from this module
+but drives them through langsmith.evaluate(). This module remains the standalone/
+ad-hoc path for single-case debugging via --case-id.
+
 Usage:
     python run_eval.py --direction outbound|inbound|both [--case-id ID] [--limit N]
-                        [--prompt-source live|variants/some_variant.py] [--no-post]
+                        [--prompt-source live|variants/some_variant.py]
 
 A "prompt version" = sha256(BASE_RULES + CALL_FLOW) for one direction. --prompt-source
 live (default) reads the current production BASE_RULES/CALL_FLOW straight from
@@ -65,7 +69,6 @@ FAQ_TEXT = KNOWLEDGE_PATH.read_text(encoding="utf-8") if KNOWLEDGE_PATH.exists()
 KB_SUFFIX = ("\n\nKNOWLEDGE BASE (faq_and_flow.txt):\n" + FAQ_TEXT) if FAQ_TEXT else ""
 
 RESULTS_DIR = HERE / "results"
-EVALS_API_BASE = os.environ.get("EVALS_API_BASE", "http://localhost:4000/api/evals")
 
 # ── Tool declarations (mirrors tests/run_stress_test_inbound.py's TOOLS exactly) ──
 LOOKUP_TOOL = {
@@ -880,7 +883,11 @@ def build_inbound_customer_system(case: dict) -> str:
     return "\n\n".join(parts)
 
 
-def run_case(case: dict, direction: str, base_rules: str, call_flow: str) -> dict:
+def simulate_case(case: dict, direction: str, base_rules: str, call_flow: str) -> dict:
+    """Everything run_case() does except grading -- simulates one call and returns the raw
+    transcript/telemetry, with no judge call. Split out so LangSmith's evaluate() can call this
+    as its `target` and grade separately via an `evaluators` function wrapping
+    rubric.judge_transcript() (see run_langsmith_eval.py)."""
     if direction == "outbound":
         tools = TOOLS_OUTBOUND
         mobile = case.get("simulated_customer", DEFAULT_OUTBOUND_CUSTOMER)
@@ -952,20 +959,29 @@ def run_case(case: dict, direction: str, base_rules: str, call_flow: str) -> dic
     elapsed_ms = int((time.monotonic() - t0) * 1000)
     transcript = "\n".join(transcript_lines)
 
-    verdict = rubric.judge_transcript(case, transcript)
-
     return {
         "case_id": case["id"],
         "direction": direction,
         "case_type": case.get("type"),
-        "verdict": verdict["overall"],
-        "violated_rules": verdict.get("violated_rules", []),
-        "judge_reasoning": json.dumps(verdict.get("rule_results", [])),
         "transcript": transcript,
         "turn_count": turn_count,
         "input_tokens": in_tok_total,
         "output_tokens": out_tok_total,
         "latency_ms": elapsed_ms,
+    }
+
+
+def run_case(case: dict, direction: str, base_rules: str, call_flow: str) -> dict:
+    """simulate_case() + grading, for standalone/ad-hoc use (this module's own --case-id CLI).
+    LangSmith runs (run_langsmith_eval.py) call simulate_case() and the judge separately instead,
+    so LangSmith can track them as distinct target/evaluator steps."""
+    sim = simulate_case(case, direction, base_rules, call_flow)
+    verdict = rubric.judge_transcript(case, sim["transcript"])
+    return {
+        **sim,
+        "verdict": verdict["overall"],
+        "violated_rules": verdict.get("violated_rules", []),
+        "judge_reasoning": json.dumps(verdict.get("rule_results", [])),
     }
 
 
@@ -1017,32 +1033,6 @@ def write_local_artifact(direction: str, label: str, prompt_hash: str, results: 
     return path
 
 
-def post_to_dashboard(direction: str, label: str, prompt_hash: str, prompt_text: str,
-                       source_kind: str, results: list) -> None:
-    try:
-        import httpx
-        with httpx.Client(timeout=10.0) as http:
-            run_resp = http.post(f"{EVALS_API_BASE}/runs", json={
-                "direction": direction, "label": label, "promptHash": prompt_hash,
-                "promptText": prompt_text, "source": source_kind,
-                "judgeModel": rubric.JUDGE_MODEL, "agentModel": AGENT_MODEL,
-            })
-            run_resp.raise_for_status()
-            run_id = run_resp.json()["runId"]
-            for r in results:
-                http.post(f"{EVALS_API_BASE}/runs/{run_id}/results", json={
-                    "caseId": r["case_id"], "caseLabel": r["case_id"], "caseType": r["case_type"],
-                    "verdict": r["verdict"], "violatedRules": r["violated_rules"],
-                    "judgeReasoning": r["judge_reasoning"], "transcript": r["transcript"],
-                    "turnCount": r["turn_count"], "inputTokens": r["input_tokens"],
-                    "outputTokens": r["output_tokens"], "latencyMs": r["latency_ms"],
-                })
-            http.post(f"{EVALS_API_BASE}/runs/{run_id}/complete", json={"status": "completed"})
-        print(f"[eval] posted results to dashboard: run {run_id}")
-    except Exception as e:
-        print(f"[eval] WARNING: failed to POST results to dashboard ({e}) — local artifact is authoritative.")
-
-
 def summarize(direction: str, label: str, results: list) -> None:
     total = len(results)
     passed = sum(1 for r in results if r["verdict"] == "PASS")
@@ -1061,7 +1051,6 @@ def main() -> None:
     parser.add_argument("--limit", type=int, default=None, help="Cap the number of cases run.")
     parser.add_argument("--prompt-source", default="live",
                          help='"live" (default) or a path to a variants/*.py file.')
-    parser.add_argument("--no-post", action="store_true", help="Skip POSTing results to the dashboard.")
     args = parser.parse_args()
 
     directions = ["outbound", "inbound"] if args.direction == "both" else [args.direction]
@@ -1106,8 +1095,6 @@ def main() -> None:
                 error_streak = 0
 
         write_local_artifact(direction, label, prompt_hash, results)
-        if not args.no_post:
-            post_to_dashboard(direction, label, prompt_hash, base_rules + "\n\n" + call_flow, source_kind, results)
         summarize(direction, label, results)
 
 

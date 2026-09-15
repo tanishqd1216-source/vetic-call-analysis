@@ -1,0 +1,4 @@
+# Only needed for the one-time LangSmith historical backfill (langsmith_backfill.py),
+# specifically to read the final reconciled eval state from the dashboard's Postgres DB.
+# Not a dependency of the production agent or the regular eval harness.
+psycopg2-binary
