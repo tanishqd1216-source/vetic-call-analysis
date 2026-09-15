@@ -68,7 +68,7 @@ Fields injected into the prompt include: `owner`, `pet`, `service`, `date`, `cli
 
 ### Local Development Setup
 ```bat
-cd C:\Users\hp\Documents\claude_WO_API\livekit_agent
+cd livekit_agent
 py -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
@@ -89,3 +89,11 @@ This connects your agent to your LiveKit Cloud project.
 2. Connect it to your LiveKit Cloud project.
 3. Allow microphone access.
 4. The agent will greet you. (Use headphones for the best audio experience).
+
+## 6. Evaluation
+
+Correctness and business-rule compliance are graded automatically, not just tested by hand: see
+`tests/eval/` — `rubric.py` defines the tagged business rules an LLM judge grades against,
+`run_langsmith_eval.py` runs simulated calls through LangSmith as reference datasets/experiments.
+Real, live-verified numbers and the story of what the eval harness itself got wrong along the way
+are in [`../CASE_STUDY.md`](../CASE_STUDY.md).
